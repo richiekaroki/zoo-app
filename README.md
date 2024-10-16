@@ -1,14 +1,12 @@
 ZOO APP
+
 Zoo-App is a Single-Page Application (SPA) built using HTML, Vue.js, Vue Router, and Bootstrap CSS. It showcases various animals with descriptions and images, dynamically fetched from API Ninjas(for descriptions) and UnsplashAPI(for images).Addition it stores login/Registration information and information recorded in the forms in Firebase
 
-<<<<<<< HEAD
 ## Installation and Setup
-=======
+
 ## Project setup
-```
+
 npm install -g @vue/cli
-```
->>>>>>> 508f74c6e6a147feb755cce9605d50fab1d0cdfd
 
 To run this project locally, follow these steps:
 
