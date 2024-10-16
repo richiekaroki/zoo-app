@@ -2,7 +2,7 @@
   <div class="hero-section text-center text-white">
     <div class="overlay"></div>
     <div class="content">
-      <h1 class="display-4">Animal Kingdom</h1>
+      <h1 class="display-4">Zoo App</h1>
       <p>Showcasing animal facts and promoting wildlife conservation.</p>
       <a href="/services" class="btn btn-success btn-lg">View Services</a>
     </div>
