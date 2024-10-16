@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
     <div class="container">
-      <a class="navbar-brand" href="/">ANIMAL KINGDOM</a>
+      <a class="navbar-brand" href="/">ZOO APP</a>
       <button
         class="navbar-toggler"
         type="button"
