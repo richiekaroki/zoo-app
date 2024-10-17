@@ -4,8 +4,9 @@
       <!-- Brand Name -->
       <router-link class="navbar-brand" to="/">ZOO APP</router-link>
 
-      <!-- Custom Hamburger Menu Button for Small Screens -->
+      <!-- Custom Hamburger Menu Button for Small Screens, only rendered when mobile -->
       <button
+        v-if="!isDesktop"
         class="navbar-toggler custom-toggler"
         type="button"
         @click="toggleMenu"
@@ -63,6 +64,7 @@ export default {
     };
   },
   mounted() {
+    this.checkScreenSize(); // Check the screen size on initial load
     window.addEventListener("resize", this.checkScreenSize); // Add event listener to track screen resizing
   },
   beforeUnmount() {
@@ -81,6 +83,9 @@ export default {
     },
     checkScreenSize() {
       this.isDesktop = window.innerWidth >= 992; // Update `isDesktop` when the screen is resized
+      if (this.isDesktop) {
+        this.isMenuOpen = false; // Close mobile menu when switching to desktop
+      }
     },
   },
 };
