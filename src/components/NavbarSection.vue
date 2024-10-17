@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
     <div class="container">
       <!-- Brand Name -->
-      <router-link class="navbar-brand" to="/">ZOO APP</router-link>
+      <router-link class="navbar-brand" to="/">ZOO APP</router-link>y
 
       <!-- Custom Hamburger Menu Button for Small Screens, only rendered when mobile -->
       <button
