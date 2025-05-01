@@ -1,28 +1,37 @@
 <template>
-  <div class="about-us-container">
-    <div class="about-text">
-      <h5>DISCOVER WILDLIFE</h5>
-      <h1>Explore animal facts and conservation</h1>
-      <p>
-        At Animal Kingdom, we ignite your passion for wildlife by showcasing
-        fascinating animal facts and descriptions. Our mission is to promote
-        wildlife conservation and foster a deeper appreciation for the natural
-        world. Join us in our journey to protect endangered species and their
-        habitats. Together, we can make a difference!
-      </p>
-      <a href="/contact" class="btn btn-success btn-lg">Get in touch</a>
+  <section class="about-section">
+    <div class="about-us-container container py-5">
+      <div class="row align-items-center g-5">
+        <!-- Text Content -->
+        <div class="col-lg-6 about-text">
+          <h5 class="section-subtitle">DISCOVER WILDLIFE</h5>
+          <h1 class="section-title">Explore animal facts and conservation</h1>
+          <p class="section-description">
+            At Animal Kingdom, we ignite your passion for wildlife by showcasing
+            fascinating animal facts and descriptions. Our mission is to promote
+            wildlife conservation and foster a deeper appreciation for the
+            natural world. Join us in our journey to protect endangered species
+            and their habitats. Together, we can make a difference!
+          </p>
+          <router-link to="/contact" class="btn btn-success btn-lg px-4 py-3">
+            Get in touch <i class="fas fa-arrow-right ms-2"></i>
+          </router-link>
+        </div>
+
+        <!-- Carousel -->
+        <div class="col-lg-6 carousel-section">
+          <AnimalCarousel />
+        </div>
+      </div>
     </div>
-    <div class="carousel-section">
-      <!-- Animal Carousel component -->
-      <AnimalCarousel />
-    </div>
-  </div>
+  </section>
 </template>
 
 <script>
 import AnimalCarousel from "@/components/AnimalCarousel.vue";
 
 export default {
+  name: "AboutSection",
   components: {
     AnimalCarousel,
   },
@@ -30,68 +39,102 @@ export default {
 </script>
 
 <style scoped>
-.about-us-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 50px;
+.about-section {
   background-color: #f8f9fa;
+  position: relative;
+  overflow: hidden;
 }
 
-.about-text {
-  flex: 1;
-  max-width: 50%;
+.about-section::before {
+  content: "";
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(
+    circle,
+    rgba(55, 160, 0, 0.1) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  z-index: 0;
 }
 
-.about-text h5 {
+.about-us-container {
+  position: relative;
+  z-index: 1;
+}
+
+.section-subtitle {
   color: #37a000;
-  font-weight: bold;
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 1rem;
   text-transform: uppercase;
-  margin-bottom: 10px;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+  display: inline-block;
 }
 
-.about-text h1 {
-  font-size: 42px;
-  font-weight: bold;
-  margin-bottom: 20px;
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  color: #212529;
 }
 
-.about-text p {
-  font-size: 18px;
-  line-height: 1.6;
-  margin-bottom: 30px;
+.section-description {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  color: #495057;
 }
 
-.contact-link {
-  text-decoration: none;
-  font-weight: bold;
-  color: #000;
-  border-bottom: 1px solid #000;
+.btn-success {
+  background-color: #37a000;
+  border-color: #37a000;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border-radius: 50px;
+}
+
+.btn-success:hover {
+  background-color: #2d8600;
+  border-color: #2d8600;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(55, 160, 0, 0.3);
 }
 
 .carousel-section {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  max-width: 50%;
+  padding: 20px;
 }
 
-.carousel-section img {
-  max-width: 100%;
-  border-radius: 10px;
-}
-
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .about-us-container {
-    flex-direction: column;
     text-align: center;
   }
 
-  .about-text,
-  .carousel-section {
-    max-width: 100%;
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .section-description {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-section {
+    padding: 40px 0;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+  }
+
+  .btn-lg {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
   }
 }
 </style>

@@ -1,4 +1,3 @@
-// Import the Firebase auth instance and necessary Vue Router functions
 import { auth } from "@/firebase/firebaseConfig";
 import { createRouter, createWebHistory } from "vue-router";
 
@@ -40,21 +39,15 @@ const router = createRouter({
   routes,
 });
 
-// Add Navigation Guard for routes requiring authentication
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    const user = auth.currentUser; // Get current user
-
-    // Check if user is authenticated
+    const user = auth.currentUser;
     if (!user) {
-      // User is not authenticated, redirect to login
       next("/login");
     } else {
-      // User is authenticated, proceed to the next route
       next();
     }
   } else {
-    // Route does not require authentication, proceed as normal
     next();
   }
 });

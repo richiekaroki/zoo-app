@@ -1,16 +1,44 @@
 <template>
-  <div>
-    <div v-if="loading" class="spinner-border text-primary" role="status">
-      <span class="sr-only">Loading...</span>
+  <div class="container py-4">
+    <!-- Search Box -->
+    <div class="mb-4">
+      <div class="input-group" style="max-width: 400px">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search animals..."
+          v-model="searchQuery"
+        />
+        <span class="input-group-text">
+          <i class="fas fa-search"></i>
+        </span>
+      </div>
     </div>
+
+    <!-- Loading State -->
+    <div v-if="loading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <!-- Animals Grid -->
     <div v-else class="row">
-      <div v-for="animal in animals" :key="animal.name" class="col-md-4">
-        <div class="card mb-4">
-          <img :src="animal.imageUrl" class="card-img-top" :alt="animal.name" />
+      <div
+        v-for="animal in filteredAnimals"
+        :key="animal.name"
+        class="col-md-4 mb-4"
+      >
+        <div class="card h-100">
+          <img
+            :src="animal.imageUrl"
+            class="card-img-top"
+            :alt="animal.name"
+            style="height: 200px; object-fit: cover"
+          />
           <div class="card-body">
             <h5 class="card-title">{{ animal.name }}</h5>
             <p class="card-text">{{ animal.habitat }}</p>
-            <!-- Link to individual animal detail page -->
             <router-link
               :to="`/animals/${animal.name}`"
               class="btn btn-primary"
@@ -21,6 +49,14 @@
         </div>
       </div>
     </div>
+
+    <!-- Empty State -->
+    <div
+      v-if="!loading && filteredAnimals.length === 0"
+      class="text-center py-5"
+    >
+      <p class="text-muted">No animals found matching your search.</p>
+    </div>
   </div>
 </template>
 
@@ -30,14 +66,8 @@ export default {
     return {
       animals: [],
       loading: true,
-    };
-  },
-  mounted() {
-    this.fetchAnimals();
-  },
-  methods: {
-    async fetchAnimals() {
-      const animalNames = [
+      searchQuery: "",
+      animalNames: [
         "Lion",
         "Tiger",
         "Elephant",
@@ -45,22 +75,44 @@ export default {
         "Warthog",
         "Zebra",
         "Monkey",
-      ]; // Example animals
-      let fetchedAnimals = [];
+      ],
+    };
+  },
+  computed: {
+    filteredAnimals() {
+      const query = this.searchQuery.toLowerCase();
+      return this.animals.filter(
+        (animal) =>
+          animal.name.toLowerCase().includes(query) ||
+          animal.habitat.toLowerCase().includes(query)
+      );
+    },
+  },
+  async mounted() {
+    await this.fetchAnimals();
+  },
+  methods: {
+    async fetchAnimals() {
+      try {
+        const fetchedAnimals = [];
 
-      for (const name of animalNames) {
-        const habitat = await this.fetchAnimalHabitat(name);
-        const imageUrl = await this.fetchAnimalImage(name);
+        for (const name of this.animalNames) {
+          const habitat = await this.fetchAnimalHabitat(name);
+          const imageUrl = await this.fetchAnimalImage(name);
 
-        fetchedAnimals.push({
-          name,
-          habitat,
-          imageUrl,
-        });
+          fetchedAnimals.push({
+            name,
+            habitat,
+            imageUrl,
+          });
+        }
+
+        this.animals = fetchedAnimals;
+      } catch (error) {
+        console.error("Error fetching animals:", error);
+      } finally {
+        this.loading = false;
       }
-
-      this.animals = fetchedAnimals;
-      this.loading = false;
     },
     async fetchAnimalHabitat(name) {
       const response = await fetch(
@@ -77,10 +129,20 @@ export default {
         `https://api.unsplash.com/search/photos?query=${name}&client_id=Sc4pjbkYKYIW0Kb84jJCNXyakIkkaiQ1c2DaGqTRzAA`
       );
       const data = await response.json();
-      return data.results[0]?.urls?.small || "https://via.placeholder.com/150";
+      return (
+        data.results[0]?.urls?.small || "https://via.placeholder.com/300x200"
+      );
     },
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+.card {
+  transition: transform 0.2s;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+</style>

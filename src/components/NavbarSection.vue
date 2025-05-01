@@ -1,33 +1,37 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
-    <div class="container">
-      <!-- Brand Name -->
-      <router-link class="navbar-brand" to="/">ZOO APP</router-link>y
+  <!-- Loading state (optional) -->
+  <div v-if="authLoading" class="loading-auth">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
 
-      <!-- Custom Hamburger Menu Button for Small Screens, only rendered when mobile -->
+  <!-- Main Navigation -->
+  <nav
+    v-else
+    class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm"
+  >
+    <div class="container">
+      <!-- Brand Logo -->
+      <router-link to="/" class="navbar-brand fw-bold">
+        <i class="fas fa-paw me-2"></i>ZOO APP
+      </router-link>
+
+      <!-- Mobile Toggle Button -->
       <button
-        v-if="!isDesktop"
-        class="navbar-toggler custom-toggler"
+        class="navbar-toggler"
         type="button"
         @click="toggleMenu"
-        :class="{ 'is-active': isMenuOpen }"
-        aria-controls="navbarNav"
-        aria-expanded="false"
+        :aria-expanded="isMenuOpen ? 'true' : 'false'"
         aria-label="Toggle navigation"
       >
-        <!-- Custom Hamburger Icon Animation -->
-        <span class="toggler-icon"></span>
-        <span class="toggler-icon"></span>
-        <span class="toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
       </button>
 
-      <!-- Navbar Links -->
-      <div
-        class="collapse navbar-collapse"
-        :class="{ show: isMenuOpen || isDesktop }"
-        id="navbarNav"
-      >
+      <!-- Navigation Links -->
+      <div class="collapse navbar-collapse" :class="{ show: isMenuOpen }">
         <ul class="navbar-nav ms-auto">
+          <!-- Regular Nav Items -->
           <li class="nav-item">
             <router-link to="/" class="nav-link" @click="closeMenu"
               >Home</router-link
@@ -48,6 +52,92 @@
               >Contact</router-link
             >
           </li>
+
+          <!-- Admin Link (Conditional) -->
+          <li class="nav-item" v-if="isAdmin">
+            <router-link
+              to="/admin"
+              class="nav-link text-danger fw-bold"
+              @click="closeMenu"
+            >
+              Admin
+            </router-link>
+          </li>
+
+          <!-- Authentication Buttons -->
+          <template v-if="!isLoggedIn">
+            <li class="nav-item ms-lg-2">
+              <router-link
+                to="/login"
+                class="btn btn-outline-primary"
+                @click="closeMenu"
+              >
+                Sign In
+              </router-link>
+            </li>
+            <li class="nav-item ms-lg-2">
+              <router-link
+                to="/register"
+                class="btn btn-primary"
+                @click="closeMenu"
+              >
+                Sign Up
+              </router-link>
+            </li>
+          </template>
+
+          <!-- User Dropdown (Logged In) -->
+          <li v-else class="nav-item dropdown ms-lg-2">
+            <a
+              class="nav-link dropdown-toggle d-flex align-items-center"
+              href="#"
+              @click.prevent="toggleDropdown"
+              :aria-expanded="isDropdownOpen ? 'true' : 'false'"
+            >
+              <img
+                v-if="userPhoto"
+                :src="userPhoto"
+                class="rounded-circle me-2"
+                width="32"
+                height="32"
+                alt="User profile"
+              />
+              {{ userName || "Profile" }}
+            </a>
+            <ul
+              class="dropdown-menu dropdown-menu-end"
+              :class="{ show: isDropdownOpen }"
+            >
+              <li>
+                <router-link
+                  to="/profile"
+                  class="dropdown-item"
+                  @click="closeAllMenus"
+                >
+                  <i class="fas fa-user me-2"></i>Profile
+                </router-link>
+              </li>
+              <li v-if="isAdmin">
+                <router-link
+                  to="/admin"
+                  class="dropdown-item"
+                  @click="closeAllMenus"
+                >
+                  <i class="fas fa-lock me-2"></i>Admin
+                </router-link>
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a
+                  class="dropdown-item text-danger"
+                  href="#"
+                  @click="handleLogout"
+                >
+                  <i class="fas fa-sign-out-alt me-2"></i>Logout
+                </a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </div>
     </div>
@@ -55,125 +145,113 @@
 </template>
 
 <script>
+import { auth } from "@/firebase/firebaseConfig";
+import { signOut } from "firebase/auth";
+
 export default {
   name: "NavbarSection",
   data() {
     return {
-      isMenuOpen: false, // Track menu open/close state for mobile
-      isDesktop: window.innerWidth >= 992, // Track if desktop or mobile
+      isMenuOpen: false,
+      isDropdownOpen: false,
+      isLoggedIn: false,
+      userName: null,
+      userPhoto: null,
+      isAdmin: false,
+      authLoading: false, // Set to true if you want loading state
     };
   },
   mounted() {
-    this.checkScreenSize(); // Check the screen size on initial load
-    window.addEventListener("resize", this.checkScreenSize); // Add event listener to track screen resizing
-  },
-  beforeUnmount() {
-    window.removeEventListener("resize", this.checkScreenSize); // Clean up the event listener when component unmounts
+    auth.onAuthStateChanged((user) => {
+      this.isLoggedIn = !!user;
+      if (user) {
+        this.userName = user.displayName || user.email?.split("@")[0];
+        this.userPhoto = user.photoURL;
+        this.isAdmin = user.email?.endsWith("@admin.com"); // Simple admin check
+      }
+      this.authLoading = false;
+    });
   },
   methods: {
     toggleMenu() {
       if (!this.isDesktop) {
-        this.isMenuOpen = !this.isMenuOpen; // Toggle menu state on mobile only
+        this.isMenuOpen = !this.isMenuOpen;
+        if (this.isMenuOpen) this.isDropdownOpen = false;
       }
+    },
+    toggleDropdown() {
+      this.isDropdownOpen = !this.isDropdownOpen;
+      if (this.isDropdownOpen) this.isMenuOpen = false;
+    },
+    closeAllMenus() {
+      this.isMenuOpen = false;
+      this.isDropdownOpen = false;
     },
     closeMenu() {
       if (!this.isDesktop) {
-        this.isMenuOpen = false; // Close menu when a link is clicked on mobile
+        this.isMenuOpen = false;
+      }
+    },
+    async handleLogout() {
+      try {
+        await signOut(auth);
+        this.$router.push("/");
+      } catch (error) {
+        console.error("Logout failed:", error);
+        // Optionally show error to user
       }
     },
     checkScreenSize() {
-      this.isDesktop = window.innerWidth >= 992; // Update `isDesktop` when the screen is resized
+      this.isDesktop = window.innerWidth >= 992;
       if (this.isDesktop) {
-        this.isMenuOpen = false; // Close mobile menu when switching to desktop
+        this.isMenuOpen = false;
       }
+    },
+  },
+  computed: {
+    isDesktop() {
+      return window.innerWidth >= 992;
     },
   },
 };
 </script>
 
 <style scoped>
-/* Navbar Styles */
 .navbar {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Softer shadow for modern look */
-  padding: 10px 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-brand {
-  font-weight: bold;
-  font-size: 1.8rem; /* Larger font size for branding */
-  transition: color 0.3s ease;
-}
-
-.navbar-brand:hover {
-  color: #28a745; /* Hover effect for the brand */
+  font-size: 1.5rem;
+  color: #28a745;
 }
 
 .nav-link {
-  margin-right: 25px; /* Increased margin for better spacing */
   font-weight: 500;
-  color: #333; /* Darker text color */
-  transition: color 0.3s ease;
+  padding: 0.5rem 1rem;
 }
 
-.nav-link:hover {
-  color: #28a745; /* Smooth hover color change */
+.btn {
+  padding: 0.375rem 1rem;
+  white-space: nowrap;
 }
 
-/* Custom Hamburger Icon */
-.custom-toggler {
-  border: none;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 24px;
-  width: 30px;
-  cursor: pointer;
-  padding: 0;
+.dropdown-menu {
+  margin-top: 0.5rem;
 }
 
-.toggler-icon {
-  width: 100%;
-  height: 3px;
-  background-color: #333;
-  border-radius: 5px;
-  transition: all 0.3s ease;
-}
-
-/* Transform hamburger to 'X' when active */
-.is-active .toggler-icon:nth-child(1) {
-  transform: translateY(9px) rotate(45deg);
-}
-.is-active .toggler-icon:nth-child(2) {
-  opacity: 0;
-}
-.is-active .toggler-icon:nth-child(3) {
-  transform: translateY(-9px) rotate(-45deg);
-}
-
-/* Slide down transition for the navbar collapse */
-.slide-down-enter-active,
-.slide-down-leave-active {
-  transition: max-height 0.5s ease-in-out;
-}
-.slide-down-enter,
-.slide-down-leave-to {
-  max-height: 0;
-  overflow: hidden;
-}
-
-.navbar-collapse {
-  max-height: 500px; /* Maximum height to enable sliding effect */
-  overflow: hidden; /* Prevent content overflow */
-}
-
-@media (max-width: 992px) {
-  .navbar-nav {
-    text-align: center;
-    margin-top: 20px;
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    padding-top: 1rem;
   }
 
   .nav-item {
-    margin-bottom: 10px; /* Spacing between items in mobile view */
+    margin-bottom: 0.5rem;
+  }
+
+  .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
   }
 }
 </style>

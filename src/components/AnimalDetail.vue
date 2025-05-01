@@ -1,44 +1,75 @@
 <template>
   <div class="animal-detail container py-5">
-    <div v-if="loading" class="spinner-border text-primary" role="status">
-      <span class="sr-only">Loading...</span>
+    <div v-if="loading" class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
     </div>
-    <div v-else>
+
+    <div v-else class="animal-content">
       <h2 class="text-center mb-4">{{ animal.name }}</h2>
-      <img :src="animal.imageUrl" alt="Animal Image" class="img-fluid mb-4" />
-      <h4>Habitat</h4>
-      <p>{{ animal.habitat }}</p>
-      <h4>Other Information</h4>
-      <p>{{ animal.description }}</p>
+      <img
+        :src="animal.imageUrl"
+        :alt="`${animal.name} image`"
+        class="img-fluid rounded mb-4 animal-image"
+        @error="handleImageError"
+      />
+      <div class="animal-info">
+        <h4 class="info-title">Habitat</h4>
+        <p class="info-text">{{ animal.habitat }}</p>
+
+        <h4 class="info-title">Description</h4>
+        <p class="info-text">{{ animal.description }}</p>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["name"], // Get the animal name from the route parameter
+  props: {
+    name: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
-      animal: {},
+      animal: {
+        name: "",
+        habitat: "",
+        imageUrl: "",
+        description: "",
+      },
       loading: true,
+      defaultImage: "https://via.placeholder.com/600x400?text=Animal+Image",
     };
   },
-  mounted() {
-    this.fetchAnimalDetail();
+  async mounted() {
+    await this.fetchAnimalDetail();
   },
   methods: {
     async fetchAnimalDetail() {
-      const habitat = await this.fetchAnimalHabitat(this.name);
-      const imageUrl = await this.fetchAnimalImage(this.name);
-      const description = await this.fetchAnimalDescription(this.name); // Fetch other details if needed
+      try {
+        const [habitat, imageUrl, description] = await Promise.all([
+          this.fetchAnimalHabitat(this.name),
+          this.fetchAnimalImage(this.name),
+          this.fetchAnimalDescription(this.name),
+        ]);
 
-      this.animal = {
-        name: this.name,
-        habitat,
-        imageUrl,
-        description,
-      };
-      this.loading = false;
+        this.animal = {
+          name: this.name,
+          habitat,
+          imageUrl,
+          description,
+        };
+      } catch (error) {
+        console.error("Error loading animal:", error);
+        this.animal.description = "Could not load animal details.";
+        this.animal.imageUrl = this.defaultImage;
+      } finally {
+        this.loading = false;
+      }
     },
     async fetchAnimalHabitat(name) {
       const response = await fetch(
@@ -55,11 +86,21 @@ export default {
         `https://api.unsplash.com/search/photos?query=${name}&client_id=Sc4pjbkYKYIW0Kb84jJCNXyakIkkaiQ1c2DaGqTRzAA`
       );
       const data = await response.json();
-      return data.results[0]?.urls?.small || "https://via.placeholder.com/150";
+      return data.results[0]?.urls?.regular || this.defaultImage;
     },
     async fetchAnimalDescription(name) {
-      // Example placeholder for description (could be extended with additional data)
-      return `This is a description for ${name}.`;
+      const response = await fetch(
+        `https://api.api-ninjas.com/v1/animals?name=${name}`,
+        {
+          headers: { "X-Api-Key": "XUrkiZ8CqgXO0McvqPMpmXWnE6RixqZYWidyofow" },
+        }
+      );
+      const data = await response.json();
+      const characteristics = data[0]?.characteristics || {};
+      return characteristics.slogan || `Information about ${name}`;
+    },
+    handleImageError() {
+      this.animal.imageUrl = this.defaultImage;
     },
   },
 };
@@ -67,10 +108,24 @@ export default {
 
 <style scoped>
 .animal-detail {
-  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.animal-detail img {
-  max-width: 400px;
+.animal-image {
+  max-height: 400px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.info-title {
+  color: #2c3e50;
+  margin-top: 1.5rem;
+}
+
+.info-text {
+  color: #495057;
+  line-height: 1.6;
 }
 </style>
