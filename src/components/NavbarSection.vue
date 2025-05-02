@@ -1,56 +1,47 @@
 <template>
-  <!-- Loading state (optional) -->
-  <div v-if="authLoading" class="loading-auth">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-  </div>
-
-  <!-- Main Navigation -->
-  <nav
-    v-else
-    class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm"
-  >
+  <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm">
     <div class="container">
-      <!-- Brand Logo -->
       <router-link to="/" class="navbar-brand fw-bold">
         <i class="fas fa-paw me-2"></i>ZOO APP
       </router-link>
 
-      <!-- Mobile Toggle Button -->
       <button
         class="navbar-toggler"
         type="button"
         @click="toggleMenu"
         :aria-expanded="isMenuOpen ? 'true' : 'false'"
-        aria-label="Toggle navigation"
       >
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <!-- Navigation Links -->
       <div class="collapse navbar-collapse" :class="{ show: isMenuOpen }">
         <ul class="navbar-nav ms-auto">
-          <!-- Regular Nav Items -->
           <li class="nav-item">
-            <router-link to="/" class="nav-link" @click="closeMenu"
-              >Home</router-link
+            <router-link
+              to="/services"
+              class="nav-link"
+              @click="handleNavClick('/services', $event)"
             >
+              Services
+            </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/about" class="nav-link" @click="closeMenu"
-              >About</router-link
+            <router-link
+              to="/about"
+              class="nav-link"
+              @click="handleNavClick('/about', $event)"
             >
+              About
+            </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/services" class="nav-link" @click="closeMenu"
-              >Services</router-link
+            <router-link
+              to="/contact"
+              class="nav-link"
+              @click="handleNavClick('/contact', $event)"
             >
-          </li>
-          <li class="nav-item">
-            <router-link to="/contact" class="nav-link" @click="closeMenu"
-              >Contact</router-link
-            >
+              Contact
+            </router-link>
           </li>
 
           <!-- Admin Link (Conditional) -->
@@ -58,7 +49,7 @@
             <router-link
               to="/admin"
               class="nav-link text-danger fw-bold"
-              @click="closeMenu"
+              @click="handleNavClick('/admin', $event)"
             >
               Admin
             </router-link>
@@ -70,7 +61,7 @@
               <router-link
                 to="/login"
                 class="btn btn-outline-primary"
-                @click="closeMenu"
+                @click="handleNavClick('/login', $event)"
               >
                 Sign In
               </router-link>
@@ -79,7 +70,7 @@
               <router-link
                 to="/register"
                 class="btn btn-primary"
-                @click="closeMenu"
+                @click="handleNavClick('/register', $event)"
               >
                 Sign Up
               </router-link>
@@ -158,7 +149,7 @@ export default {
       userName: null,
       userPhoto: null,
       isAdmin: false,
-      authLoading: false, // Set to true if you want loading state
+      lastClickTime: 0
     };
   },
   mounted() {
@@ -169,15 +160,25 @@ export default {
         this.userPhoto = user.photoURL;
         this.isAdmin = user.email?.endsWith("@admin.com"); // Simple admin check
       }
-      this.authLoading = false;
     });
   },
   methods: {
-    toggleMenu() {
-      if (!this.isDesktop) {
-        this.isMenuOpen = !this.isMenuOpen;
-        if (this.isMenuOpen) this.isDropdownOpen = false;
+    handleNavClick(routePath, event) {
+      event.preventDefault();
+      const now = Date.now();
+      if (now - this.lastClickTime < 300) return;
+      this.lastClickTime = now;
+
+      if (this.$route.path === routePath) {
+        this.$router.go(0);
+      } else {
+        this.isMenuOpen = false;
+        this.$router.push(routePath);
       }
+    },
+    toggleMenu() {
+      this.isMenuOpen = !this.isMenuOpen;
+      if (this.isMenuOpen) this.isDropdownOpen = false;
     },
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen;
@@ -187,32 +188,15 @@ export default {
       this.isMenuOpen = false;
       this.isDropdownOpen = false;
     },
-    closeMenu() {
-      if (!this.isDesktop) {
-        this.isMenuOpen = false;
-      }
-    },
     async handleLogout() {
       try {
         await signOut(auth);
         this.$router.push("/");
       } catch (error) {
         console.error("Logout failed:", error);
-        // Optionally show error to user
       }
-    },
-    checkScreenSize() {
-      this.isDesktop = window.innerWidth >= 992;
-      if (this.isDesktop) {
-        this.isMenuOpen = false;
-      }
-    },
-  },
-  computed: {
-    isDesktop() {
-      return window.innerWidth >= 992;
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -220,38 +204,27 @@ export default {
 .navbar {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
-
 .navbar-brand {
   font-size: 1.5rem;
   color: #28a745;
 }
 
-.nav-link {
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-}
-
-.btn {
-  padding: 0.375rem 1rem;
-  white-space: nowrap;
-}
-
-.dropdown-menu {
-  margin-top: 0.5rem;
-}
-
+/* Mobile menu styles */
 @media (max-width: 991.98px) {
   .navbar-collapse {
     padding-top: 1rem;
   }
-
   .nav-item {
     margin-bottom: 0.5rem;
   }
-
   .btn {
     width: 100%;
     margin-bottom: 0.5rem;
   }
+}
+
+/* Dropdown styles */
+.dropdown-menu {
+  margin-top: 0.5rem;
 }
 </style>
