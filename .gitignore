@@ -1,108 +1,81 @@
-### --- Project-Specific --- ###
-# Local Firebase emulator files (if used)
-.firebase/
-firebase-debug.log
+# ==================== DEPENDENCIES ====================
+node_modules/
+*/node_modules/
 
-# Local development data
-data/
-*.sqlite
-*.db
+# ==================== BUILD OUTPUTS ====================
+dist/
+dist-ssr/
+build/
+*.tgz
+*.tar.gz
 
-### --- OS-Specific --- ###
-# macOS
+# ==================== NEXT.JS ====================
+.next/
+out/
+next-env.d.ts
+
+# ==================== ENVIRONMENT VARIABLES ====================
+.env
+.env.local
+.env.*.local
+
+# ==================== IDE & EDITOR ====================
+.vscode/
+.idea/
+*.swp
+*.swo
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ==================== OS GENERATED FILES ====================
 .DS_Store
+.DS_Store?
 ._*
 .Spotlight-V100
 .Trashes
-
-# Windows
-Thumbs.db
 ehthumbs.db
+Thumbs.db
 Desktop.ini
-$RECYCLE.BIN/
 
-# Linux
-.directory
-*~
-
-### --- Dependency & Build --- ###
-node_modules/
-/dist/
-/.vuepress/dist/
-*.js.map
-*.css.map
+# ==================== LOGS ====================
+logs
 *.log
-*.stats.html
 
-# Local Nuxt.js build
-.nuxt/
-.output/
-
-### --- Environment & Secrets --- ###
-.env
-.env.*
-!.env.example
-secrets.json
-firebase-config-backup.json
-*.key
-*.cert
-
-### --- Testing & Coverage --- ###
-/coverage/
-.nyc_output/
-/cypress/screenshots/
-/cypress/videos/
-/junit.xml
-
-### --- Editor & IDE --- ###
-# VS Code
-.vscode/
-!.vscode/settings.json.example
-!.vscode/extensions.json
-*.code-workspace
-
-# JetBrains (WebStorm, etc.)
-.idea/
-*.iml
-*.iws
-*.ipr
-
-# Vim
-*.swp
-*.swo
-*.un~
-
-### --- Package Manager --- ###
-# npm/yarn/pnpm
-.npm/
-.yarn/
-.pnpm-store/
-.yarn/cache/
-.yarn/unplugged/
-.yarn/build-state.yml
-.yarn/install-state.gz
-.pnpm-debug.log
-.yarnrc.yml
-
-# Lock files (keep package-lock.json for npm)
-# yarn.lock
-# pnpm-lock.yaml
-
-### --- Cache & Temp --- ###
-.cache/
-.temp/
-.tmp/
-*.tmp
-*.bak
-*.pid
-
-### --- Misc --- ###
-*.log
-logs/
-dump.rdb
+# ==================== RUNTIME DATA ====================
+pids
 *.pid
 *.seed
 *.pid.lock
+
+# ==================== COVERAGE & TESTING ====================
+coverage/
+*/coverage/
+.nyc_output/
+*.lcov
+playwright-report/
+test-results/
+
+# ==================== TYPESCRIPT ====================
 *.tsbuildinfo
-.history/
+
+# ==================== TEMPORARY FILES ====================
+tmp/
+temp/
+*.tmp
+*.temp
+.cache/
 .parcel-cache/
+
+# ==================== EDITOR EXTENSIONS ====================
+!.vscode/extensions.json
+
+# ==================== AGENT / SKILL TOOLING ====================
+.agents/
+.impeccable/
+.playwright-mcp/
+skills-lock.json
+opencode.json
+.vercel
