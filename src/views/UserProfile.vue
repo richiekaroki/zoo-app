@@ -1,0 +1,256 @@
+<template>
+  <div class="profile-page">
+    <div class="page-header">
+      <div class="container">
+        <span class="section-eyebrow" data-aos="fade-up">Your Account</span>
+        <h1 class="page-title" data-aos="fade-up" data-aos-delay="100">Profile</h1>
+      </div>
+    </div>
+
+    <div class="container py-5">
+      <div class="profile-layout">
+        <div class="profile-card" data-aos="fade-up">
+          <!-- Photo -->
+          <div class="profile-photo-section">
+            <div class="profile-photo">
+              <img
+                :src="user.photoURL || 'https://via.placeholder.com/150'"
+                alt="Profile"
+              />
+            </div>
+            <button class="btn btn-sm btn-outline-primary" @click="triggerFileUpload">
+              <i class="fas fa-camera me-1"></i>Change Photo
+            </button>
+            <input
+              type="file"
+              ref="fileInput"
+              @change="handlePhotoChange"
+              accept="image/*"
+              style="display: none"
+            />
+          </div>
+
+          <!-- Form -->
+          <div class="profile-form">
+            <div class="form-group">
+              <label class="form-label">Display Name</label>
+              <input type="text" class="form-control" v-model="user.displayName" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                v-model="user.email"
+                :disabled="!canChangeEmail"
+              />
+            </div>
+
+            <div v-if="user.providerData[0]?.providerId === 'password'" class="form-group">
+              <label class="form-label">New Password</label>
+              <input
+                type="password"
+                class="form-control mb-2"
+                v-model="newPassword"
+                placeholder="Leave blank to keep current"
+              />
+              <input
+                type="password"
+                class="form-control"
+                v-model="confirmPassword"
+                placeholder="Confirm new password"
+              />
+            </div>
+
+            <div class="profile-actions">
+              <button
+                class="btn btn-primary"
+                @click="updateProfile"
+                :disabled="updating"
+              >
+                <span v-if="updating">
+                  <span class="spinner-border spinner-border-sm me-1"></span>Saving...
+                </span>
+                <span v-else><i class="fas fa-check me-1"></i>Save Changes</span>
+              </button>
+              <button class="btn btn-outline-danger" @click="handleLogout">
+                <i class="fas fa-sign-out-alt me-1"></i>Sign Out
+              </button>
+            </div>
+
+            <div v-if="successMessage" class="alert alert-success mt-3">
+              <i class="fas fa-check-circle me-2"></i>{{ successMessage }}
+            </div>
+            <div v-if="error" class="alert alert-danger mt-3">
+              <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { auth, storage } from "@/firebase/firebaseConfig";
+import { updateProfile, updateEmail, updatePassword, signOut } from "firebase/auth";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
+export default {
+  name: "UserProfile",
+  data() {
+    return {
+      user: { displayName: "", email: "", photoURL: "", providerData: [] },
+      newPassword: "",
+      confirmPassword: "",
+      updating: false,
+      error: null,
+      successMessage: null,
+    };
+  },
+  computed: {
+    canChangeEmail() {
+      return this.user.providerData[0]?.providerId === "password";
+    },
+  },
+  created() {
+    this.loadUserData();
+  },
+  methods: {
+    loadUserData() {
+      const u = auth.currentUser;
+      if (u) {
+        this.user = {
+          displayName: u.displayName || "",
+          email: u.email || "",
+          photoURL: u.photoURL || "",
+          providerData: u.providerData || [],
+        };
+      }
+    },
+    triggerFileUpload() {
+      this.$refs.fileInput.click();
+    },
+    async handlePhotoChange(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      try {
+        this.updating = true;
+        this.error = null;
+        const storageRef = ref(storage, `profile-photos/${auth.currentUser.uid}`);
+        await uploadBytes(storageRef, file);
+        const downloadURL = await getDownloadURL(storageRef);
+        await updateProfile(auth.currentUser, { photoURL: downloadURL });
+        this.user.photoURL = downloadURL;
+        this.successMessage = "Photo updated!";
+        setTimeout(() => { this.successMessage = null; }, 3000);
+      } catch (e) {
+        this.error = e.message;
+      } finally {
+        this.updating = false;
+      }
+    },
+    async updateProfile() {
+      if (this.newPassword && this.newPassword !== this.confirmPassword) {
+        this.error = "Passwords don't match";
+        return;
+      }
+      try {
+        this.updating = true;
+        this.error = null;
+        this.successMessage = null;
+
+        if (this.user.displayName !== auth.currentUser.displayName || this.user.photoURL !== auth.currentUser.photoURL) {
+          await updateProfile(auth.currentUser, { displayName: this.user.displayName, photoURL: this.user.photoURL });
+        }
+        if (this.canChangeEmail && this.user.email !== auth.currentUser.email) {
+          await updateEmail(auth.currentUser, this.user.email);
+        }
+        if (this.newPassword && this.user.providerData[0]?.providerId === "password") {
+          await updatePassword(auth.currentUser, this.newPassword);
+          this.newPassword = "";
+          this.confirmPassword = "";
+        }
+
+        this.successMessage = "Profile updated!";
+        setTimeout(() => { this.successMessage = null; }, 3000);
+      } catch (e) {
+        this.error = e.message;
+      } finally {
+        this.updating = false;
+      }
+    },
+    async handleLogout() {
+      try {
+        await signOut(auth);
+        this.$router.push("/login");
+      } catch (e) {
+        this.error = e.message;
+      }
+    },
+  },
+};
+</script>
+
+<style scoped>
+.profile-page {
+  padding-top: var(--nav-height);
+}
+
+.profile-layout {
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+.profile-card {
+  background: white;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.profile-photo-section {
+  text-align: center;
+  padding: 2rem 2rem 1.5rem;
+  background: var(--color-sand);
+}
+
+.profile-photo {
+  width: 110px;
+  height: 110px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin: 0 auto 1rem;
+  border: 3px solid var(--color-gold);
+  transition: transform var(--transition-spring);
+}
+
+.profile-photo:hover {
+  transform: scale(1.03);
+}
+
+.profile-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-form {
+  padding: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.profile-actions .btn {
+  flex: 1;
+}
+</style>

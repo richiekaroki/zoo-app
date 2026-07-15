@@ -1,0 +1,346 @@
+<template>
+  <div class="animal-list-page">
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-title" data-aos="fade-up" data-aos-delay="100">Our Animals</h1>
+        <p class="page-subtitle" data-aos="fade-up" data-aos-delay="200">
+          Discover the incredible species that call our planet home.
+        </p>
+      </div>
+    </div>
+
+    <div class="container py-5">
+      <!-- Search -->
+      <div class="search-wrapper" data-aos="fade-up">
+        <div class="search-bar">
+          <i class="fas fa-search search-icon"></i>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search by name or habitat..."
+            v-model="searchQuery"
+            aria-label="Search animals"
+          />
+          <span v-if="searchQuery" class="search-clear" @click="searchQuery = ''" role="button" aria-label="Clear search">
+            <i class="fas fa-times"></i>
+          </span>
+        </div>
+      </div>
+
+      <!-- Skeleton Loading -->
+      <div v-if="loading" class="animal-grid">
+        <div v-for="n in 6" :key="n" class="skeleton-card">
+          <div class="skeleton skeleton-img"></div>
+          <div class="skeleton-card-body">
+            <div class="skeleton skeleton-text" style="width: 40%"></div>
+            <div class="skeleton skeleton-text" style="width: 70%; height: 1.25rem; margin-top: 0.5rem"></div>
+            <div class="skeleton skeleton-text" style="width: 50%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid -->
+      <div v-else class="animal-grid">
+        <div
+          v-for="animal in filteredAnimals"
+          :key="animal.name"
+          class="animal-card stagger-item"
+        >
+          <div class="animal-card-img">
+            <img :src="animal.imageUrl" :alt="animal.name" loading="lazy" />
+            <div class="animal-card-img-overlay">
+              <router-link :to="`/animals/${animal.name}`" class="btn btn-sm btn-gold">
+                View Details
+              </router-link>
+            </div>
+          </div>
+          <div class="animal-card-body">
+            <h3>{{ animal.name }}</h3>
+            <p class="animal-card-habitat">
+              <i class="fas fa-map-marker-alt me-1"></i>{{ animal.habitat }}
+            </p>
+            <router-link :to="`/animals/${animal.name}`" class="animal-card-link">
+              Learn more<i class="fas fa-arrow-right ms-2"></i>
+            </router-link>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div v-if="!loading && filteredAnimals.length === 0" class="empty-state" data-aos="fade-up">
+        <div class="empty-icon">
+          <i class="fas fa-search"></i>
+        </div>
+        <h3>No animals found</h3>
+        <p>Try adjusting your search query or browse all animals.</p>
+        <button class="btn btn-outline-primary" @click="searchQuery = ''">Clear Search</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { fetchAnimalHabitat, fetchAnimalImage } from "@/services/animalApi";
+
+export default {
+  data() {
+    return {
+      animals: [],
+      loading: true,
+      searchQuery: "",
+      animalNames: ["Lion", "Tiger", "Elephant", "Giraffe", "Warthog", "Zebra", "Monkey"],
+    };
+  },
+  computed: {
+    filteredAnimals() {
+      const query = this.searchQuery.toLowerCase();
+      return this.animals.filter(
+        (a) =>
+          a.name.toLowerCase().includes(query) ||
+          a.habitat.toLowerCase().includes(query)
+      );
+    },
+  },
+  async mounted() {
+    await this.fetchAnimals();
+  },
+  methods: {
+    async fetchAnimals() {
+      try {
+        const results = await Promise.all(
+          this.animalNames.map(async (name) => {
+            const [habitat, imageUrl] = await Promise.all([
+              fetchAnimalHabitat(name),
+              fetchAnimalImage(name, "small"),
+            ]);
+            return { name, habitat, imageUrl };
+          })
+        );
+        this.animals = results;
+      } catch (error) {
+        console.error("Error fetching animals:", error);
+      } finally {
+        this.loading = false;
+      }
+    },
+  },
+};
+</script>
+
+<style scoped>
+.animal-list-page {
+  padding-top: var(--nav-height);
+}
+
+.search-wrapper {
+  max-width: 520px;
+  margin: 0 auto 3rem;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1.5px solid var(--color-light-border);
+  border-radius: var(--radius-full);
+  padding: 0.5rem 1.25rem;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.search-bar:focus-within {
+  border-color: var(--color-forest-light);
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.08);
+}
+
+.search-icon {
+  color: var(--color-warm-gray);
+  font-size: var(--text-sm);
+  margin-right: 0.75rem;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-charcoal);
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: var(--color-warm-gray);
+  opacity: 0.6;
+}
+
+.search-clear {
+  color: var(--color-warm-gray);
+  cursor: pointer;
+  padding: 0.25rem;
+  margin-left: 0.5rem;
+  transition: color var(--transition-fast);
+}
+
+.search-clear:hover {
+  color: var(--color-charcoal);
+}
+
+/* Grid */
+.animal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+/* Animal Card */
+.animal-card {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: white;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-slow), box-shadow var(--transition-slow);
+}
+
+.animal-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-xl);
+}
+
+.animal-card-img {
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+}
+
+.animal-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animal-card:hover .animal-card-img img {
+  transform: scale(1.05);
+}
+
+.animal-card-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(15, 43, 31, 0.5) 0%,
+    transparent 50%
+  );
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 1rem;
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.animal-card:hover .animal-card-img-overlay {
+  opacity: 1;
+}
+
+.animal-card-body {
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.animal-card-body h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 400;
+  color: var(--color-forest-dark);
+  margin-bottom: var(--space-2);
+  letter-spacing: -0.01em;
+}
+
+.animal-card-habitat {
+  font-size: var(--text-sm);
+  color: var(--color-warm-gray);
+  margin-bottom: var(--space-4);
+}
+
+.animal-card-link {
+  font-weight: 600;
+  color: var(--color-gold-dark);
+  font-size: var(--text-sm);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.animal-card-link:hover {
+  color: var(--color-gold);
+  transform: translateX(3px);
+}
+
+/* Skeleton Card */
+.skeleton-card {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: white;
+  box-shadow: var(--shadow-xs);
+}
+
+.skeleton-img {
+  height: 240px;
+  border-radius: 0;
+}
+
+.skeleton-card-body {
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 4rem 0;
+}
+
+.empty-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-sand);
+  border-radius: var(--radius-xl);
+  color: var(--color-warm-gray);
+  font-size: 1.5rem;
+}
+
+.empty-state h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  color: var(--color-forest-dark);
+  margin-bottom: var(--space-2);
+}
+
+.empty-state p {
+  color: var(--color-warm-gray);
+  margin-bottom: var(--space-6);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .animal-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .animal-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .animal-card-img {
+    height: 200px;
+  }
+}
+</style>

@@ -57,6 +57,7 @@ coverage/
 *.lcov
 playwright-report/
 test-results/
+screenshots/
 
 # ==================== TYPESCRIPT ====================
 *.tsbuildinfo
