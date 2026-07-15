@@ -11,10 +11,10 @@
         <!-- Form -->
         <div class="contact-form-col" data-aos="fade-right">
           <div class="contact-form-card">
-            <div v-if="submitSuccess" class="alert alert-success">
+            <div v-if="submitSuccess" class="alert alert-success" role="status" aria-live="polite">
               <i class="fas fa-check-circle me-2"></i>Message sent successfully!
             </div>
-            <div v-if="submitError" class="alert alert-danger">
+            <div v-if="submitError" class="alert alert-danger" role="alert" aria-live="assertive">
               <i class="fas fa-exclamation-circle me-2"></i>{{ submitError }}
             </div>
 
@@ -69,6 +69,7 @@
                 type="submit"
                 class="btn btn-primary btn-lg w-100"
                 :disabled="!isValid || loading"
+                :aria-busy="loading"
               >
                 <span v-if="loading">
                   <span class="spinner-border spinner-border-sm me-2"></span>Sending...
@@ -93,7 +94,7 @@
                 <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
                 <div>
                   <strong>Address</strong>
-                  <p>123 Animal Street, Safari City, SC 12345</p>
+                  <p>123 Zoo Lane, Wildlife City</p>
                 </div>
               </div>
               <div class="info-item">
@@ -120,6 +121,7 @@
                 style="border: 0; border-radius: var(--radius-lg)"
                 allowfullscreen=""
                 loading="lazy"
+                title="Location map"
               ></iframe>
             </div>
           </div>
@@ -215,7 +217,7 @@ export default {
 }
 
 .form-error {
-  color: #c0392b;
+  color: var(--color-error);
   font-size: var(--text-xs);
   display: block;
   margin-top: var(--space-1);

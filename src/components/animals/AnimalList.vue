@@ -21,14 +21,14 @@
             v-model="searchQuery"
             aria-label="Search animals"
           />
-          <span v-if="searchQuery" class="search-clear" @click="searchQuery = ''" role="button" aria-label="Clear search">
+          <button v-if="searchQuery" class="search-clear" @click="searchQuery = ''" type="button" aria-label="Clear search">
             <i class="fas fa-times"></i>
-          </span>
+          </button>
         </div>
       </div>
 
       <!-- Skeleton Loading -->
-      <div v-if="loading" class="animal-grid">
+      <div v-if="loading" class="animal-grid" aria-busy="true" aria-label="Loading animals">
         <div v-for="n in 6" :key="n" class="skeleton-card">
           <div class="skeleton skeleton-img"></div>
           <div class="skeleton-card-body">

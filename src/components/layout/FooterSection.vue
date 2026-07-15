@@ -172,7 +172,7 @@ export default {
   font-family: var(--font-body);
   font-size: var(--text-xs);
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.7);
   margin-bottom: 1.25rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -269,7 +269,7 @@ export default {
 
 .footer-bottom p {
   font-size: var(--text-xs);
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.6);
   margin: 0;
   letter-spacing: 0.02em;
 }

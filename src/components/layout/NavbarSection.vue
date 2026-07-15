@@ -68,7 +68,7 @@
               :aria-expanded="isDropdownOpen ? 'true' : 'false'"
             >
               <span class="user-avatar" v-if="userPhoto">
-                <img :src="userPhoto" alt="" />
+                <img :src="userPhoto" :alt="userName || 'User avatar'" />
               </span>
               <span class="user-avatar user-avatar-placeholder" v-else>
                 <i class="fas fa-user"></i>

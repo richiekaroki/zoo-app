@@ -31,6 +31,14 @@
   transition-property: transform, opacity;
 }
 
+/* Fallback: ensure content is visible if AOS fails to initialize */
+@media (prefers-reduced-motion: reduce) {
+  [data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 /* --- Stagger animation for lists --- */
 @keyframes fadeInUp {
   from {

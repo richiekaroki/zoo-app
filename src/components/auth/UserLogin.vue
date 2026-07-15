@@ -33,11 +33,11 @@
           />
         </div>
 
-        <div v-if="error" class="alert alert-danger">
+        <div v-if="error" class="alert alert-danger" role="alert" aria-live="assertive">
           <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
         </div>
 
-        <button type="submit" class="btn btn-primary btn-lg w-100" :disabled="loading">
+        <button type="submit" class="btn btn-primary btn-lg w-100" :disabled="loading" :aria-busy="loading">
           <span v-if="loading">
             <span class="spinner-border spinner-border-sm me-2"></span>Signing in...
           </span>
@@ -67,7 +67,7 @@ export default {
       this.error = null;
       try {
         await signInWithEmailAndPassword(auth, this.email, this.password);
-        this.$router.push("/contact");
+        this.$router.push("/");
       } catch (e) {
         this.error = "Invalid email or password. Please try again.";
       } finally {

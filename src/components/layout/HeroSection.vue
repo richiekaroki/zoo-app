@@ -1,5 +1,5 @@
 <template>
-  <div class="hero" :class="{ loaded: imageLoaded }">
+  <div class="hero">
     <div class="hero-overlay"></div>
     <div class="hero-gradient"></div>
 
@@ -35,24 +35,6 @@
 <script>
 export default {
   name: "HeroSection",
-  data() {
-    return {
-      imageLoaded: false,
-    };
-  },
-  mounted() {
-    this.lazyLoadImage();
-  },
-  methods: {
-    lazyLoadImage() {
-      const img = new Image();
-      img.src =
-        "https://images.unsplash.com/photo-1723752233207-86148d03889f?w=1400&auto=format&fit=crop&q=80";
-      img.onload = () => {
-        this.imageLoaded = true;
-      };
-    },
-  },
 };
 </script>
 
@@ -73,12 +55,6 @@ export default {
   background-image: url("https://images.unsplash.com/photo-1723752233207-86148d03889f?w=1400&auto=format&fit=crop&q=80");
   background-size: cover;
   background-position: center 40%;
-  opacity: 0;
-  transition: opacity 1.4s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: opacity;
-}
-
-.hero.loaded .hero-overlay {
   opacity: 1;
 }
 

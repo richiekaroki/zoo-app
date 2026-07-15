@@ -20,7 +20,6 @@ AOS.init({
   easing: "ease-out-quad",
   once: true,
   offset: 100,
-  disable: window.innerWidth < 768,
 });
 
 let refreshTimeout;
