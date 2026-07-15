@@ -10,8 +10,7 @@ export async function fetchAnimalHabitat(name) {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     return data[0]?.characteristics?.habitat || "Habitat information unavailable";
-  } catch (error) {
-    console.error(`Failed to fetch habitat for ${name}:`, error);
+  } catch {
     return "Habitat information unavailable";
   }
 }
@@ -26,8 +25,7 @@ export async function fetchAnimalDescription(name) {
     const data = await response.json();
     const characteristics = data[0]?.characteristics || {};
     return characteristics.slogan || `Learn more about the ${name}`;
-  } catch (error) {
-    console.error(`Failed to fetch description for ${name}:`, error);
+  } catch {
     return `Learn more about the ${name}`;
   }
 }
@@ -43,8 +41,7 @@ export async function fetchAnimalImage(name, size = "small") {
       return data.results[0]?.urls?.regular || "https://via.placeholder.com/600x400?text=Animal+Image";
     }
     return data.results[0]?.urls?.small || "https://via.placeholder.com/300x200";
-  } catch (error) {
-    console.error(`Failed to fetch image for ${name}:`, error);
+  } catch {
     return size === "regular"
       ? "https://via.placeholder.com/600x400?text=Animal+Image"
       : "https://via.placeholder.com/300x200";

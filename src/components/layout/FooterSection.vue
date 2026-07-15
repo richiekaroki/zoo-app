@@ -82,7 +82,7 @@ export default {
 
 .footer-top {
   display: grid;
-  grid-template-columns: 1.4fr 0.8fr 0.8fr 1.2fr;
+  grid-template-columns: 1.4fr 1fr 1fr;
   gap: 3rem;
   padding-bottom: 3rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
@@ -155,8 +155,7 @@ export default {
 }
 
 /* Links */
-.footer-links h4,
-.footer-newsletter h4 {
+.footer-links h4 {
   font-family: var(--font-body);
   font-size: var(--text-xs);
   font-weight: 700;

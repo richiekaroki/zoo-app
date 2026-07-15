@@ -35,6 +35,13 @@
             autocomplete="current-password"
             aria-describedby="passwordError"
           />
+          <button type="button" class="forgot-password-link" @click="forgotPassword">
+            Forgot password?
+          </button>
+        </div>
+
+        <div v-if="successMessage" class="alert alert-success" role="status">
+          <i class="fas fa-check-circle me-2"></i>{{ successMessage }}
         </div>
 
         <div v-if="error" class="alert alert-danger" role="alert" aria-live="assertive" id="loginError">
@@ -58,12 +65,12 @@
 </template>
 
 <script>
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/firebase/firebaseConfig";
 
 export default {
   data() {
-    return { email: "", password: "", loading: false, error: null };
+    return { email: "", password: "", loading: false, error: null, successMessage: null };
   },
   computed: {
     isFormValid() {
@@ -75,6 +82,7 @@ export default {
       if (!this.isFormValid) return;
       this.loading = true;
       this.error = null;
+      this.successMessage = null;
       try {
         await signInWithEmailAndPassword(auth, this.email, this.password);
         this.$router.push("/");
@@ -90,6 +98,24 @@ export default {
         }
       } finally {
         this.loading = false;
+      }
+    },
+    async forgotPassword() {
+      if (!this.email.trim()) {
+        this.error = "Please enter your email address first.";
+        return;
+      }
+      this.error = null;
+      this.successMessage = null;
+      try {
+        await sendPasswordResetEmail(auth, this.email);
+        this.successMessage = "Password reset email sent. Check your inbox.";
+      } catch (e) {
+        if (e.code === "auth/user-not-found") {
+          this.error = "No account found with this email.";
+        } else {
+          this.error = "Failed to send reset email. Please try again.";
+        }
       }
     },
   },
@@ -171,6 +197,24 @@ export default {
 
 .form-group {
   margin-bottom: 1.25rem;
+}
+
+.forgot-password-link {
+  background: none;
+  border: none;
+  color: var(--color-forest-light);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 0.5rem;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.forgot-password-link:hover {
+  color: var(--color-gold);
+  text-decoration: underline;
 }
 
 .auth-footer {

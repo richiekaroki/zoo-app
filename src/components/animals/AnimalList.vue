@@ -53,14 +53,9 @@
         >
           <div class="animal-card-img">
             <img :src="animal.imageUrl" :alt="animal.name" loading="lazy" />
-            <span class="conservation-badge" :class="getStatusClass(animal.status)">
+            <span class="conservation-badge" :class="getStatusClass(animal.status)" :aria-label="`Conservation status: ${animal.status}`">
               {{ animal.status }}
             </span>
-            <div class="animal-card-img-overlay">
-              <router-link :to="`/animals/${animal.name}`" class="btn btn-sm btn-gold">
-                View Details
-              </router-link>
-            </div>
           </div>
           <div class="animal-card-body">
             <h3>{{ animal.name }}</h3>
@@ -308,26 +303,6 @@ export default {
 
 .animal-card:hover .animal-card-img img {
   transform: scale(1.05);
-}
-
-.animal-card-img-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(15, 43, 31, 0.5) 0%,
-    transparent 50%
-  );
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  padding: 1rem;
-  opacity: 0;
-  transition: opacity var(--transition-base);
-}
-
-.animal-card:hover .animal-card-img-overlay {
-  opacity: 1;
 }
 
 .animal-card-body {

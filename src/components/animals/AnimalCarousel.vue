@@ -205,7 +205,6 @@ export default {
           },
         ];
       } catch (error) {
-        console.error("Error fetching animals:", error);
         this.error = true;
       } finally {
         this.loading = false;
@@ -250,7 +249,7 @@ export default {
         const audio = this.$refs.animalAudio;
         audio.pause();
         audio.src = animal.sound;
-        audio.play().catch((e) => console.error("Audio playback failed:", e));
+        audio.play().catch(() => {});
       }
     },
 
@@ -356,8 +355,7 @@ export default {
 }
 
 .carousel-caption {
-  background: rgba(15, 43, 31, 0.88);
-  backdrop-filter: blur(16px);
+  background: rgba(15, 43, 31, 0.94);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   right: 8%;
