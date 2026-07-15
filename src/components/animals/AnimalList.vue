@@ -66,8 +66,20 @@
         </div>
       </div>
 
+      <!-- Error State -->
+      <div v-if="error && !loading" class="error-state" data-aos="fade-up">
+        <div class="error-icon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3>Something went wrong</h3>
+        <p>{{ error }}</p>
+        <button class="btn btn-outline-primary" @click="fetchAnimals">
+          <i class="fas fa-redo me-2"></i>Try Again
+        </button>
+      </div>
+
       <!-- Empty State -->
-      <div v-if="!loading && filteredAnimals.length === 0" class="empty-state" data-aos="fade-up">
+      <div v-if="!loading && !error && filteredAnimals.length === 0" class="empty-state" data-aos="fade-up">
         <div class="empty-icon">
           <i class="fas fa-search"></i>
         </div>
@@ -87,6 +99,7 @@ export default {
     return {
       animals: [],
       loading: true,
+      error: null,
       searchQuery: "",
       animalNames: ["Lion", "Tiger", "Elephant", "Giraffe", "Warthog", "Zebra", "Monkey"],
     };
@@ -118,7 +131,7 @@ export default {
         );
         this.animals = results;
       } catch (error) {
-        console.error("Error fetching animals:", error);
+        this.error = "Failed to load animals. Please try again.";
       } finally {
         this.loading = false;
       }
@@ -254,12 +267,18 @@ export default {
   color: var(--color-forest-dark);
   margin-bottom: var(--space-2);
   letter-spacing: -0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .animal-card-habitat {
   font-size: var(--text-sm);
   color: var(--color-warm-gray);
   margin-bottom: var(--space-4);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .animal-card-link {
@@ -296,12 +315,14 @@ export default {
 }
 
 /* Empty State */
-.empty-state {
+.empty-state,
+.error-state {
   text-align: center;
   padding: 4rem 0;
 }
 
-.empty-icon {
+.empty-icon,
+.error-icon {
   width: 72px;
   height: 72px;
   margin: 0 auto var(--space-6);
@@ -314,14 +335,21 @@ export default {
   font-size: 1.5rem;
 }
 
-.empty-state h3 {
+.error-icon {
+  background: #fef2f2;
+  color: var(--color-error);
+}
+
+.empty-state h3,
+.error-state h3 {
   font-family: var(--font-display);
   font-size: var(--text-xl);
   color: var(--color-forest-dark);
   margin-bottom: var(--space-2);
 }
 
-.empty-state p {
+.empty-state p,
+.error-state p {
   color: var(--color-warm-gray);
   margin-bottom: var(--space-6);
 }

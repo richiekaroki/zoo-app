@@ -8,6 +8,21 @@
       </div>
     </div>
 
+    <div v-else-if="error" class="error-state">
+      <div class="container">
+        <div class="error-content" data-aos="fade-up">
+          <div class="error-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <h2>Something went wrong</h2>
+          <p>{{ error }}</p>
+          <router-link to="/animals" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Animals
+          </router-link>
+        </div>
+      </div>
+    </div>
+
     <template v-else>
       <div class="detail-header">
         <div class="container">
@@ -86,6 +101,7 @@ export default {
     return {
       animal: { name: "", habitat: "", imageUrl: "", description: "" },
       loading: true,
+      error: null,
     };
   },
   async mounted() {
@@ -101,8 +117,7 @@ export default {
         ]);
         this.animal = { name: this.name, habitat, imageUrl, description };
       } catch (error) {
-        console.error("Error loading animal:", error);
-        this.animal.description = "Could not load animal details.";
+        this.error = "Failed to load animal details. Please try again.";
         this.animal.imageUrl = DEFAULT_IMAGE;
       } finally {
         this.loading = false;
@@ -212,6 +227,8 @@ export default {
   color: var(--color-charcoal);
   line-height: 1.7;
   margin: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .info-divider {
@@ -233,6 +250,40 @@ export default {
   align-items: center;
   min-height: 60vh;
   padding-top: var(--nav-height);
+}
+
+.error-state {
+  padding-top: var(--nav-height);
+}
+
+.error-content {
+  text-align: center;
+  padding: 4rem 0;
+}
+
+.error-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fef2f2;
+  border-radius: var(--radius-xl);
+  color: var(--color-error);
+  font-size: 1.5rem;
+}
+
+.error-content h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  color: var(--color-forest-dark);
+  margin-bottom: var(--space-2);
+}
+
+.error-content p {
+  color: var(--color-warm-gray);
+  margin-bottom: var(--space-6);
 }
 
 @media (max-width: 768px) {

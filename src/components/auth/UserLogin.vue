@@ -9,7 +9,7 @@
         <p>Sign in to access your profile</p>
       </div>
 
-      <form @submit.prevent="loginUser">
+      <form @submit.prevent="loginUser" aria-label="Sign in form">
         <div class="form-group">
           <label for="email" class="form-label">Email</label>
           <input
@@ -19,6 +19,8 @@
             class="form-control"
             placeholder="you@example.com"
             required
+            autocomplete="email"
+            aria-describedby="emailError"
           />
         </div>
         <div class="form-group">
@@ -30,14 +32,16 @@
             class="form-control"
             placeholder="Enter your password"
             required
+            autocomplete="current-password"
+            aria-describedby="passwordError"
           />
         </div>
 
-        <div v-if="error" class="alert alert-danger" role="alert" aria-live="assertive">
+        <div v-if="error" class="alert alert-danger" role="alert" aria-live="assertive" id="loginError">
           <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
         </div>
 
-        <button type="submit" class="btn btn-primary btn-lg w-100" :disabled="loading" :aria-busy="loading">
+        <button type="submit" class="btn btn-primary btn-lg w-100" :disabled="loading || !isFormValid" :aria-busy="loading">
           <span v-if="loading">
             <span class="spinner-border spinner-border-sm me-2"></span>Signing in...
           </span>
@@ -61,15 +65,29 @@ export default {
   data() {
     return { email: "", password: "", loading: false, error: null };
   },
+  computed: {
+    isFormValid() {
+      return this.email.trim() && this.password.trim();
+    },
+  },
   methods: {
     async loginUser() {
+      if (!this.isFormValid) return;
       this.loading = true;
       this.error = null;
       try {
         await signInWithEmailAndPassword(auth, this.email, this.password);
         this.$router.push("/");
       } catch (e) {
-        this.error = "Invalid email or password. Please try again.";
+        if (e.code === "auth/user-not-found") {
+          this.error = "No account found with this email.";
+        } else if (e.code === "auth/wrong-password") {
+          this.error = "Incorrect password. Please try again.";
+        } else if (e.code === "auth/too-many-requests") {
+          this.error = "Too many failed attempts. Please try again later.";
+        } else {
+          this.error = "Invalid email or password. Please try again.";
+        }
       } finally {
         this.loading = false;
       }

@@ -54,7 +54,7 @@
             </li>
             <li>
               <i class="fas fa-envelope"></i>
-              info@animalkingdom.com
+              info@wamzoo.com
             </li>
           </ul>
         </div>

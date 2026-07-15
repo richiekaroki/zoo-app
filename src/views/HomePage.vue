@@ -4,7 +4,6 @@
     <section class="featured-section">
       <div class="container">
         <div class="section-header" data-aos="fade-up">
-          <span class="section-eyebrow">Featured Animals</span>
           <h2 class="section-title">Meet Our Wildlife</h2>
           <p class="section-subtitle">
             Each species plays a vital role in maintaining the balance of our ecosystems.

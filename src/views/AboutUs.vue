@@ -9,7 +9,6 @@
     <div class="container py-5">
       <div class="about-layout">
         <div class="about-content" data-aos="fade-right">
-          <span class="section-eyebrow">Who We Are</span>
           <h2 class="about-heading">
             Igniting Passion for<br />
             <span class="text-accent">Wildlife Conservation</span>
@@ -38,7 +37,6 @@
     <div class="values-section">
       <div class="container">
         <div class="text-center mb-5" data-aos="fade-up">
-          <span class="section-eyebrow">Our Values</span>
           <h2 class="section-title">What Drives Us</h2>
         </div>
         <div class="values-grid">

@@ -4,10 +4,7 @@
     <div class="hero-gradient"></div>
 
     <div class="container hero-content">
-      <div class="hero-badge" data-aos="fade-down" data-aos-delay="100">
-        <i class="fas fa-leaf me-2"></i>Wildlife Conservation
-      </div>
-      <h1 class="hero-title" data-aos="fade-up" data-aos-delay="200">
+      <h1 class="hero-title" data-aos="fade-up" data-aos-delay="100">
         Where Every<br />
         <span class="title-accent">Creature</span><br />
         Has a Story

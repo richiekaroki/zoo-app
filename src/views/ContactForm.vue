@@ -108,7 +108,7 @@
                 <div class="info-icon"><i class="fas fa-envelope"></i></div>
                 <div>
                   <strong>Email</strong>
-                  <p>info@wildlifehabitat.com</p>
+                  <p>info@wamzoo.com</p>
                 </div>
               </div>
             </div>

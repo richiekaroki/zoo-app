@@ -2,7 +2,6 @@
   <div class="admin-page">
     <div class="page-header">
       <div class="container">
-        <span class="section-eyebrow" data-aos="fade-up">Administration</span>
         <h1 class="page-title" data-aos="fade-up" data-aos-delay="100">Dashboard</h1>
       </div>
     </div>
@@ -19,12 +18,14 @@
               placeholder="Search by name or email..."
               v-model="searchQuery"
               @input="filterSubmissions"
+              aria-label="Search submissions"
             />
           </div>
           <div class="controls-meta">
-            <label class="controls-label">Show</label>
+            <label class="controls-label" for="itemsPerPage">Show</label>
             <select
               class="form-select form-select-sm"
+              id="itemsPerPage"
               v-model="itemsPerPage"
               @change="fetchSubmissions"
             >
@@ -37,17 +38,36 @@
         </div>
       </div>
 
+      <!-- Loading State -->
+      <div v-if="loading" class="admin-loading">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading submissions...</span>
+        </div>
+      </div>
+
+      <!-- Error State -->
+      <div v-else-if="error" class="admin-error">
+        <div class="error-icon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3>Failed to load data</h3>
+        <p>{{ error }}</p>
+        <button class="btn btn-outline-primary" @click="fetchSubmissions">
+          <i class="fas fa-redo me-2"></i>Try Again
+        </button>
+      </div>
+
       <!-- Table -->
-      <div class="admin-table-wrapper" data-aos="fade-up" data-aos-delay="100">
+      <div v-else class="admin-table-wrapper" data-aos="fade-up" data-aos-delay="100">
         <div class="table-responsive" v-if="filteredSubmissions.length > 0">
-          <table class="table">
+          <table class="table" aria-label="Contact submissions">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Message</th>
-                <th>Date</th>
-                <th class="text-end">Actions</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Message</th>
+                <th scope="col">Date</th>
+                <th scope="col" class="text-end">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -57,10 +77,10 @@
                 <td class="text-truncate message-td">{{ submission.message }}</td>
                 <td>{{ formatDate(submission.submittedAt) }}</td>
                 <td class="text-end">
-                  <button class="btn btn-sm btn-outline-primary me-1" @click="viewDetails(submission)">
+                  <button class="btn btn-sm btn-outline-primary me-1" @click="viewDetails(submission)" :aria-label="`View submission from ${submission.name}`">
                     <i class="fas fa-eye"></i>
                   </button>
-                  <button class="btn btn-sm btn-outline-danger" @click="confirmDelete(submission.id)">
+                  <button class="btn btn-sm btn-outline-danger" @click="confirmDelete(submission.id)" :aria-label="`Delete submission from ${submission.name}`">
                     <i class="fas fa-trash"></i>
                   </button>
                 </td>
@@ -178,6 +198,8 @@ export default {
       selectedSubmission: null,
       submissionToDelete: null,
       deleting: false,
+      loading: true,
+      error: null,
       viewModal: null,
       deleteModal: null,
     };
@@ -197,6 +219,8 @@ export default {
   methods: {
     async fetchSubmissions() {
       try {
+        this.loading = true;
+        this.error = null;
         const q = query(collection(db, "contacts"), orderBy("submittedAt", "desc"), limit(this.itemsPerPage));
         const snapshot = await getDocs(q);
         this.submissions = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
@@ -208,7 +232,9 @@ export default {
         this.hasPreviousPage = false;
         this.currentPage = 1;
       } catch (e) {
-        console.error("Error fetching submissions:", e);
+        this.error = "Failed to load submissions. Please try again.";
+      } finally {
+        this.loading = false;
       }
     },
     async getNextPage() {
@@ -225,7 +251,7 @@ export default {
         this.hasNextPage = snapshot.docs.length === this.itemsPerPage;
         this.currentPage++;
       } catch (e) {
-        console.error("Error fetching next page:", e);
+        this.error = "Failed to load next page. Please try again.";
       }
     },
     async getPreviousPage() {
@@ -242,7 +268,7 @@ export default {
         this.hasPreviousPage = snapshot.docs.length === this.itemsPerPage;
         this.currentPage--;
       } catch (e) {
-        console.error("Error fetching previous page:", e);
+        this.error = "Failed to load previous page. Please try again.";
       }
     },
     goToPage(page) {
@@ -280,7 +306,8 @@ export default {
         await this.fetchSubmissions();
         this.deleteModal.hide();
       } catch (e) {
-        console.error("Error deleting:", e);
+        this.error = "Failed to delete submission. Please try again.";
+        this.deleteModal.hide();
       } finally {
         this.deleting = false;
       }
@@ -370,6 +397,48 @@ export default {
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-sm);
   overflow: hidden;
+}
+
+.admin-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 30vh;
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-error {
+  text-align: center;
+  padding: 3rem;
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-error .error-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fef2f2;
+  border-radius: var(--radius-xl);
+  color: var(--color-error);
+  font-size: 1.25rem;
+}
+
+.admin-error h3 {
+  font-family: var(--font-display);
+  color: var(--color-forest-dark);
+  margin-bottom: var(--space-2);
+}
+
+.admin-error p {
+  color: var(--color-warm-gray);
+  margin-bottom: var(--space-4);
 }
 
 .message-td {

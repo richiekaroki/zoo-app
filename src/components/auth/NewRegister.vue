@@ -9,7 +9,7 @@
         <p>Join our community of wildlife enthusiasts</p>
       </div>
 
-      <form @submit.prevent="registerUser">
+      <form @submit.prevent="registerUser" aria-label="Create account form">
         <div class="form-group">
           <label for="email" class="form-label">Email</label>
           <input
@@ -19,6 +19,8 @@
             class="form-control"
             placeholder="you@example.com"
             required
+            autocomplete="email"
+            aria-describedby="emailError"
           />
         </div>
         <div class="form-group">
@@ -30,14 +32,18 @@
             class="form-control"
             placeholder="At least 6 characters"
             required
+            minlength="6"
+            autocomplete="new-password"
+            aria-describedby="passwordHelp"
           />
+          <small id="passwordHelp" class="form-text text-muted">Minimum 6 characters</small>
         </div>
 
-        <div v-if="error" class="alert alert-danger" role="alert" aria-live="assertive">
+        <div v-if="error" class="alert alert-danger" role="alert" aria-live="assertive" id="registerError">
           <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
         </div>
 
-        <button type="submit" class="btn btn-primary btn-lg w-100" :disabled="loading" :aria-busy="loading">
+        <button type="submit" class="btn btn-primary btn-lg w-100" :disabled="loading || !isFormValid" :aria-busy="loading">
           <span v-if="loading">
             <span class="spinner-border spinner-border-sm me-2"></span>Creating account...
           </span>
@@ -61,15 +67,29 @@ export default {
   data() {
     return { email: "", password: "", loading: false, error: null };
   },
+  computed: {
+    isFormValid() {
+      return this.email.trim() && this.password.length >= 6;
+    },
+  },
   methods: {
     async registerUser() {
+      if (!this.isFormValid) return;
       this.loading = true;
       this.error = null;
       try {
         await createUserWithEmailAndPassword(auth, this.email, this.password);
         this.$router.push("/");
       } catch (e) {
-        this.error = "Registration failed. Please try again.";
+        if (e.code === "auth/email-already-in-use") {
+          this.error = "An account with this email already exists.";
+        } else if (e.code === "auth/invalid-email") {
+          this.error = "Please enter a valid email address.";
+        } else if (e.code === "auth/weak-password") {
+          this.error = "Password must be at least 6 characters.";
+        } else {
+          this.error = "Registration failed. Please try again.";
+        }
       } finally {
         this.loading = false;
       }

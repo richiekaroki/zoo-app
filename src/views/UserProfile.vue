@@ -2,23 +2,29 @@
   <div class="profile-page">
     <div class="page-header">
       <div class="container">
-        <span class="section-eyebrow" data-aos="fade-up">Your Account</span>
         <h1 class="page-title" data-aos="fade-up" data-aos-delay="100">Profile</h1>
       </div>
     </div>
 
     <div class="container py-5">
-      <div class="profile-layout">
+      <!-- Loading State -->
+      <div v-if="loading" class="profile-loading">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading profile...</span>
+        </div>
+      </div>
+
+      <div v-else class="profile-layout">
         <div class="profile-card" data-aos="fade-up">
           <!-- Photo -->
           <div class="profile-photo-section">
             <div class="profile-photo">
               <img
                 :src="user.photoURL || 'https://via.placeholder.com/150'"
-                alt="Profile"
+                :alt="`${user.displayName || 'User'} profile photo`"
               />
             </div>
-            <button class="btn btn-sm btn-outline-primary" @click="triggerFileUpload">
+            <button class="btn btn-sm btn-outline-primary" @click="triggerFileUpload" aria-label="Change profile photo">
               <i class="fas fa-camera me-1"></i>Change Photo
             </button>
             <input
@@ -26,6 +32,7 @@
               ref="fileInput"
               @change="handlePhotoChange"
               accept="image/*"
+              aria-label="Upload profile photo"
               style="display: none"
             />
           </div>
@@ -33,56 +40,80 @@
           <!-- Form -->
           <div class="profile-form">
             <div class="form-group">
-              <label class="form-label">Display Name</label>
-              <input type="text" class="form-control" v-model="user.displayName" />
+              <label class="form-label" for="displayName">Display Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="displayName"
+                v-model="user.displayName"
+                maxlength="50"
+                aria-describedby="displayNameHelp"
+              />
+              <small id="displayNameHelp" class="form-text text-muted">Up to 50 characters</small>
             </div>
 
             <div class="form-group">
-              <label class="form-label">Email</label>
+              <label class="form-label" for="email">Email</label>
               <input
                 type="email"
                 class="form-control"
+                id="email"
                 v-model="user.email"
                 :disabled="!canChangeEmail"
+                aria-describedby="emailHelp"
               />
+              <small v-if="!canChangeEmail" id="emailHelp" class="form-text text-muted">
+                Email can only be changed for password accounts
+              </small>
             </div>
 
             <div v-if="user.providerData[0]?.providerId === 'password'" class="form-group">
-              <label class="form-label">New Password</label>
+              <label class="form-label" for="newPassword">New Password</label>
               <input
                 type="password"
                 class="form-control mb-2"
+                id="newPassword"
                 v-model="newPassword"
                 placeholder="Leave blank to keep current"
+                minlength="6"
+                aria-describedby="passwordHelp"
               />
               <input
                 type="password"
                 class="form-control"
+                id="confirmPassword"
                 v-model="confirmPassword"
                 placeholder="Confirm new password"
+                :aria-invalid="newPassword && newPassword !== confirmPassword"
+                aria-describedby="confirmHelp"
               />
+              <small id="passwordHelp" class="form-text text-muted">Minimum 6 characters</small>
+              <small v-if="newPassword && newPassword !== confirmPassword" id="confirmHelp" class="form-text text-danger">
+                Passwords do not match
+              </small>
             </div>
 
             <div class="profile-actions">
               <button
                 class="btn btn-primary"
                 @click="updateProfile"
-                :disabled="updating"
+                :disabled="updating || !isFormValid"
+                aria-busy="updating"
               >
                 <span v-if="updating">
                   <span class="spinner-border spinner-border-sm me-1"></span>Saving...
                 </span>
                 <span v-else><i class="fas fa-check me-1"></i>Save Changes</span>
               </button>
-              <button class="btn btn-outline-danger" @click="handleLogout">
+              <button class="btn btn-outline-danger" @click="handleLogout" :disabled="updating" aria-label="Sign out">
                 <i class="fas fa-sign-out-alt me-1"></i>Sign Out
               </button>
             </div>
 
-            <div v-if="successMessage" class="alert alert-success mt-3">
+            <div v-if="successMessage" class="alert alert-success mt-3" role="status">
               <i class="fas fa-check-circle me-2"></i>{{ successMessage }}
             </div>
-            <div v-if="error" class="alert alert-danger mt-3">
+            <div v-if="error" class="alert alert-danger mt-3" role="alert">
               <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
             </div>
           </div>
@@ -105,6 +136,7 @@ export default {
       newPassword: "",
       confirmPassword: "",
       updating: false,
+      loading: true,
       error: null,
       successMessage: null,
     };
@@ -113,12 +145,20 @@ export default {
     canChangeEmail() {
       return this.user.providerData[0]?.providerId === "password";
     },
+    isFormValid() {
+      if (!this.user.displayName.trim()) return false;
+      if (!this.user.email.trim()) return false;
+      if (this.newPassword && this.newPassword.length < 6) return false;
+      if (this.newPassword && this.newPassword !== this.confirmPassword) return false;
+      return true;
+    },
   },
   created() {
     this.loadUserData();
   },
   methods: {
     loadUserData() {
+      this.loading = true;
       const u = auth.currentUser;
       if (u) {
         this.user = {
@@ -128,6 +168,7 @@ export default {
           providerData: u.providerData || [],
         };
       }
+      this.loading = false;
     },
     triggerFileUpload() {
       this.$refs.fileInput.click();
@@ -152,8 +193,8 @@ export default {
       }
     },
     async updateProfile() {
-      if (this.newPassword && this.newPassword !== this.confirmPassword) {
-        this.error = "Passwords don't match";
+      if (!this.isFormValid) {
+        this.error = "Please fix the form errors before saving.";
         return;
       }
       try {
@@ -252,5 +293,17 @@ export default {
 
 .profile-actions .btn {
   flex: 1;
+}
+
+.profile-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 40vh;
+}
+
+.profile-actions .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 </style>
