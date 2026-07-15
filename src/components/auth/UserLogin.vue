@@ -236,20 +236,22 @@ export default {
 }
 
 .auth-card .btn-primary {
-  background-color: var(--color-forest);
-  border-color: var(--color-forest);
-  color: white;
+  background-color: var(--color-forest) !important;
+  border-color: var(--color-forest) !important;
+  color: white !important;
 }
 
-.auth-card .btn-primary:hover {
-  background-color: var(--color-forest-light);
-  border-color: var(--color-forest-light);
+.auth-card .btn-primary:hover:not(:disabled) {
+  background-color: var(--color-forest-light) !important;
+  border-color: var(--color-forest-light) !important;
   box-shadow: 0 4px 24px rgba(27, 67, 50, 0.35);
   transform: translateY(-2px);
 }
 
 .auth-card .btn-primary:disabled {
-  opacity: 0.5;
+  background-color: var(--color-forest) !important;
+  border-color: var(--color-forest) !important;
+  opacity: 0.55;
   transform: none;
   box-shadow: none;
 }
