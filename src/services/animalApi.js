@@ -38,12 +38,10 @@ export async function fetchAnimalImage(name, size = "small") {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     if (size === "regular") {
-      return data.results[0]?.urls?.regular || "https://via.placeholder.com/600x400?text=Animal+Image";
+      return data.results[0]?.urls?.regular || null;
     }
-    return data.results[0]?.urls?.small || "https://via.placeholder.com/300x200";
+    return data.results[0]?.urls?.small || null;
   } catch {
-    return size === "regular"
-      ? "https://via.placeholder.com/600x400?text=Animal+Image"
-      : "https://via.placeholder.com/300x200";
+    return null;
   }
 }

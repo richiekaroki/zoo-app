@@ -20,7 +20,7 @@
           <div class="profile-photo-section">
             <div class="profile-photo">
               <img
-                :src="user.photoURL || 'https://via.placeholder.com/150'"
+                :src="user.photoURL || undefined"
                 :alt="`${user.displayName || 'User'} profile photo`"
               />
             </div>
@@ -60,7 +60,7 @@
                 id="email"
                 v-model="user.email"
                 :disabled="!canChangeEmail"
-                aria-describedby="emailHelp"
+                :aria-describedby="!canChangeEmail ? 'emailHelp' : undefined"
               />
               <small v-if="!canChangeEmail" id="emailHelp" class="form-text text-muted">
                 Email can only be changed for password accounts
@@ -88,7 +88,7 @@
                 aria-describedby="confirmHelp"
               />
               <small id="passwordHelp" class="form-text text-muted">Minimum 6 characters</small>
-              <small v-if="newPassword && newPassword !== confirmPassword" id="confirmHelp" class="form-text text-danger">
+              <small v-if="newPassword && newPassword !== confirmPassword" id="confirmHelp" class="form-text text-error">
                 Passwords do not match
               </small>
             </div>
@@ -187,7 +187,7 @@ export default {
         this.successMessage = "Photo updated!";
         setTimeout(() => { this.successMessage = null; }, 3000);
       } catch (e) {
-        this.error = e.message;
+        this.error = this.mapFirebaseError(e);
       } finally {
         this.updating = false;
       }
@@ -217,7 +217,7 @@ export default {
         this.successMessage = "Profile updated!";
         setTimeout(() => { this.successMessage = null; }, 3000);
       } catch (e) {
-        this.error = e.message;
+        this.error = this.mapFirebaseError(e);
       } finally {
         this.updating = false;
       }
@@ -227,8 +227,22 @@ export default {
         await signOut(auth);
         this.$router.push("/login");
       } catch (e) {
-        this.error = e.message;
+        this.error = "Failed to sign out. Please try again.";
       }
+    },
+    mapFirebaseError(e) {
+      const code = e.code || "";
+      const messages = {
+        "auth/requires-recent-login": "This action requires a recent sign-in. Please log out and log back in.",
+        "auth/email-already-in-use": "This email is already associated with another account.",
+        "auth/invalid-email": "Please enter a valid email address.",
+        "auth/weak-password": "Password must be at least 6 characters.",
+        "auth/wrong-password": "Incorrect password. Please try again.",
+        "auth/user-not-found": "No account found with this email.",
+        "storage/unauthorized": "You don't have permission to upload files.",
+        "storage/quota-exceeded": "Storage quota exceeded. Please contact support.",
+      };
+      return messages[code] || "Something went wrong. Please try again.";
     },
   },
 };

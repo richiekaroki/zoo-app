@@ -16,7 +16,6 @@
   --color-gold: #C67B5C;
   --color-gold-light: #D4956E;
   --color-gold-dark: #A65D3F;
-  --color-terracotta: #B5651D;
   --color-olive: #5C6B3C;
   --color-error: #c0392b;
   --color-sand: #F5F0E1;
@@ -25,6 +24,20 @@
   --color-warm-gray: #6B6B5C;
   --color-light-border: #E2DDD0;
   --color-surface: #F9F6EE;
+
+  /* Conservation Status Colors */
+  --badge-endangered-bg: #fef2f2;
+  --badge-endangered-text: #991b1b;
+  --badge-endangered-border: #fecaca;
+  --badge-vulnerable-bg: #fffbeb;
+  --badge-vulnerable-text: #92400e;
+  --badge-vulnerable-border: #fde68a;
+  --badge-near-threatened-bg: #fefce8;
+  --badge-near-threatened-text: #854d0e;
+  --badge-near-threatened-border: #fef08a;
+  --badge-least-concern-bg: #f0fdf4;
+  --badge-least-concern-text: #166534;
+  --badge-least-concern-border: #bbf7d0;
 
   /* Typography */
   --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
@@ -78,7 +91,6 @@
   --radius-md: 10px;
   --radius-lg: 16px;
   --radius-xl: 24px;
-  --radius-2xl: 32px;
   --radius-full: 9999px;
 
   /* Z-index scale */
@@ -156,11 +168,11 @@ img {
 .text-charcoal { color: var(--color-charcoal); }
 .text-warm-gray { color: var(--color-warm-gray); }
 .text-white { color: white; }
+.text-error { color: var(--color-error); }
 .text-center { text-align: center; }
 
 .bg-ivory { background-color: var(--color-ivory); }
 .bg-sand { background-color: var(--color-sand); }
-.bg-surface { background-color: var(--color-surface); }
 .bg-forest { background-color: var(--color-forest); }
 .bg-gold { background-color: var(--color-gold); }
 
@@ -310,12 +322,12 @@ img {
 }
 
 .btn-outline-danger {
-  color: #c0392b;
-  border-color: #c0392b;
+  color: var(--color-error);
+  border-color: var(--color-error);
 }
 .btn-outline-danger:hover {
-  background-color: #c0392b;
-  border-color: #c0392b;
+  background-color: var(--color-error);
+  border-color: var(--color-error);
   color: white;
 }
 
@@ -348,7 +360,7 @@ img {
 
 .form-control:hover,
 .form-select:hover {
-  border-color: #ccc;
+  border-color: var(--color-light-border);
 }
 
 .form-control:focus,
@@ -392,12 +404,6 @@ img {
 /* --- Section Spacing --- */
 section {
   padding: var(--space-24) 0;
-}
-
-/* --- Focus Visible --- */
-:focus-visible {
-  outline: 3px solid var(--color-gold);
-  outline-offset: 2px;
 }
 
 /* --- Selection --- */
@@ -471,7 +477,7 @@ section {
 
 .page-subtitle {
   font-size: var(--text-lg);
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.85);
   max-width: 500px;
   margin: var(--space-3) auto 0;
   line-height: 1.6;
@@ -495,7 +501,7 @@ section {
 
 .alert-danger {
   background: rgba(192, 57, 43, 0.08);
-  color: #c0392b;
+  color: var(--color-error);
   border: 1px solid rgba(192, 57, 43, 0.2);
 }
 
@@ -624,11 +630,6 @@ section {
 }
 
 /* --- Delight: Micro-interactions --- */
-
-/* Satisfying button press */
-.btn:active {
-  transform: translateY(1px);
-}
 
 /* Smooth lift on hover for cards */
 .featured-card,

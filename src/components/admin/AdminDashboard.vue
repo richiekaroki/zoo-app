@@ -63,10 +63,16 @@
           <table class="table" aria-label="Contact submissions">
             <thead>
               <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
+                <th scope="col" class="sortable" @click="sortBy('name')">
+                  Name <i class="fas" :class="sortKey === 'name' ? (sortOrder === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                </th>
+                <th scope="col" class="sortable" @click="sortBy('email')">
+                  Email <i class="fas" :class="sortKey === 'email' ? (sortOrder === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                </th>
                 <th scope="col">Message</th>
-                <th scope="col">Date</th>
+                <th scope="col" class="sortable" @click="sortBy('submittedAt')">
+                  Date <i class="fas" :class="sortKey === 'submittedAt' ? (sortOrder === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                </th>
                 <th scope="col" class="text-end">Actions</th>
               </tr>
             </thead>
@@ -105,7 +111,7 @@
         <nav aria-label="Page navigation">
           <ul class="pagination justify-content-center">
             <li class="page-item" :class="{ disabled: !hasPreviousPage }">
-              <button class="page-link" @click="getPreviousPage" :disabled="!hasPreviousPage">
+              <button class="page-link" @click="goToPage(currentPage - 1)" :disabled="!hasPreviousPage">
                 <i class="fas fa-chevron-left"></i>
               </button>
             </li>
@@ -117,7 +123,7 @@
               >{{ page }}</button>
             </li>
             <li class="page-item" :class="{ disabled: !hasNextPage }">
-              <button class="page-link" @click="getNextPage" :disabled="!hasNextPage">
+              <button class="page-link" @click="goToPage(currentPage + 1)" :disabled="!hasNextPage">
                 <i class="fas fa-chevron-right"></i>
               </button>
             </li>
@@ -131,7 +137,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title">Submission Details</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" v-if="selectedSubmission">
               <p><strong>Name:</strong> {{ selectedSubmission.name }}</p>
@@ -153,7 +159,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title">Confirm Deletion</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               Are you sure you want to delete this submission? This action cannot be undone.
@@ -182,7 +188,7 @@
 <script>
 import { Modal } from "bootstrap";
 import {
-  collection, deleteDoc, doc, endBefore, getDocs, limit, orderBy, query, startAfter,
+  collection, deleteDoc, doc, getDocs, orderBy, query,
 } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 
@@ -191,14 +197,12 @@ export default {
     return {
       submissions: [],
       filteredSubmissions: [],
-      searchQuery: "",
-      lastVisible: null,
-      firstVisible: null,
       paginatedSubmissions: [],
+      searchQuery: "",
       itemsPerPage: 5,
       currentPage: 1,
-      hasNextPage: false,
-      hasPreviousPage: false,
+      sortKey: "submittedAt",
+      sortOrder: "desc",
       selectedSubmission: null,
       submissionToDelete: null,
       deleting: false,
@@ -211,6 +215,29 @@ export default {
   computed: {
     totalPages() {
       return Math.ceil(this.filteredSubmissions.length / this.itemsPerPage);
+    },
+    hasNextPage() {
+      return this.currentPage < this.totalPages;
+    },
+    hasPreviousPage() {
+      return this.currentPage > 1;
+    },
+    sortedSubmissions() {
+      const sorted = [...this.filteredSubmissions].sort((a, b) => {
+        let valA = a[this.sortKey];
+        let valB = b[this.sortKey];
+        if (this.sortKey === "submittedAt") {
+          valA = valA?.toDate?.() || new Date(0);
+          valB = valB?.toDate?.() || new Date(0);
+        } else if (typeof valA === "string") {
+          valA = valA.toLowerCase();
+          valB = (valB || "").toLowerCase();
+        }
+        if (valA < valB) return this.sortOrder === "asc" ? -1 : 1;
+        if (valA > valB) return this.sortOrder === "asc" ? 1 : -1;
+        return 0;
+      });
+      return sorted;
     },
   },
   async created() {
@@ -225,63 +252,34 @@ export default {
       try {
         this.loading = true;
         this.error = null;
-        const q = query(collection(db, "contacts"), orderBy("submittedAt", "desc"), limit(this.itemsPerPage));
+        const q = query(collection(db, "contacts"), orderBy("submittedAt", "desc"));
         const snapshot = await getDocs(q);
         this.submissions = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
         this.filteredSubmissions = [...this.submissions];
-        this.updatePagination();
-        this.firstVisible = snapshot.docs[0];
-        this.lastVisible = snapshot.docs[snapshot.docs.length - 1];
-        this.hasNextPage = snapshot.docs.length === this.itemsPerPage;
-        this.hasPreviousPage = false;
         this.currentPage = 1;
+        this.updatePagination();
       } catch (e) {
         this.error = "Failed to load submissions. Please try again.";
       } finally {
         this.loading = false;
       }
     },
-    async getNextPage() {
-      if (!this.hasNextPage) return;
-      try {
-        const q = query(collection(db, "contacts"), orderBy("submittedAt", "desc"), startAfter(this.lastVisible), limit(this.itemsPerPage));
-        const snapshot = await getDocs(q);
-        this.submissions = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
-        this.filteredSubmissions = [...this.submissions];
-        this.updatePagination();
-        this.firstVisible = snapshot.docs[0];
-        this.lastVisible = snapshot.docs[snapshot.docs.length - 1];
-        this.hasPreviousPage = true;
-        this.hasNextPage = snapshot.docs.length === this.itemsPerPage;
-        this.currentPage++;
-      } catch (e) {
-        this.error = "Failed to load next page. Please try again.";
-      }
-    },
-    async getPreviousPage() {
-      if (!this.hasPreviousPage) return;
-      try {
-        const q = query(collection(db, "contacts"), orderBy("submittedAt", "desc"), endBefore(this.firstVisible), limit(this.itemsPerPage));
-        const snapshot = await getDocs(q);
-        this.submissions = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
-        this.filteredSubmissions = [...this.submissions];
-        this.updatePagination();
-        this.firstVisible = snapshot.docs[0];
-        this.lastVisible = snapshot.docs[snapshot.docs.length - 1];
-        this.hasNextPage = true;
-        this.hasPreviousPage = snapshot.docs.length === this.itemsPerPage;
-        this.currentPage--;
-      } catch (e) {
-        this.error = "Failed to load previous page. Please try again.";
-      }
-    },
     goToPage(page) {
       this.currentPage = page;
       this.updatePagination();
     },
+    sortBy(key) {
+      if (this.sortKey === key) {
+        this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc";
+      } else {
+        this.sortKey = key;
+        this.sortOrder = "asc";
+      }
+      this.updatePagination();
+    },
     updatePagination() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
-      this.paginatedSubmissions = this.filteredSubmissions.slice(start, start + this.itemsPerPage);
+      this.paginatedSubmissions = this.sortedSubmissions.slice(start, start + this.itemsPerPage);
     },
     filterSubmissions() {
       const q = this.searchQuery.toLowerCase();
@@ -428,7 +426,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fef2f2;
+  background: var(--badge-endangered-bg);
   border-radius: var(--radius-xl);
   color: var(--color-error);
   font-size: 1.25rem;
@@ -486,6 +484,22 @@ export default {
   overflow-y: auto;
   font-size: var(--text-sm);
   line-height: 1.6;
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.sortable i {
+  margin-left: 0.35rem;
+  font-size: 0.7rem;
+  opacity: 0.5;
+}
+
+.sortable:hover i {
+  opacity: 1;
 }
 
 @media (max-width: 768px) {

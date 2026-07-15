@@ -53,7 +53,7 @@
         >
           <div class="animal-card-img">
             <img :src="animal.imageUrl" :alt="animal.name" loading="lazy" />
-            <span class="conservation-badge" :class="getStatusClass(animal.status)" :aria-label="`Conservation status: ${animal.status}`">
+            <span class="conservation-badge" :class="getStatusClass(animal.status)" :aria-label="`Conservation status: ${animal.status}`" :title="getConservationInfo(animal.status)">
               {{ animal.status }}
             </span>
           </div>
@@ -125,6 +125,7 @@ export default {
       },
       loadingMessage: getRandomLoadingMessage(),
       animalFact: getRandomFact(),
+      factInterval: null,
     };
   },
   computed: {
@@ -139,6 +140,12 @@ export default {
   },
   async mounted() {
     await this.fetchAnimals();
+    this.factInterval = setInterval(() => {
+      this.animalFact = getRandomFact();
+    }, 5000);
+  },
+  beforeUnmount() {
+    if (this.factInterval) clearInterval(this.factInterval);
   },
   methods: {
     async fetchAnimals() {
@@ -167,6 +174,15 @@ export default {
         "Least Concern": "status-least-concern",
       };
       return classes[status] || "";
+    },
+    getConservationInfo(status) {
+      const info = {
+        "Endangered": "Very high risk of extinction in the wild. Immediate conservation action needed.",
+        "Vulnerable": "High risk of endangerment in the wild. Conservation measures recommended.",
+        "Near Threatened": "Likely to become threatened in the near future. Monitoring required.",
+        "Least Concern": "Widespread and abundant. Lowest risk of extinction.",
+      };
+      return info[status] || "Conservation status information unavailable.";
     },
   },
 };
@@ -271,27 +287,27 @@ export default {
 }
 
 .status-endangered {
-  background: #fef2f2;
-  color: #991b1b;
-  border: 1px solid #fecaca;
+  background: var(--badge-endangered-bg);
+  color: var(--badge-endangered-text);
+  border: 1px solid var(--badge-endangered-border);
 }
 
 .status-vulnerable {
-  background: #fffbeb;
-  color: #92400e;
-  border: 1px solid #fde68a;
+  background: var(--badge-vulnerable-bg);
+  color: var(--badge-vulnerable-text);
+  border: 1px solid var(--badge-vulnerable-border);
 }
 
 .status-near-threatened {
-  background: #fefce8;
-  color: #854d0e;
-  border: 1px solid #fef08a;
+  background: var(--badge-near-threatened-bg);
+  color: var(--badge-near-threatened-text);
+  border: 1px solid var(--badge-near-threatened-border);
 }
 
 .status-least-concern {
-  background: #f0fdf4;
-  color: #166534;
-  border: 1px solid #bbf7d0;
+  background: var(--badge-least-concern-bg);
+  color: var(--badge-least-concern-text);
+  border: 1px solid var(--badge-least-concern-border);
 }
 
 .animal-card-img img {
@@ -411,7 +427,7 @@ export default {
 }
 
 .error-icon {
-  background: #fef2f2;
+  background: var(--badge-endangered-bg);
   color: var(--color-error);
 }
 
@@ -436,7 +452,7 @@ export default {
 }
 
 /* Responsive */
-@media (max-width: 1024px) {
+@media (max-width: 992px) {
   .animal-grid {
     grid-template-columns: repeat(2, 1fr);
   }

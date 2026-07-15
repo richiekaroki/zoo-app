@@ -79,6 +79,7 @@
                   <span
                     class="conservation-status"
                     :class="getConservationClass(animal)"
+                    :title="getConservationInfo(animal.conservationStatus)"
                   >
                     <i :class="getStatusIcon(animal)" class="me-1"></i>
                     {{ animal.conservationStatus }}
@@ -151,7 +152,7 @@ export default {
       activeIndex: 0,
       carousel: null,
       imageLoaded: false,
-      defaultImage: "https://via.placeholder.com/800x400?text=Wildlife+Photo",
+      defaultImage: null,
       placeholderImages: {
         lion: "https://images.unsplash.com/photo-1552410260-0fd9b577afa6?w=800&h=400&fit=crop",
         tiger: "https://images.unsplash.com/photo-1559253664-ca249d4608c6?w=800&h=400&fit=crop",
@@ -256,12 +257,22 @@ export default {
     soundIcon(animal) { return animal.sound ? "fa-volume-up" : "fa-volume-mute text-muted"; },
 
     getConservationClass(animal) {
-      const status = animal.conservationStatus?.toLowerCase() || "";
-      if (status.includes("endangered")) return "status-danger";
-      if (status.includes("vulnerable")) return "status-warning";
-      if (status.includes("near threatened")) return "status-info";
-      if (status.includes("least concern")) return "status-success";
-      return "status-secondary";
+      const status = (animal.conservationStatus || "").toLowerCase();
+      if (status.includes("endangered")) return "status-endangered";
+      if (status.includes("vulnerable")) return "status-vulnerable";
+      if (status.includes("near threatened")) return "status-near-threatened";
+      if (status.includes("least concern")) return "status-least-concern";
+      return "status-unknown";
+    },
+
+    getConservationInfo(status) {
+      const info = {
+        "Endangered": "Very high risk of extinction in the wild.",
+        "Vulnerable": "High risk of endangerment in the wild.",
+        "Near Threatened": "Likely to become threatened soon.",
+        "Least Concern": "Widespread and abundant.",
+      };
+      return info[status] || "Conservation status information unavailable.";
     },
 
     getStatusIcon(animal) {
@@ -325,7 +336,7 @@ export default {
   justify-content: center;
   background: rgba(192, 57, 43, 0.08);
   border-radius: var(--radius-xl);
-  color: #c0392b;
+  color: var(--color-error);
   font-size: 1.25rem;
 }
 
@@ -464,11 +475,11 @@ export default {
   border: 2px solid white;
 }
 
-.status-danger { background-color: #dc3545; color: white; }
-.status-warning { background-color: var(--color-gold); color: white; }
-.status-info { background-color: var(--color-olive); color: white; }
-.status-success { background-color: var(--color-forest-light); color: white; }
-.status-secondary { background-color: #6c757d; color: white; }
+.status-endangered { background-color: var(--color-error); color: white; }
+.status-vulnerable { background-color: var(--color-gold); color: white; }
+.status-near-threatened { background-color: var(--color-olive); color: white; }
+.status-least-concern { background-color: var(--color-forest-light); color: white; }
+.status-unknown { background-color: var(--color-warm-gray); color: white; }
 
 button:focus {
   outline: 2px solid rgba(255, 255, 255, 0.8);

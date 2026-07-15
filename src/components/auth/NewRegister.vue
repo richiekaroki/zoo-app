@@ -20,7 +20,7 @@
             placeholder="you@example.com"
             required
             autocomplete="email"
-            aria-describedby="emailError"
+            :aria-describedby="error ? 'registerError' : undefined"
           />
         </div>
         <div class="form-group">

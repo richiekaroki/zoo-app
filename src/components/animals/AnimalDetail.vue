@@ -88,7 +88,7 @@ import {
   fetchAnimalDescription,
 } from "@/services/animalApi";
 
-const DEFAULT_IMAGE = "https://via.placeholder.com/800x500?text=Animal+Image";
+const DEFAULT_IMAGE = null;
 
 export default {
   props: {
@@ -268,7 +268,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fef2f2;
+  background: var(--badge-endangered-bg);
   border-radius: var(--radius-xl);
   color: var(--color-error);
   font-size: 1.5rem;

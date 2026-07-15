@@ -20,7 +20,7 @@
             placeholder="you@example.com"
             required
             autocomplete="email"
-            aria-describedby="emailError"
+            :aria-describedby="error ? 'loginError' : undefined"
           />
         </div>
         <div class="form-group">
@@ -33,7 +33,7 @@
             placeholder="Enter your password"
             required
             autocomplete="current-password"
-            aria-describedby="passwordError"
+            :aria-describedby="error ? 'loginError' : undefined"
           />
           <button type="button" class="forgot-password-link" @click="forgotPassword">
             Forgot password?

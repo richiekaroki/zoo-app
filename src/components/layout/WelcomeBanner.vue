@@ -105,7 +105,7 @@ export default {
   color: white;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 576px) {
   .welcome-content {
     flex-direction: column;
     text-align: center;

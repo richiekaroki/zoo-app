@@ -100,7 +100,7 @@
               <li><hr class="dropdown-divider" /></li>
               <li>
                 <a
-                  class="dropdown-item text-danger"
+                  class="dropdown-item text-error"
                   href="#"
                   @click="handleLogout"
                 >
@@ -150,10 +150,12 @@ export default {
     });
     window.addEventListener("scroll", this.handleScroll, { passive: true });
     document.addEventListener("click", this.handleClickOutside);
+    document.addEventListener("keydown", this.handleEscape);
   },
   beforeUnmount() {
     window.removeEventListener("scroll", this.handleScroll);
     document.removeEventListener("click", this.handleClickOutside);
+    document.removeEventListener("keydown", this.handleEscape);
   },
   methods: {
     handleScroll() {
@@ -162,6 +164,12 @@ export default {
     handleClickOutside(event) {
       const navbar = this.$el;
       if (!navbar.contains(event.target)) {
+        this.isMenuOpen = false;
+        this.isDropdownOpen = false;
+      }
+    },
+    handleEscape(event) {
+      if (event.key === "Escape") {
         this.isMenuOpen = false;
         this.isDropdownOpen = false;
       }
@@ -196,8 +204,8 @@ export default {
         await signOut(auth);
         this.closeAllMenus();
         this.$router.push("/");
-      } catch (error) {
-        this.error = "Failed to sign out. Please try again.";
+      } catch {
+        // Sign-out failed silently; user remains logged in
       }
     },
   },
@@ -464,7 +472,7 @@ export default {
 }
 
 /* Mobile */
-@media (max-width: 991.98px) {
+@media (max-width: 992px) {
   .navbar-toggler {
     display: flex;
   }

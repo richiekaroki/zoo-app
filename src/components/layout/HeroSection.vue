@@ -108,38 +108,6 @@ export default {
   margin-bottom: var(--space-16);
 }
 
-.hero-actions .btn-gold {
-  background: var(--color-gold);
-  border-color: var(--color-gold);
-  color: white;
-  font-weight: 600;
-}
-
-.hero-actions .btn-gold:hover {
-  background: var(--color-gold-dark);
-  border-color: var(--color-gold-dark);
-  box-shadow: 0 4px 24px rgba(198, 123, 92, 0.4);
-  transform: translateY(-2px);
-}
-
-.btn-ghost {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  font-weight: 500;
-  padding: 0.875rem 1.75rem;
-  border-radius: var(--radius-lg);
-  transition: all var(--transition-base);
-  font-size: var(--text-base);
-}
-
-.btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.35);
-  color: white;
-  transform: translateY(-2px);
-}
-
 
 
 .hero-scroll-indicator {
