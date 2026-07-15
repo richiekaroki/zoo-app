@@ -12,9 +12,9 @@
       <div class="container">
         <div class="error-content" data-aos="fade-up">
           <div class="error-icon">
-            <i class="fas fa-exclamation-triangle"></i>
+            <i class="fas fa-binoculars"></i>
           </div>
-          <h2>Something went wrong</h2>
+          <h2>This animal is playing hide and seek</h2>
           <p>{{ error }}</p>
           <router-link to="/animals" class="btn btn-outline-primary">
             <i class="fas fa-arrow-left me-2"></i>Back to Animals

@@ -634,3 +634,71 @@ section {
 .table tbody tr:hover {
   background: rgba(27, 67, 50, 0.03);
 }
+
+/* --- Delight: Micro-interactions --- */
+
+/* Satisfying button press */
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* Smooth lift on hover for cards */
+.featured-card,
+.animal-card {
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Icon bounce on hover */
+.btn i,
+.nav-link i {
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.btn:hover i,
+.nav-link:hover i {
+  transform: scale(1.1);
+}
+
+/* Focus ring animation */
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  animation: focusPulse 0.3s ease-out;
+}
+
+@keyframes focusPulse {
+  0% { outline-offset: 6px; opacity: 0; }
+  100% { outline-offset: 2px; opacity: 1; }
+}
+
+/* Smooth page transitions */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Success checkmark animation */
+@keyframes checkmark {
+  0% { transform: scale(0) rotate(-45deg); }
+  50% { transform: scale(1.2) rotate(-45deg); }
+  100% { transform: scale(1) rotate(-45deg); }
+}
+
+.alert-success i.fa-check-circle {
+  animation: checkmark 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Gentle pulse for loading states */
+@keyframes gentlePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.loading-spinner {
+  animation: gentlePulse 1.5s ease-in-out infinite;
+}

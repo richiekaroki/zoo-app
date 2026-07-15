@@ -29,6 +29,11 @@
 
       <!-- Skeleton Loading -->
       <div v-if="loading" class="animal-grid" aria-busy="true" aria-label="Loading animals">
+        <div class="loading-fact">
+          <i class="fas fa-leaf loading-icon"></i>
+          <p>{{ loadingMessage }}</p>
+          <small class="fact-text">{{ animalFact }}</small>
+        </div>
         <div v-for="n in 6" :key="n" class="skeleton-card">
           <div class="skeleton skeleton-img"></div>
           <div class="skeleton-card-body">
@@ -71,7 +76,7 @@
         <div class="error-icon">
           <i class="fas fa-exclamation-triangle"></i>
         </div>
-        <h3>Something went wrong</h3>
+        <h3>Oops! Something went wrong</h3>
         <p>{{ error }}</p>
         <button class="btn btn-outline-primary" @click="fetchAnimals">
           <i class="fas fa-redo me-2"></i>Try Again
@@ -101,6 +106,7 @@
 
 <script>
 import { fetchAnimalHabitat, fetchAnimalImage } from "@/services/animalApi";
+import { getRandomFact, getRandomLoadingMessage } from "@/utils/animalFacts";
 
 export default {
   data() {
@@ -110,6 +116,8 @@ export default {
       error: null,
       searchQuery: "",
       animalNames: ["Lion", "Tiger", "Elephant", "Giraffe", "Warthog", "Zebra", "Monkey"],
+      loadingMessage: getRandomLoadingMessage(),
+      animalFact: getRandomFact(),
     };
   },
   computed: {
@@ -311,6 +319,32 @@ export default {
   overflow: hidden;
   background: white;
   box-shadow: var(--shadow-xs);
+}
+
+.loading-fact {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2rem 1rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.loading-icon {
+  font-size: 1.5rem;
+  color: var(--color-forest-light);
+  margin-bottom: 0.5rem;
+  animation: gentlePulse 1.5s ease-in-out infinite;
+}
+
+.loading-fact p {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--color-forest-dark);
+  margin-bottom: 0.25rem;
+}
+
+.fact-text {
+  color: var(--color-warm-gray);
+  font-style: italic;
 }
 
 .skeleton-img {
