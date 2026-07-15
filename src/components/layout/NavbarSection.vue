@@ -225,9 +225,10 @@ export default {
 }
 
 .navbar.scrolled {
-  background: var(--color-sand);
-  border-bottom: 1px solid rgba(226, 221, 208, 0.4);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  background: rgba(245, 240, 225, 0.82);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border-bottom: 1px solid rgba(226, 221, 208, 0.35);
   padding: 0.5rem 0;
 }
 
@@ -484,12 +485,14 @@ export default {
     width: min(320px, 85vw);
     height: 100vh;
     height: 100dvh;
-    background: white;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(20px) saturate(1.2);
+    -webkit-backdrop-filter: blur(20px) saturate(1.2);
     margin: 0;
     padding: 5rem 1.5rem 2rem;
     flex-direction: column;
     align-items: stretch;
-    box-shadow: -8px 0 40px rgba(0, 0, 0, 0.1);
+    box-shadow: -8px 0 40px rgba(0, 0, 0, 0.08);
     transition: right var(--transition-slow);
     z-index: var(--z-overlay);
     overflow-y: auto;
