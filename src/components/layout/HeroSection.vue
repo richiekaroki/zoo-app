@@ -52,9 +52,9 @@ export default {
 .hero-image {
   position: absolute;
   inset: 0;
-  background-image: url("https://images.unsplash.com/photo-1723752233207-86148d03889f?w=1600&auto=format&fit=crop&q=80");
+  background-image: url("https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1600&auto=format&fit=crop&q=80");
   background-size: cover;
-  background-position: center 35%;
+  background-position: center 40%;
   animation: heroZoom 20s ease-in-out infinite alternate;
 }
 

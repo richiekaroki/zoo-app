@@ -268,8 +268,13 @@ export default {
   font-family: var(--font-display);
   font-weight: 400;
   font-size: 1.5rem;
-  color: var(--color-forest-dark);
+  color: white;
   letter-spacing: -0.01em;
+  transition: color var(--transition-base);
+}
+
+.navbar.scrolled .brand-text {
+  color: var(--color-forest-dark);
 }
 
 .brand-accent {
@@ -293,7 +298,7 @@ export default {
 .nav-link {
   font-family: var(--font-body);
   font-weight: 500;
-  color: var(--color-charcoal);
+  color: rgba(255, 255, 255, 0.85);
   padding: 0.5rem 0.875rem;
   border-radius: var(--radius-md);
   transition: all var(--transition-base);
@@ -302,14 +307,27 @@ export default {
   text-decoration: none;
 }
 
+.navbar.scrolled .nav-link {
+  color: var(--color-charcoal);
+}
+
 .nav-link:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.navbar.scrolled .nav-link:hover {
   color: var(--color-forest);
   background: rgba(27, 67, 50, 0.05);
 }
 
 .nav-link.active {
-  color: var(--color-forest);
+  color: white;
   font-weight: 600;
+}
+
+.navbar.scrolled .nav-link.active {
+  color: var(--color-forest);
 }
 
 .nav-link.active::after {
@@ -331,6 +349,10 @@ export default {
 
 /* CTA */
 .nav-cta .nav-link {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.navbar.scrolled .nav-cta .nav-link {
   color: var(--color-warm-gray) !important;
 }
 
@@ -407,10 +429,14 @@ export default {
   display: block;
   width: 24px;
   height: 2px;
-  background: var(--color-charcoal);
+  background: white;
   border-radius: 2px;
   transition: all var(--transition-base);
   position: relative;
+}
+
+.navbar.scrolled .toggler-bar {
+  background: var(--color-charcoal);
 }
 
 .toggler-bar::before,
@@ -419,9 +445,14 @@ export default {
   position: absolute;
   width: 100%;
   height: 2px;
-  background: var(--color-charcoal);
+  background: white;
   border-radius: 2px;
   transition: all var(--transition-base);
+}
+
+.navbar.scrolled .toggler-bar::before,
+.navbar.scrolled .toggler-bar::after {
+  background: var(--color-charcoal);
 }
 
 .toggler-bar::before { top: -7px; }

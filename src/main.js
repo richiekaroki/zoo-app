@@ -3,11 +3,11 @@ import App from "./App.vue";
 import router from "./router";
 
 // CSS
+import "bootstrap/dist/css/bootstrap.css";
 import "@/assets/css/design-system.css";
 import "@/assets/css/transitions.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "aos/dist/aos.css";
-import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.bundle.js";
 
 // JS

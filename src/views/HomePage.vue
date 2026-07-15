@@ -146,6 +146,7 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
+  align-items: start;
 }
 
 .featured-card-stack {
@@ -168,11 +169,11 @@ export default {
 }
 
 .featured-card--large .featured-card-img {
-  height: 380px;
+  height: 420px;
 }
 
 .featured-card--small .featured-card-img--small {
-  height: 180px;
+  height: 198px;
 }
 
 .featured-card-img {
