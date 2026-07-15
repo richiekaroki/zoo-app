@@ -92,7 +92,11 @@
           <div class="empty-icon">
             <i class="fas fa-inbox"></i>
           </div>
-          <p>No submissions found.</p>
+          <h3>No submissions yet</h3>
+          <p>When visitors submit the contact form, their messages will appear here.</p>
+          <router-link to="/contact" class="btn btn-outline-primary btn-sm">
+            <i class="fas fa-envelope me-2"></i>View Contact Form
+          </router-link>
         </div>
       </div>
 
@@ -449,6 +453,16 @@ export default {
   text-align: center;
   padding: 3rem;
   color: var(--color-warm-gray);
+}
+
+.empty-state h3 {
+  font-family: var(--font-display);
+  color: var(--color-forest-dark);
+  margin-bottom: var(--space-2);
+}
+
+.empty-state p {
+  margin-bottom: var(--space-4);
 }
 
 .empty-icon {

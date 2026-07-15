@@ -1,6 +1,7 @@
 <template>
   <div>
     <HeroSection />
+    <WelcomeBanner />
     <section class="featured-section">
       <div class="container">
         <div class="section-header" data-aos="fade-up">
@@ -63,32 +64,34 @@
 
 <script>
 import HeroSection from "@/components/layout/HeroSection.vue";
+import WelcomeBanner from "@/components/layout/WelcomeBanner.vue";
 
 export default {
   name: "HomePage",
   components: {
     HeroSection,
+    WelcomeBanner,
   },
   data() {
     return {
       featuredAnimals: [
         {
-          name: "Lion",
+          name: "African Lion",
           tag: "Vulnerable",
-          desc: "The majestic king of the savanna, living in complex social groups called prides.",
-          img: "https://images.unsplash.com/photo-1552410260-0fd9b577afa6?w=800&auto=format&fit=crop&q=80",
+          desc: "The king of the savanna, lions are social cats that live in groups called prides.",
+          img: "https://images.unsplash.com/photo-1614027164847-1b28cfe1df60?w=600&auto=format&fit=crop&q=80",
         },
         {
-          name: "Elephant",
+          name: "Bengal Tiger",
           tag: "Endangered",
-          desc: "Gentle giants with extraordinary memory and deep family bonds.",
-          img: "https://images.unsplash.com/photo-1505148230895-d9a785a555fa?w=600&auto=format&fit=crop&q=80",
+          desc: "The largest big cat, tigers are solitary hunters with stunning striped coats.",
+          img: "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?w=600&auto=format&fit=crop&q=80",
         },
         {
-          name: "Tiger",
+          name: "Asian Elephant",
           tag: "Endangered",
-          desc: "The largest cat species, each bearing a unique pattern of stripes.",
-          img: "https://images.unsplash.com/photo-1559253664-ca249d4608c6?w=600&auto=format&fit=crop&q=80",
+          desc: "Intelligent and gentle giants, elephants are vital to their ecosystems.",
+          img: "https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?w=600&auto=format&fit=crop&q=80",
         },
       ],
     };

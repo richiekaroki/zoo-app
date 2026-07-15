@@ -84,8 +84,16 @@
           <i class="fas fa-search"></i>
         </div>
         <h3>No animals found</h3>
-        <p>Try adjusting your search query or browse all animals.</p>
-        <button class="btn btn-outline-primary" @click="searchQuery = ''">Clear Search</button>
+        <p v-if="searchQuery">No animals match "{{ searchQuery }}". Try a different search term.</p>
+        <p v-else>Our animal collection is being updated. Check back soon!</p>
+        <div class="empty-actions">
+          <button v-if="searchQuery" class="btn btn-outline-primary" @click="searchQuery = ''">
+            <i class="fas fa-times me-2"></i>Clear Search
+          </button>
+          <router-link to="/" class="btn btn-primary">
+            <i class="fas fa-home me-2"></i>Back to Home
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -352,6 +360,12 @@ export default {
 .error-state p {
   color: var(--color-warm-gray);
   margin-bottom: var(--space-6);
+}
+
+.empty-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
 }
 
 /* Responsive */
