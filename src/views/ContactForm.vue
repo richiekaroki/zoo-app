@@ -300,6 +300,25 @@ export default {
   overflow: hidden;
 }
 
+.contact-form-card .btn-primary {
+  background-color: var(--color-forest);
+  border-color: var(--color-forest);
+  color: white;
+}
+
+.contact-form-card .btn-primary:hover {
+  background-color: var(--color-forest-light);
+  border-color: var(--color-forest-light);
+  box-shadow: 0 4px 24px rgba(27, 67, 50, 0.35);
+  transform: translateY(-2px);
+}
+
+.contact-form-card .btn-primary:disabled {
+  opacity: 0.5;
+  transform: none;
+  box-shadow: none;
+}
+
 @media (max-width: 768px) {
   .contact-layout {
     grid-template-columns: 1fr;
