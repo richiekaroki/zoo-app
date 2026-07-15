@@ -77,23 +77,6 @@ export default {
   max-width: 700px;
 }
 
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.4rem 1rem;
-  background: rgba(198, 123, 92, 0.15);
-  border: 1px solid rgba(198, 123, 92, 0.25);
-  border-radius: var(--radius-full);
-  color: var(--color-gold-light);
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: var(--space-8);
-  backdrop-filter: blur(8px);
-}
-
 .hero-title {
   font-family: var(--font-display);
   font-size: clamp(3rem, 7vw, var(--text-6xl));

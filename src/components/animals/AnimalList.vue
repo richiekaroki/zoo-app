@@ -53,6 +53,9 @@
         >
           <div class="animal-card-img">
             <img :src="animal.imageUrl" :alt="animal.name" loading="lazy" />
+            <span class="conservation-badge" :class="getStatusClass(animal.status)">
+              {{ animal.status }}
+            </span>
             <div class="animal-card-img-overlay">
               <router-link :to="`/animals/${animal.name}`" class="btn btn-sm btn-gold">
                 View Details
@@ -116,6 +119,15 @@ export default {
       error: null,
       searchQuery: "",
       animalNames: ["Lion", "Tiger", "Elephant", "Giraffe", "Warthog", "Zebra", "Monkey"],
+      conservationStatus: {
+        Lion: "Vulnerable",
+        Tiger: "Endangered",
+        Elephant: "Endangered",
+        Giraffe: "Vulnerable",
+        Warthog: "Least Concern",
+        Zebra: "Near Threatened",
+        Monkey: "Least Concern",
+      },
       loadingMessage: getRandomLoadingMessage(),
       animalFact: getRandomFact(),
     };
@@ -142,7 +154,7 @@ export default {
               fetchAnimalHabitat(name),
               fetchAnimalImage(name, "small"),
             ]);
-            return { name, habitat, imageUrl };
+            return { name, habitat, imageUrl, status: this.conservationStatus[name] || "Unknown" };
           })
         );
         this.animals = results;
@@ -151,6 +163,15 @@ export default {
       } finally {
         this.loading = false;
       }
+    },
+    getStatusClass(status) {
+      const classes = {
+        "Endangered": "status-endangered",
+        "Vulnerable": "status-vulnerable",
+        "Near Threatened": "status-near-threatened",
+        "Least Concern": "status-least-concern",
+      };
+      return classes[status] || "";
     },
   },
 };
@@ -239,6 +260,43 @@ export default {
   position: relative;
   height: 240px;
   overflow: hidden;
+}
+
+.conservation-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-full);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  z-index: 2;
+}
+
+.status-endangered {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.status-vulnerable {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.status-near-threatened {
+  background: #fefce8;
+  color: #854d0e;
+  border: 1px solid #fef08a;
+}
+
+.status-least-concern {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
 }
 
 .animal-card-img img {

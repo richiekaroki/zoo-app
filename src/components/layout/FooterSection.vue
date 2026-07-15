@@ -58,18 +58,6 @@
             </li>
           </ul>
         </div>
-
-        <!-- Newsletter -->
-        <div class="footer-newsletter">
-          <h4>Stay Connected</h4>
-          <p>Get wildlife updates delivered to your inbox.</p>
-          <div class="newsletter-form">
-            <input type="email" placeholder="Your email" aria-label="Email for newsletter" />
-            <button class="btn-newsletter" aria-label="Subscribe">
-              <i class="fas fa-arrow-right"></i>
-            </button>
-          </div>
-        </div>
       </div>
 
       <div class="footer-bottom">
@@ -211,54 +199,6 @@ export default {
   font-size: 0.8rem;
   width: 16px;
   text-align: center;
-}
-
-/* Newsletter */
-.footer-newsletter p {
-  font-size: var(--text-sm);
-  color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 1rem;
-}
-
-.newsletter-form {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.newsletter-form input {
-  flex: 1;
-  padding: 0.6rem 0.875rem;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-md);
-  color: white;
-  font-size: var(--text-sm);
-  font-family: var(--font-body);
-  transition: border-color var(--transition-fast);
-}
-
-.newsletter-form input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.newsletter-form input:focus {
-  outline: none;
-  border-color: var(--color-gold);
-}
-
-.btn-newsletter {
-  background: var(--color-gold);
-  color: white;
-  border: none;
-  padding: 0.6rem 0.875rem;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition-base);
-}
-
-.btn-newsletter:hover {
-  background: var(--color-gold-dark);
 }
 
 /* Bottom */

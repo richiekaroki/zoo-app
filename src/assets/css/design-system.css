@@ -437,18 +437,6 @@ section {
   top: var(--space-4);
 }
 
-/* --- Eyebrow / Label Pattern --- */
-.section-eyebrow {
-  display: inline-block;
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  font-weight: 700;
-  color: var(--color-gold);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  margin-bottom: var(--space-4);
-}
-
 /* --- Page Header Pattern --- */
 .page-header {
   background: var(--color-forest);

@@ -197,7 +197,7 @@ export default {
         this.closeAllMenus();
         this.$router.push("/");
       } catch (error) {
-        console.error("Logout failed:", error);
+        this.error = "Failed to sign out. Please try again.";
       }
     },
   },
@@ -217,7 +217,7 @@ export default {
 }
 
 .navbar.scrolled {
-  background: var(--color-cream);
+  background: var(--color-sand);
   border-bottom: 1px solid rgba(226, 221, 208, 0.4);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
   padding: 0.5rem 0;
@@ -514,7 +514,16 @@ export default {
   }
 
   .nav-cta {
-    display: none;
+    margin-top: 0.5rem;
+  }
+
+  .nav-cta .nav-link {
+    width: 100%;
+    text-align: center;
+    border: 1.5px solid var(--color-forest);
+    border-radius: var(--radius-md);
+    color: var(--color-forest);
+    font-weight: 600;
   }
 
   .dropdown-menu {
