@@ -11,6 +11,7 @@
     </main>
     <FooterSection />
     <ToastContainer />
+    <Analytics />
   </div>
 </template>
 
@@ -18,6 +19,7 @@
 import FooterSection from "@/components/layout/FooterSection.vue";
 import NavbarSection from "@/components/layout/NavbarSection.vue";
 import ToastContainer from "@/components/layout/ToastContainer.vue";
+import { Analytics } from "@vercel/analytics/vue";
 import { useDarkMode } from "@/composables/useDarkMode";
 
 export default {
@@ -25,6 +27,7 @@ export default {
     NavbarSection,
     FooterSection,
     ToastContainer,
+    Analytics,
   },
   setup() {
     useDarkMode();
