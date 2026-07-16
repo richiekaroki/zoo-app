@@ -12,6 +12,7 @@ const AnimalList = () => import("@/components/animals/AnimalList.vue");
 const AnimalDetail = () => import("@/components/animals/AnimalDetail.vue");
 const UserProfile = () => import("@/views/UserProfile.vue");
 const AdminDashboard = () => import("@/components/admin/AdminDashboard.vue");
+const NotFound = () => import("@/views/NotFound.vue");
 
 const routes = [
   { path: "/", name: "Home", component: HomePage },
@@ -42,6 +43,7 @@ const routes = [
     component: AdminDashboard,
     meta: { requiresAuth: true },
   },
+  { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFound },
 ];
 
 const router = createRouter({

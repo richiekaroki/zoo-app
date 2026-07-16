@@ -58,6 +58,28 @@
             </li>
           </ul>
         </div>
+
+        <!-- Newsletter -->
+        <div class="footer-links">
+          <h4>Stay Connected</h4>
+          <p class="footer-newsletter-desc">Get the latest wildlife conservation updates.</p>
+          <form class="footer-newsletter" @submit.prevent="handleSubscribe" v-if="!subscribed">
+            <input
+              type="email"
+              v-model="email"
+              placeholder="Your email"
+              class="newsletter-input"
+              required
+              aria-label="Email for newsletter"
+            />
+            <button type="submit" class="newsletter-btn" :disabled="subscribing" aria-label="Subscribe">
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </form>
+          <p v-else class="newsletter-success">
+            <i class="fas fa-check-circle me-1"></i>Thanks for subscribing!
+          </p>
+        </div>
       </div>
 
       <div class="footer-bottom">
@@ -68,8 +90,30 @@
 </template>
 
 <script>
+import { useToast } from "@/composables/useToast";
+
 export default {
   name: "FooterSection",
+  setup() {
+    const toast = useToast();
+    return { toast };
+  },
+  data() {
+    return {
+      email: "",
+      subscribed: false,
+      subscribing: false,
+    };
+  },
+  methods: {
+    async handleSubscribe() {
+      this.subscribing = true;
+      await new Promise((r) => setTimeout(r, 800));
+      this.subscribed = true;
+      this.subscribing = false;
+      this.toast.success("You've been subscribed to our newsletter!");
+    },
+  },
 };
 </script>
 
@@ -82,13 +126,12 @@ export default {
 
 .footer-top {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
   gap: 3rem;
   padding-bottom: 3rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* Brand */
 .footer-logo {
   display: inline-flex;
   align-items: center;
@@ -154,7 +197,6 @@ export default {
   transform: translateY(-2px);
 }
 
-/* Links */
 .footer-links h4 {
   font-family: var(--font-body);
   font-size: var(--text-xs);
@@ -200,7 +242,67 @@ export default {
   text-align: center;
 }
 
-/* Bottom */
+/* Newsletter */
+.footer-newsletter-desc {
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+
+.footer-newsletter {
+  display: flex;
+  gap: 0;
+}
+
+.newsletter-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-right: none;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+  color: white;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.newsletter-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.newsletter-input:focus {
+  border-color: var(--color-gold);
+}
+
+.newsletter-btn {
+  background: var(--color-gold);
+  border: none;
+  color: white;
+  padding: 0.5rem 0.875rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  font-size: 0.85rem;
+}
+
+.newsletter-btn:hover {
+  background: var(--color-gold-dark);
+}
+
+.newsletter-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.newsletter-success {
+  color: var(--color-gold-light);
+  font-size: var(--text-sm);
+  margin: 0;
+}
+
 .footer-bottom {
   padding: 1.5rem 0;
   text-align: center;
@@ -213,7 +315,6 @@ export default {
   letter-spacing: 0.02em;
 }
 
-/* Responsive */
 @media (max-width: 992px) {
   .footer-top {
     grid-template-columns: 1fr 1fr;

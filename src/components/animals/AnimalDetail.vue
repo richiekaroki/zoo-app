@@ -10,7 +10,7 @@
 
     <div v-else-if="error" class="error-state">
       <div class="container">
-        <div class="error-content" data-aos="fade-up">
+        <div class="error-content" v-scroll-reveal>
           <div class="error-icon">
             <i class="fas fa-binoculars"></i>
           </div>
@@ -26,16 +26,14 @@
     <template v-else>
       <div class="detail-header">
         <div class="container">
-          <router-link to="/animals" class="back-link" data-aos="fade-right">
-            <i class="fas fa-arrow-left me-2"></i>Back to Animals
-          </router-link>
-          <h1 class="detail-title" data-aos="fade-up">{{ animal.name }}</h1>
+          <BreadcrumbNav :crumbs="breadcrumbs" />
+          <h1 class="detail-title" v-scroll-reveal>{{ animal.name }}</h1>
         </div>
       </div>
 
       <div class="container py-5">
         <div class="detail-layout">
-          <div class="detail-image-col" data-aos="fade-right">
+          <div class="detail-image-col" v-scroll-reveal="{ direction: 'left' }">
             <div class="detail-image-wrapper">
               <img
                 :src="animal.imageUrl"
@@ -47,7 +45,7 @@
             </div>
           </div>
 
-          <div class="detail-info-col" data-aos="fade-left">
+          <div class="detail-info-col" v-scroll-reveal="{ direction: 'right' }">
             <div class="detail-info">
               <div class="info-block">
                 <span class="info-label">
@@ -87,10 +85,13 @@ import {
   fetchAnimalImage,
   fetchAnimalDescription,
 } from "@/services/animalApi";
+import BreadcrumbNav from "@/components/layout/BreadcrumbNav.vue";
 
 const DEFAULT_IMAGE = null;
 
 export default {
+  name: "AnimalDetail",
+  components: { BreadcrumbNav },
   props: {
     name: {
       type: String,
@@ -103,6 +104,15 @@ export default {
       loading: true,
       error: null,
     };
+  },
+  computed: {
+    breadcrumbs() {
+      return [
+        { label: "Home", path: "/" },
+        { label: "Animals", path: "/animals" },
+        { label: this.animal.name || this.name, path: `/animals/${this.name}` },
+      ];
+    },
   },
   async mounted() {
     await this.fetchAnimalDetail();
@@ -137,7 +147,7 @@ export default {
 
 .detail-header {
   background: var(--color-forest);
-  padding: 3.5rem 0 3rem;
+  padding: 1.5rem 0 3rem;
   position: relative;
   overflow: hidden;
 }
@@ -150,21 +160,9 @@ export default {
   pointer-events: none;
 }
 
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  color: rgba(255, 255, 255, 0.55);
-  text-decoration: none;
-  font-size: var(--text-sm);
-  font-weight: 500;
-  margin-bottom: var(--space-4);
-  transition: color var(--transition-fast);
+.detail-header .container {
   position: relative;
   z-index: 1;
-}
-
-.back-link:hover {
-  color: var(--color-gold);
 }
 
 .detail-title {
@@ -174,8 +172,6 @@ export default {
   color: white;
   margin: 0;
   letter-spacing: -0.02em;
-  position: relative;
-  z-index: 1;
 }
 
 .detail-layout {

@@ -2,13 +2,14 @@
   <section class="about-page">
     <div class="page-header">
       <div class="container">
-        <h1 class="page-title" data-aos="fade-up" data-aos-delay="100">About Us</h1>
+        <h1 class="page-title" v-scroll-reveal>About Us</h1>
+        <p class="page-subtitle" v-scroll-reveal="{ delay: 100 }">Protecting wildlife for future generations</p>
       </div>
     </div>
 
     <div class="container py-5">
       <div class="about-layout">
-        <div class="about-content" data-aos="fade-right">
+        <div class="about-content" v-scroll-reveal="{ direction: 'left' }">
           <h2 class="about-heading">
             Igniting Passion for<br />
             <span class="text-accent">Wildlife Conservation</span>
@@ -28,7 +29,7 @@
             Get in Touch<i class="fas fa-arrow-right ms-2"></i>
           </router-link>
         </div>
-        <div class="about-carousel-wrapper" data-aos="fade-left">
+        <div class="about-carousel-wrapper" v-scroll-reveal="{ direction: 'right' }">
           <AnimalCarousel />
         </div>
       </div>
@@ -36,16 +37,27 @@
 
     <div class="values-section">
       <div class="container">
-        <div class="text-center mb-5" data-aos="fade-up">
+        <div class="text-center mb-5" v-scroll-reveal>
           <h2 class="section-title">What Drives Us</h2>
         </div>
         <div class="values-grid">
-          <div class="value-card stagger-item" v-for="val in values" :key="val.title">
+          <div class="value-card" v-for="(val, idx) in values" :key="val.title" v-scroll-reveal="{ delay: idx * 100 }">
             <div class="value-icon">
               <i :class="val.icon"></i>
             </div>
             <h3>{{ val.title }}</h3>
             <p>{{ val.desc }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-section">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-item" v-for="(stat, idx) in stats" :key="stat.label" v-scroll-reveal="{ delay: idx * 100 }">
+            <div class="stat-number">{{ stat.number }}</div>
+            <div class="stat-label">{{ stat.label }}</div>
           </div>
         </div>
       </div>
@@ -65,6 +77,12 @@ export default {
         { icon: "fas fa-seedling", title: "Conservation", desc: "Protecting habitats and the species that depend on them for survival." },
         { icon: "fas fa-graduation-cap", title: "Education", desc: "Empowering communities with knowledge about wildlife and ecosystems." },
         { icon: "fas fa-hand-holding-heart", title: "Action", desc: "Turning awareness into tangible results through active programs." },
+      ],
+      stats: [
+        { number: "50+", label: "Species Protected" },
+        { number: "10K", label: "Annual Visitors" },
+        { number: "25", label: "Conservation Projects" },
+        { number: "15", label: "Years of Impact" },
       ],
     };
   },
@@ -178,6 +196,50 @@ export default {
   margin: 0;
 }
 
+/* Stats Section */
+.stats-section {
+  background: var(--color-forest);
+  padding: 4rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 20% 50%, rgba(198, 123, 92, 0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  text-align: center;
+}
+
+.stat-item {
+  padding: 1rem;
+}
+
+.stat-number {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, var(--text-4xl));
+  color: var(--color-gold);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
 @media (max-width: 768px) {
   .about-layout {
     grid-template-columns: 1fr;
@@ -187,6 +249,11 @@ export default {
   .values-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
   }
 }
 </style>

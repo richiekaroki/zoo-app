@@ -39,6 +39,17 @@
             </router-link>
           </li>
 
+          <li class="nav-item">
+            <button
+              class="theme-toggle"
+              @click="toggleTheme"
+              :aria-label="`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`"
+              :title="`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`"
+            >
+              <i class="fas" :class="theme === 'dark' ? 'fa-sun' : 'fa-moon'"></i>
+            </button>
+          </li>
+
           <template v-if="!isLoggedIn">
             <li class="nav-item nav-cta">
               <router-link
@@ -118,9 +129,14 @@
 <script>
 import { auth } from "@/firebase/firebaseConfig";
 import { signOut } from "firebase/auth";
+import { useDarkMode } from "@/composables/useDarkMode";
 
 export default {
   name: "NavbarSection",
+  setup() {
+    const { theme, toggleTheme } = useDarkMode();
+    return { theme, toggleTheme };
+  },
   data() {
     return {
       isMenuOpen: false,
@@ -347,6 +363,40 @@ export default {
   font-weight: 600;
 }
 
+/* Theme Toggle */
+.theme-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.85);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all var(--transition-base);
+}
+
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+  transform: rotate(15deg);
+}
+
+.navbar.scrolled .theme-toggle {
+  background: var(--color-sand);
+  border-color: var(--color-light-border);
+  color: var(--color-charcoal);
+}
+
+.navbar.scrolled .theme-toggle:hover {
+  background: var(--color-forest);
+  border-color: var(--color-forest);
+  color: white;
+}
+
 /* CTA */
 .nav-cta .nav-link {
   color: rgba(255, 255, 255, 0.7) !important;
@@ -553,6 +603,23 @@ export default {
     text-align: center;
     margin-top: 0.75rem;
     padding: 0.75rem 1.25rem;
+  }
+
+  .theme-toggle {
+    width: 100%;
+    height: auto;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    justify-content: flex-start;
+    gap: 0.5rem;
+    font-size: var(--text-base);
+    background: transparent;
+    border: none;
+    color: var(--color-charcoal);
+  }
+
+  .theme-toggle:hover {
+    background: var(--color-sand);
   }
 
   .nav-cta {

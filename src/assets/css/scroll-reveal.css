@@ -1,0 +1,37 @@
+/* --- Scroll Reveal System --- */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.scroll-reveal[data-scroll-direction="left"] {
+  transform: translateX(-24px);
+}
+
+.scroll-reveal[data-scroll-direction="right"] {
+  transform: translateX(24px);
+}
+
+.scroll-reveal[data-scroll-direction="scale"] {
+  transform: scale(0.95);
+}
+
+.scroll-reveal[data-scroll-direction="none"] {
+  transform: none;
+}
+
+.scroll-revealed {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

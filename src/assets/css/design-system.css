@@ -107,6 +107,33 @@
   --nav-height: 72px;
 }
 
+/* --- Dark Mode Tokens --- */
+[data-theme="dark"] {
+  --color-ivory: #0F1A14;
+  --color-sand: #162018;
+  --color-surface: #1A2A20;
+  --color-charcoal: #E8E4DA;
+  --color-warm-gray: #9CA090;
+  --color-light-border: #2A3A2E;
+  --color-forest: #4A9E73;
+  --color-forest-light: #5CB88A;
+  --color-forest-dark: #E8F5EE;
+  --color-gold-light: #D4956E;
+  --badge-endangered-bg: rgba(153, 27, 27, 0.15);
+  --badge-endangered-border: rgba(220, 80, 80, 0.3);
+  --badge-vulnerable-bg: rgba(146, 64, 14, 0.15);
+  --badge-vulnerable-border: rgba(217, 161, 48, 0.3);
+  --badge-near-threatened-bg: rgba(133, 77, 14, 0.12);
+  --badge-near-threatened-border: rgba(234, 200, 80, 0.25);
+  --badge-least-concern-bg: rgba(22, 101, 52, 0.15);
+  --badge-least-concern-border: rgba(74, 222, 128, 0.3);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-xl: 0 24px 60px rgba(0, 0, 0, 0.4), 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
 /* --- Global Reset & Base --- */
 *,
 *::before,
@@ -696,4 +723,110 @@ section {
 
 .loading-spinner {
   animation: gentlePulse 1.5s ease-in-out infinite;
+}
+
+/* --- Dark Mode Component Overrides --- */
+[data-theme="dark"] body {
+  color: var(--color-charcoal);
+  background-color: var(--color-ivory);
+}
+
+[data-theme="dark"] .page-header {
+  background: var(--color-surface);
+}
+
+[data-theme="dark"] .page-header::before {
+  background: radial-gradient(ellipse at 30% 20%, rgba(74, 158, 115, 0.1) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 80%, rgba(198, 123, 92, 0.08) 0%, transparent 60%);
+}
+
+[data-theme="dark"] .card,
+[data-theme="dark"] .contact-form-card,
+[data-theme="dark"] .contact-info-card,
+[data-theme="dark"] .value-card,
+[data-theme="dark"] .service-card,
+[data-theme="dark"] .animal-card,
+[data-theme="dark"] .skeleton-card,
+[data-theme="dark"] .featured-card,
+[data-theme="dark"] .profile-card,
+[data-theme="dark"] .admin-table-wrapper,
+[data-theme="dark"] .admin-controls,
+[data-theme="dark"] .admin-loading,
+[data-theme="dark"] .admin-error {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select,
+[data-theme="dark"] .search-bar,
+[data-theme="dark"] .search-input {
+  background-color: var(--color-sand);
+  color: var(--color-charcoal);
+  border-color: var(--color-light-border);
+}
+
+[data-theme="dark"] .form-control:focus,
+[data-theme="dark"] .form-select:focus {
+  background-color: var(--color-surface);
+}
+
+[data-theme="dark"] .modal-content {
+  background: var(--color-surface);
+}
+
+[data-theme="dark"] .modal-header,
+[data-theme="dark"] .modal-footer {
+  border-color: var(--color-light-border);
+}
+
+[data-theme="dark"] .dropdown-menu {
+  background: var(--color-surface);
+  border-color: var(--color-light-border);
+}
+
+[data-theme="dark"] .dropdown-item {
+  color: var(--color-charcoal);
+}
+
+[data-theme="dark"] .dropdown-item:hover {
+  background: var(--color-sand);
+  color: var(--color-forest);
+}
+
+[data-theme="dark"] .table th {
+  background: var(--color-sand);
+}
+
+[data-theme="dark"] .alert-success {
+  background: rgba(74, 158, 115, 0.12);
+  color: var(--color-forest);
+  border-color: rgba(74, 158, 115, 0.25);
+}
+
+[data-theme="dark"] .alert-danger {
+  background: rgba(192, 57, 43, 0.12);
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.25);
+}
+
+[data-theme="dark"] .text-error { color: #f87171; }
+
+[data-theme="dark"] .message-content {
+  background: var(--color-sand);
+}
+
+[data-theme="dark"] .skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-sand) 25%,
+    var(--color-light-border) 50%,
+    var(--color-sand) 75%
+  );
+  background-size: 200% 100%;
+}
+
+[data-theme="dark"] ::selection {
+  background-color: rgba(74, 158, 115, 0.25);
+  color: var(--color-charcoal);
 }

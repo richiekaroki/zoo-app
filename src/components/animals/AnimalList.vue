@@ -2,8 +2,8 @@
   <div class="animal-list-page">
     <div class="page-header">
       <div class="container">
-        <h1 class="page-title" data-aos="fade-up" data-aos-delay="100">Our Animals</h1>
-        <p class="page-subtitle" data-aos="fade-up" data-aos-delay="200">
+        <h1 class="page-title" v-scroll-reveal>Our Animals</h1>
+        <p class="page-subtitle" v-scroll-reveal="{ delay: 100 }">
           Discover the incredible species that call our planet home.
         </p>
       </div>
@@ -11,7 +11,7 @@
 
     <div class="container py-5">
       <!-- Search -->
-      <div class="search-wrapper" data-aos="fade-up">
+      <div class="search-wrapper" v-scroll-reveal>
         <div class="search-bar">
           <i class="fas fa-search search-icon"></i>
           <input
@@ -70,7 +70,7 @@
       </div>
 
       <!-- Error State -->
-      <div v-if="error && !loading" class="error-state" data-aos="fade-up">
+      <div v-if="error && !loading" class="error-state" v-scroll-reveal>
         <div class="error-icon">
           <i class="fas fa-exclamation-triangle"></i>
         </div>
@@ -82,7 +82,7 @@
       </div>
 
       <!-- Empty State -->
-      <div v-if="!loading && !error && filteredAnimals.length === 0" class="empty-state" data-aos="fade-up">
+      <div v-if="!loading && !error && filteredAnimals.length === 0" class="empty-state" v-scroll-reveal>
         <div class="empty-icon">
           <i class="fas fa-search"></i>
         </div>

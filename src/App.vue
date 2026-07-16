@@ -10,17 +10,24 @@
       </router-view>
     </main>
     <FooterSection />
+    <ToastContainer />
   </div>
 </template>
 
 <script>
 import FooterSection from "@/components/layout/FooterSection.vue";
 import NavbarSection from "@/components/layout/NavbarSection.vue";
+import ToastContainer from "@/components/layout/ToastContainer.vue";
+import { useDarkMode } from "@/composables/useDarkMode";
 
 export default {
   components: {
     NavbarSection,
     FooterSection,
+    ToastContainer,
+  },
+  setup() {
+    useDarkMode();
   },
 };
 </script>

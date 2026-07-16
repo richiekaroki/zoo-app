@@ -110,6 +110,15 @@
               </button>
             </div>
 
+            <div class="danger-zone">
+              <div class="divider"></div>
+              <h4 class="danger-title">Danger Zone</h4>
+              <p class="danger-desc">Permanently delete your account and all associated data. This action cannot be undone.</p>
+              <button class="btn btn-danger" @click="showDeleteModal = true" :disabled="updating">
+                <i class="fas fa-trash-alt me-1"></i>Delete Account
+              </button>
+            </div>
+
             <div v-if="successMessage" class="alert alert-success mt-3" role="status">
               <i class="fas fa-check-circle me-2"></i>{{ successMessage }}
             </div>
@@ -120,13 +129,61 @@
         </div>
       </div>
     </div>
+
+    <!-- Delete Account Modal -->
+    <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteAccountModalLabel">Delete Account</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="delete-warning">
+              <div class="delete-warning-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+              </div>
+              <p><strong>This action is permanent and cannot be undone.</strong></p>
+              <p>All your data, including profile information, will be permanently deleted from our servers.</p>
+            </div>
+            <div class="form-group">
+              <label for="deleteConfirm" class="form-label">Type <strong>DELETE</strong> to confirm:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="deleteConfirm"
+                v-model="deleteConfirmText"
+                placeholder="Type DELETE"
+                autocomplete="off"
+              />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancel</button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              @click="deleteAccount"
+              :disabled="deleteConfirmText !== 'DELETE' || deleting"
+            >
+              <span v-if="deleting">
+                <span class="spinner-border spinner-border-sm me-1"></span>Deleting...
+              </span>
+              <span v-else><i class="fas fa-trash-alt me-1"></i>Permanently Delete</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { auth, storage } from "@/firebase/firebaseConfig";
-import { updateProfile, updateEmail, updatePassword, signOut } from "firebase/auth";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { auth, storage, db } from "@/firebase/firebaseConfig";
+import { updateProfile, updateEmail, updatePassword, signOut, deleteUser } from "firebase/auth";
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+import { collection, query, where, getDocs, deleteDoc } from "firebase/firestore";
+import { Modal } from "bootstrap";
 
 export default {
   name: "UserProfile",
@@ -139,6 +196,10 @@ export default {
       loading: true,
       error: null,
       successMessage: null,
+      showDeleteModal: false,
+      deleteConfirmText: "",
+      deleting: false,
+      deleteModal: null,
     };
   },
   computed: {
@@ -151,6 +212,20 @@ export default {
       if (this.newPassword && this.newPassword.length < 6) return false;
       if (this.newPassword && this.newPassword !== this.confirmPassword) return false;
       return true;
+    },
+  },
+  watch: {
+    showDeleteModal(val) {
+      if (val) {
+        this.$nextTick(() => {
+          if (!this.deleteModal) {
+            this.deleteModal = new Modal(document.getElementById("deleteAccountModal"));
+          }
+          this.deleteModal.show();
+        });
+      } else if (this.deleteModal) {
+        this.deleteModal.hide();
+      }
     },
   },
   created() {
@@ -228,6 +303,58 @@ export default {
         this.$router.push("/login");
       } catch (e) {
         this.error = "Failed to sign out. Please try again.";
+      }
+    },
+    async deleteAccount() {
+      if (this.deleteConfirmText !== "DELETE") return;
+      this.deleting = true;
+      this.error = null;
+      try {
+        const user = auth.currentUser;
+        if (!user) throw new Error("No user signed in");
+
+        await this.cleanupUserData(user.uid);
+
+        if (user.photoURL && user.photoURL.includes("firebase")) {
+          try {
+            const photoRef = ref(storage, `profile-photos/${user.uid}`);
+            await deleteObject(photoRef);
+          } catch {
+            // Photo may not exist, continue
+          }
+        }
+
+        await deleteUser(user);
+
+        if (this.deleteModal) {
+          this.deleteModal.hide();
+        }
+        this.$router.push("/");
+      } catch (e) {
+        const code = e.code || "";
+        if (code === "auth/requires-recent-login") {
+          this.error = "For security, please sign out and sign back in before deleting your account.";
+        } else {
+          this.error = this.mapFirebaseError(e);
+        }
+        this.showDeleteModal = false;
+      } finally {
+        this.deleting = false;
+        this.deleteConfirmText = "";
+      }
+    },
+    async cleanupUserData(uid) {
+      try {
+        const contactsQuery = query(
+          collection(db, "contacts"),
+          where("userId", "==", uid)
+        );
+        const snapshot = await getDocs(contactsQuery);
+        for (const doc of snapshot.docs) {
+          await deleteDoc(doc.ref);
+        }
+      } catch {
+        // Cleanup is best-effort
       }
     },
     mapFirebaseError(e) {
@@ -319,5 +446,57 @@ export default {
 .profile-actions .btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* Danger Zone */
+.danger-zone {
+  margin-top: 1.5rem;
+}
+
+.danger-title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--color-error);
+  margin-bottom: var(--space-2);
+}
+
+.danger-desc {
+  font-size: var(--text-sm);
+  color: var(--color-warm-gray);
+  margin-bottom: var(--space-4);
+  line-height: 1.6;
+}
+
+.delete-warning {
+  background: rgba(192, 57, 43, 0.06);
+  border: 1px solid rgba(192, 57, 43, 0.15);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
+.delete-warning-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(192, 57, 43, 0.1);
+  border-radius: var(--radius-md);
+  color: var(--color-error);
+  font-size: 1rem;
+  margin: 0 auto 0.75rem;
+}
+
+.delete-warning p {
+  font-size: var(--text-sm);
+  color: var(--color-charcoal);
+  margin-bottom: 0.25rem;
+}
+
+.delete-warning p:last-child {
+  margin-bottom: 0;
+  color: var(--color-warm-gray);
 }
 </style>
