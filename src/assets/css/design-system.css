@@ -265,15 +265,21 @@ img {
 
 /* Primary - Forest Green */
 .btn-primary {
-  background-color: var(--color-forest);
-  border-color: var(--color-forest);
-  color: white;
+  background-color: var(--color-forest) !important;
+  border-color: var(--color-forest) !important;
+  color: white !important;
 }
 .btn-primary:hover {
-  background-color: var(--color-forest-light);
-  border-color: var(--color-forest-light);
+  background-color: var(--color-forest-light) !important;
+  border-color: var(--color-forest-light) !important;
   box-shadow: 0 4px 24px rgba(27, 67, 50, 0.35);
   transform: translateY(-2px);
+}
+
+.btn-primary:disabled {
+  background-color: var(--color-forest) !important;
+  border-color: var(--color-forest) !important;
+  opacity: 0.55;
 }
 
 /* Gold / Accent */
