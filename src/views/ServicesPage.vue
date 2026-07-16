@@ -48,7 +48,7 @@
 
 <script>
 export default {
-  name: "OurServices",
+  name: "ServicesPage",
   data() {
     return {
       services: [

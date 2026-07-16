@@ -3,23 +3,23 @@ import { createRouter, createWebHistory } from "vue-router";
 import { onAuthStateChanged } from "firebase/auth";
 
 const HomePage = () => import("@/views/HomePage.vue");
-const AboutUs = () => import("@/views/AboutUs.vue");
-const OurServices = () => import("@/views/OurServices.vue");
-const ContactForm = () => import("@/views/ContactForm.vue");
+const AboutPage = () => import("@/views/AboutPage.vue");
+const ServicesPage = () => import("@/views/ServicesPage.vue");
+const ContactPage = () => import("@/views/ContactPage.vue");
 const UserLogin = () => import("@/components/auth/UserLogin.vue");
 const NewRegister = () => import("@/components/auth/NewRegister.vue");
 const AnimalList = () => import("@/components/animals/AnimalList.vue");
 const AnimalDetail = () => import("@/components/animals/AnimalDetail.vue");
-const UserProfile = () => import("@/views/UserProfile.vue");
+const ProfilePage = () => import("@/views/ProfilePage.vue");
 const AdminDashboard = () => import("@/components/admin/AdminDashboard.vue");
 const NotFound = () => import("@/views/NotFound.vue");
 
 const routes = [
   { path: "/", name: "Home", component: HomePage },
-  { path: "/about", name: "About", component: AboutUs },
-  { path: "/services", name: "Services", component: OurServices },
+  { path: "/about", name: "About", component: AboutPage },
+  { path: "/services", name: "Services", component: ServicesPage },
   { path: "/conservation", redirect: "/about" },
-  { path: "/contact", name: "Contact", component: ContactForm },
+  { path: "/contact", name: "Contact", component: ContactPage },
   { path: "/login", name: "Login", component: UserLogin },
   { path: "/register", name: "Register", component: NewRegister },
   { path: "/animals", name: "AnimalList", component: AnimalList },
@@ -34,7 +34,7 @@ const routes = [
   {
     path: "/profile",
     name: "Profile",
-    component: UserProfile,
+    component: ProfilePage,
     meta: { requiresAuth: true },
   },
   {

@@ -104,7 +104,7 @@
 
 <script>
 import { fetchAnimalHabitat, fetchAnimalImage } from "@/services/animalApi";
-import { getRandomFact, getRandomLoadingMessage } from "@/utils/animalFacts";
+import { getRandomFact, getRandomLoadingMessage } from "@/services/animalFacts";
 
 export default {
   data() {

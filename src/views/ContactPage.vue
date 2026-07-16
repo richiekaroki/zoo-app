@@ -136,6 +136,7 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 
 export default {
+  name: "ContactPage",
   data() {
     return {
       formData: { name: "", email: "", message: "" },

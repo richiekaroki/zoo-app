@@ -186,7 +186,7 @@ import { collection, query, where, getDocs, deleteDoc } from "firebase/firestore
 import { Modal } from "bootstrap";
 
 export default {
-  name: "UserProfile",
+  name: "ProfilePage",
   data() {
     return {
       user: { displayName: "", email: "", photoURL: "", providerData: [] },
