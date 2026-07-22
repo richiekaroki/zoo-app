@@ -15,3 +15,5 @@ const app = createApp(App);
 
 app.directive("scroll-reveal", scrollReveal);
 app.use(router).mount("#app");
+
+window.dispatchEvent(new Event("render-event"));
