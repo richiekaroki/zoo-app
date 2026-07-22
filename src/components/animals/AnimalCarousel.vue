@@ -184,25 +184,25 @@ export default {
             id: 1, name: "African Lion", slug: "lion",
             description: "The majestic king of the jungle that lives in prides. Lions are the only cats that live in groups called prides.",
             imageUrl: this.placeholderImages.lion, conservationStatus: "Vulnerable",
-            sound: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+            sound: "https://cdn.freesound.org/previews/530/530568_6266058-lq.mp3",
           },
           {
             id: 2, name: "Bengal Tiger", slug: "tiger",
             description: "The largest cat species with distinctive stripes. Each tiger's stripe pattern is unique, like human fingerprints.",
             imageUrl: this.placeholderImages.tiger, conservationStatus: "Endangered",
-            sound: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+            sound: "https://cdn.freesound.org/previews/431/431825_4486667-lq.mp3",
           },
           {
             id: 3, name: "African Elephant", slug: "elephant",
             description: "Gentle giants with incredible intelligence and memory. They can remember watering holes from decades past.",
             imageUrl: this.placeholderImages.elephant, conservationStatus: "Endangered",
-            sound: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+            sound: "https://cdn.freesound.org/previews/425/425404_3389879-lq.mp3",
           },
           {
             id: 4, name: "Masai Giraffe", slug: "giraffe",
             description: "The tallest living terrestrial animal with long necks. Their necks contain the same number of vertebrae as humans (7).",
             imageUrl: this.placeholderImages.giraffe, conservationStatus: "Vulnerable",
-            sound: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+            sound: null,
           },
         ];
       } catch (error) {
