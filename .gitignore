@@ -80,3 +80,6 @@ temp/
 skills-lock.json
 opencode.json
 .vercel
+
+.vercel
+.env*
