@@ -96,14 +96,6 @@
                   >
                     <i class="fas fa-info-circle me-1"></i>Details
                   </router-link>
-                  <button
-                    class="btn btn-sm btn-ghost-light"
-                    @click="playAnimalSound(animal)"
-                    :disabled="!animal.sound"
-                    :aria-label="`Play ${animal.name} sound`"
-                  >
-                    <i class="fas" :class="soundIcon(animal)"></i>Sound
-                  </button>
                 </div>
               </div>
             </div>
@@ -132,9 +124,6 @@
           <span class="visually-hidden">Next animal</span>
         </button>
       </div>
-
-      <!-- Audio Element -->
-      <audio ref="animalAudio" preload="none"></audio>
     </div>
   </div>
 </template>
@@ -184,25 +173,21 @@ export default {
             id: 1, name: "African Lion", slug: "lion",
             description: "The majestic king of the jungle that lives in prides. Lions are the only cats that live in groups called prides.",
             imageUrl: this.placeholderImages.lion, conservationStatus: "Vulnerable",
-            sound: "https://cdn.freesound.org/previews/530/530568_6266058-lq.mp3",
           },
           {
             id: 2, name: "Bengal Tiger", slug: "tiger",
             description: "The largest cat species with distinctive stripes. Each tiger's stripe pattern is unique, like human fingerprints.",
             imageUrl: this.placeholderImages.tiger, conservationStatus: "Endangered",
-            sound: "https://cdn.freesound.org/previews/431/431825_4486667-lq.mp3",
           },
           {
             id: 3, name: "African Elephant", slug: "elephant",
             description: "Gentle giants with incredible intelligence and memory. They can remember watering holes from decades past.",
             imageUrl: this.placeholderImages.elephant, conservationStatus: "Endangered",
-            sound: "https://cdn.freesound.org/previews/425/425404_3389879-lq.mp3",
           },
           {
             id: 4, name: "Masai Giraffe", slug: "giraffe",
             description: "The tallest living terrestrial animal with long necks. Their necks contain the same number of vertebrae as humans (7).",
             imageUrl: this.placeholderImages.giraffe, conservationStatus: "Vulnerable",
-            sound: null,
           },
         ];
       } catch (error) {
@@ -244,17 +229,6 @@ export default {
 
     incrementIndex() { this.setActiveIndex((this.activeIndex + 1) % this.animals.length); },
     decrementIndex() { this.setActiveIndex((this.activeIndex - 1 + this.animals.length) % this.animals.length); },
-
-    playAnimalSound(animal) {
-      if (animal.sound) {
-        const audio = this.$refs.animalAudio;
-        audio.pause();
-        audio.src = animal.sound;
-        audio.play().catch(() => {});
-      }
-    },
-
-    soundIcon(animal) { return animal.sound ? "fa-volume-up" : "fa-volume-mute text-muted"; },
 
     getConservationClass(animal) {
       const status = (animal.conservationStatus || "").toLowerCase();
