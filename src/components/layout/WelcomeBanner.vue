@@ -10,7 +10,7 @@
           <p>Discover wildlife, learn about conservation, and explore our virtual sanctuary.</p>
         </div>
         <div class="welcome-actions">
-          <router-link to="/animals" class="btn btn-gold btn-sm">
+          <router-link to="/animals" class="btn btn-gold">
             <i class="fas fa-compass me-2"></i>Start Exploring
           </router-link>
           <button class="btn btn-ghost btn-sm" @click="dismissWelcome" aria-label="Dismiss welcome message">
@@ -99,6 +99,11 @@ export default {
 .welcome-actions .btn-ghost {
   color: rgba(255, 255, 255, 0.7);
   padding: 0.5rem;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .welcome-actions .btn-ghost:hover {

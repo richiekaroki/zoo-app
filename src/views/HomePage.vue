@@ -15,7 +15,7 @@
         <div class="featured-grid">
           <div class="featured-card featured-card--large">
             <div class="featured-card-img">
-              <img :src="featuredAnimals[0].img" :alt="featuredAnimals[0].name" loading="lazy" />
+              <img :src="featuredAnimals[0].img" :alt="featuredAnimals[0].name" loading="lazy" width="600" height="800" />
               <div class="featured-card-overlay">
                 <router-link :to="`/animals/${featuredAnimals[0].name}`" class="btn btn-sm btn-gold">
                   Learn More
@@ -36,7 +36,7 @@
               :key="animal.name"
             >
               <div class="featured-card-img featured-card-img--small">
-                <img :src="animal.img" :alt="animal.name" loading="lazy" />
+                <img :src="animal.img" :alt="animal.name" loading="lazy" width="600" height="338" />
                 <div class="featured-card-overlay">
                   <router-link :to="`/animals/${animal.name}`" class="btn btn-sm btn-gold">
                     Learn More
@@ -169,16 +169,17 @@ export default {
 }
 
 .featured-card--large .featured-card-img {
-  height: 420px;
+  aspect-ratio: 3 / 4;
 }
 
 .featured-card--small .featured-card-img--small {
-  height: 198px;
+  aspect-ratio: 16 / 9;
 }
 
 .featured-card-img {
   position: relative;
   overflow: hidden;
+  background: var(--color-sand);
 }
 
 .featured-card-img img {
@@ -222,7 +223,7 @@ export default {
 
 .featured-card-tag {
   display: inline-block;
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   font-weight: 700;
   color: var(--color-gold-dark);
   background: rgba(198, 123, 92, 0.1);
@@ -276,5 +277,33 @@ export default {
   .featured-card-stack {
     flex-direction: column;
   }
+
+  .featured-section {
+    padding: 4rem 0 5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-header {
+    margin-bottom: 2rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.6rem, 5vw, 2rem);
+  }
+
+  .featured-section {
+    padding: 3rem 0 4rem;
+  }
+}
+
+/* Dark Mode: Featured Card Tag */
+[data-theme="dark"] .featured-card-tag {
+  color: var(--color-gold-light);
+  background: rgba(212, 149, 110, 0.12);
+}
+
+[data-theme="dark"] .featured-card-body h3 {
+  color: var(--color-forest-light);
 }
 </style>

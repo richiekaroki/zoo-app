@@ -87,12 +87,12 @@ export default {
 .services-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-bottom: 4rem;
+  gap: var(--space-6);
+  margin-bottom: var(--space-16);
 }
 
 .service-card {
-  padding: 2.5rem 2rem;
+  padding: var(--space-10) var(--space-8);
   background: white;
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-sm);
@@ -198,19 +198,39 @@ export default {
 
 .cta-actions {
   display: flex;
-  gap: 1rem;
+  gap: var(--space-4);
   justify-content: center;
   flex-wrap: wrap;
 }
 
 @media (max-width: 768px) {
   .services-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
 
   .cta-banner {
     padding: 3rem 1.5rem;
   }
+}
+
+@media (max-width: 480px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Dark Mode: CTA Banner */
+[data-theme="dark"] .cta-banner {
+  background: linear-gradient(135deg, var(--color-forest) 0%, #0d3025 100%);
+}
+
+[data-theme="dark"] .cta-banner::before {
+  background: radial-gradient(ellipse at 30% 50%, rgba(198, 123, 92, 0.08) 0%, transparent 60%);
+}
+
+[data-theme="dark"] .cta-banner h2,
+[data-theme="dark"] .cta-banner p {
+  color: var(--color-charcoal);
 }
 </style>

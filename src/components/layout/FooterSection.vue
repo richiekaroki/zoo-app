@@ -127,17 +127,17 @@ export default {
 .footer-top {
   display: grid;
   grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
-  gap: 3rem;
-  padding-bottom: 3rem;
+  gap: var(--space-12);
+  padding-bottom: var(--space-12);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .footer-logo {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   text-decoration: none;
-  margin-bottom: 1.25rem;
+  margin-bottom: var(--space-5);
 }
 
 .footer-logo .brand-icon {
@@ -168,7 +168,7 @@ export default {
   font-size: var(--text-sm);
   line-height: 1.7;
   color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-6);
   max-width: 280px;
 }
 
@@ -178,8 +178,8 @@ export default {
 }
 
 .social-links a {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -202,7 +202,7 @@ export default {
   font-size: var(--text-xs);
   font-weight: 700;
   color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 1.25rem;
+  margin-bottom: var(--space-5);
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -232,7 +232,7 @@ export default {
 .footer-contact li {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .footer-contact i {
@@ -246,7 +246,7 @@ export default {
 .footer-newsletter-desc {
   font-size: var(--text-sm);
   color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-3);
   line-height: 1.5;
 }
 
@@ -330,6 +330,16 @@ export default {
 
   .social-links {
     justify-content: flex-start;
+  }
+
+  .newsletter-input {
+    padding: 0.75rem 1rem;
+    min-height: 44px;
+  }
+
+  .newsletter-btn {
+    padding: 0.75rem 1rem;
+    min-height: 44px;
   }
 }
 </style>

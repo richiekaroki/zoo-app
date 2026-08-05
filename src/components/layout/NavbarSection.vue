@@ -23,6 +23,7 @@
               :to="link.path"
               class="nav-link"
               :class="{ active: $route.path === link.path }"
+              :aria-current="$route.path === link.path ? 'page' : undefined"
               @click="handleNavClick(link.path, $event)"
             >
               {{ link.label }}
@@ -33,6 +34,7 @@
             <router-link
               to="/admin"
               class="nav-link nav-admin"
+              :aria-current="$route.path === '/admin' ? 'page' : undefined"
               @click="handleNavClick('/admin', $event)"
             >
               <i class="fas fa-shield-alt me-1"></i>Admin
@@ -79,7 +81,7 @@
               :aria-expanded="isDropdownOpen ? 'true' : 'false'"
             >
               <span class="user-avatar" v-if="userPhoto">
-                <img :src="userPhoto" :alt="userName || 'User avatar'" />
+                <img :src="userPhoto" :alt="userName || 'User avatar'" width="32" height="32" />
               </span>
               <span class="user-avatar user-avatar-placeholder" v-else>
                 <i class="fas fa-user"></i>
@@ -166,12 +168,12 @@ export default {
     });
     window.addEventListener("scroll", this.handleScroll, { passive: true });
     document.addEventListener("click", this.handleClickOutside);
-    document.addEventListener("keydown", this.handleEscape);
+    document.addEventListener("keydown", this.handleKeydown);
   },
   beforeUnmount() {
     window.removeEventListener("scroll", this.handleScroll);
     document.removeEventListener("click", this.handleClickOutside);
-    document.removeEventListener("keydown", this.handleEscape);
+    document.removeEventListener("keydown", this.handleKeydown);
   },
   methods: {
     handleScroll() {
@@ -180,14 +182,31 @@ export default {
     handleClickOutside(event) {
       const navbar = this.$el;
       if (!navbar.contains(event.target)) {
-        this.isMenuOpen = false;
-        this.isDropdownOpen = false;
+        this.closeAllMenus();
       }
     },
-    handleEscape(event) {
+    handleKeydown(event) {
       if (event.key === "Escape") {
-        this.isMenuOpen = false;
-        this.isDropdownOpen = false;
+        this.closeAllMenus();
+        return;
+      }
+      // Focus trap for mobile nav
+      if (this.isMenuOpen && event.key === "Tab") {
+        const panel = this.$el.querySelector(".navbar-collapse");
+        if (!panel) return;
+        const focusable = panel.querySelectorAll(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
       }
     },
     handleNavClick(routePath, event) {
@@ -212,8 +231,15 @@ export default {
       if (this.isDropdownOpen) this.isMenuOpen = false;
     },
     closeAllMenus() {
+      const wasMenuOpen = this.isMenuOpen;
       this.isMenuOpen = false;
       this.isDropdownOpen = false;
+      if (wasMenuOpen) {
+        this.$nextTick(() => {
+          const toggler = this.$el.querySelector(".navbar-toggler");
+          if (toggler) toggler.focus();
+        });
+      }
     },
     async handleLogout() {
       try {
@@ -287,10 +313,12 @@ export default {
   color: white;
   letter-spacing: -0.01em;
   transition: color var(--transition-base);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 }
 
 .navbar.scrolled .brand-text {
   color: var(--color-forest-dark);
+  text-shadow: none;
 }
 
 .brand-accent {
@@ -368,8 +396,8 @@ export default {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: rgba(255, 255, 255, 0.85);
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
@@ -473,6 +501,10 @@ export default {
   background: transparent;
   cursor: pointer;
   z-index: 10;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
 }
 
 .toggler-bar {
@@ -585,7 +617,8 @@ export default {
 
   .navbar-nav {
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.5rem;
+    overscroll-behavior: contain;
   }
 
   .nav-link {

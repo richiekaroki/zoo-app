@@ -48,7 +48,7 @@
           <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
         </div>
 
-        <button type="submit" class="btn btn-primary btn-lg w-100" :disabled="loading || !isFormValid" :aria-busy="loading">
+        <button type="submit" class="btn btn-primary btn-lg w-100" :disabled="loading || !isFormValid" :aria-busy="loading" aria-live="polite">
           <span v-if="loading">
             <span class="spinner-border spinner-border-sm me-2"></span>Signing in...
           </span>
@@ -130,7 +130,7 @@ export default {
   align-items: center;
   justify-content: center;
   background: var(--color-sand);
-  padding: 2rem 1rem;
+  padding: calc(var(--nav-height) + 2rem) 1rem 2rem;
   position: relative;
 }
 
@@ -254,5 +254,20 @@ export default {
   opacity: 0.55;
   transform: none;
   box-shadow: none;
+}
+
+@media (max-width: 480px) {
+  .auth-page {
+    padding: calc(var(--nav-height) + 1rem) 1rem 1rem;
+  }
+
+  .auth-card {
+    padding: 1.75rem 1.25rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .auth-header h1 {
+    font-size: var(--text-xl);
+  }
 }
 </style>

@@ -27,6 +27,8 @@
         data-bs-ride="carousel"
         @mouseenter="pauseCarousel"
         @mouseleave="resumeCarousel"
+        @focusin="pauseCarousel"
+        @focusout="resumeCarousel"
       >
         <!-- Indicators -->
         <div class="carousel-indicators">
@@ -63,6 +65,8 @@
                 class="carousel-image"
                 :alt="`${animal.name} in the wild`"
                 loading="lazy"
+                width="1200"
+                height="480"
                 @load="handleImageLoad"
                 @error="handleImageError(animal)"
               />
@@ -200,8 +204,9 @@ export default {
     initCarousel() {
       const carouselElement = document.getElementById("animalCarousel");
       if (carouselElement && this.animals.length > 0) {
+        const interval = window.innerWidth >= 992 ? 8000 : 6000;
         this.carousel = new Carousel(carouselElement, {
-          interval: 6000, wrap: true, touch: true, pause: "hover",
+          interval, wrap: true, touch: true, pause: "hover",
         });
         carouselElement.addEventListener("slid.bs.carousel", (event) => {
           this.activeIndex = event.to;
@@ -405,7 +410,7 @@ export default {
 .conservation-status {
   padding: 0.25rem 0.75rem;
   border-radius: var(--radius-full);
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -414,21 +419,36 @@ export default {
 }
 
 .carousel-indicators {
+  display: flex;
+  gap: 0;
   margin-bottom: 1rem;
 }
 
 .carousel-indicators button {
+  width: auto;
+  height: auto;
+  padding: 16px;
+  border-radius: 0;
+  margin: 0;
+  position: relative;
+  border: none;
+  background: transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* Visual dot via pseudo-element, 44px+ touch target via padding */
+.carousel-indicators button::before {
+  content: '';
+  display: block;
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  margin: 0 6px;
-  position: relative;
-  border: none;
   background-color: rgba(255, 255, 255, 0.35);
   transition: all 0.3s ease;
 }
 
-.carousel-indicators button.active {
+.carousel-indicators button.active::before {
   background-color: white;
   transform: scale(1.3);
 }
@@ -437,13 +457,13 @@ export default {
   position: absolute;
   top: -8px;
   right: -8px;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.5rem;
+  font-size: 0.6rem;
   font-weight: bold;
   color: white;
   border: 2px solid white;
@@ -477,7 +497,7 @@ button:focus {
   }
 
   .conservation-status {
-    font-size: 0.6rem;
+    font-size: 0.65rem;
     padding: 0.2rem 0.5rem;
   }
 }

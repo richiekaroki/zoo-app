@@ -18,7 +18,7 @@
               <i class="fas fa-exclamation-circle me-2"></i>{{ submitError }}
             </div>
 
-            <form @submit.prevent="submitForm">
+            <form @submit.prevent="submitForm" aria-label="Contact form">
               <div class="form-group">
                 <label for="name" class="form-label">Your Name</label>
                 <input
@@ -203,18 +203,18 @@ export default {
 .contact-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3rem;
+  gap: var(--space-12);
 }
 
 .contact-form-card {
   background: white;
-  padding: 2.5rem;
+  padding: var(--space-10);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-6);
 }
 
 .form-error {
@@ -231,7 +231,7 @@ export default {
 }
 
 .contact-info-card {
-  padding: 2.5rem;
+  padding: var(--space-10);
   background: var(--color-sand);
   border-radius: var(--radius-xl);
   height: 100%;
@@ -326,6 +326,11 @@ export default {
   .contact-layout {
     grid-template-columns: 1fr;
     gap: 2rem;
+  }
+
+  .contact-form-card,
+  .contact-info-card {
+    padding: 1.75rem;
   }
 }
 </style>

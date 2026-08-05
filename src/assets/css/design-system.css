@@ -120,12 +120,16 @@
   --color-forest-dark: #E8F5EE;
   --color-gold-light: #D4956E;
   --badge-endangered-bg: rgba(153, 27, 27, 0.15);
+  --badge-endangered-text: #fca5a5;
   --badge-endangered-border: rgba(220, 80, 80, 0.3);
   --badge-vulnerable-bg: rgba(146, 64, 14, 0.15);
+  --badge-vulnerable-text: #fcd34d;
   --badge-vulnerable-border: rgba(217, 161, 48, 0.3);
   --badge-near-threatened-bg: rgba(133, 77, 14, 0.12);
+  --badge-near-threatened-text: #fde047;
   --badge-near-threatened-border: rgba(234, 200, 80, 0.25);
   --badge-least-concern-bg: rgba(22, 101, 52, 0.15);
+  --badge-least-concern-text: #86efac;
   --badge-least-concern-border: rgba(74, 222, 128, 0.3);
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15);
@@ -159,6 +163,7 @@ body {
   color: var(--color-charcoal);
   background-color: var(--color-ivory);
   overflow-x: hidden;
+  overscroll-behavior-y: auto;
 }
 
 /* --- Headings --- */
@@ -485,6 +490,12 @@ section {
   overflow: hidden;
 }
 
+@media (max-width: 480px) {
+  .page-header {
+    padding: 4rem 0 2.5rem;
+  }
+}
+
 .page-header::before {
   content: '';
   position: absolute;
@@ -543,7 +554,7 @@ section {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 700;
   padding: 0.25rem 0.75rem;
   border-radius: var(--radius-full);
@@ -666,8 +677,25 @@ section {
 
 /* Smooth lift on hover for cards */
 .featured-card,
-.animal-card {
+.animal-card,
+.service-card {
   transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Tap feedback for touch devices — no hover available */
+@media (hover: none) {
+  .featured-card:active,
+  .animal-card:active,
+  .service-card:active {
+    transform: scale(0.97);
+    box-shadow: var(--shadow-sm);
+    transition-duration: 80ms;
+  }
+
+  .btn:active {
+    transform: scale(0.96);
+    transition-duration: 80ms;
+  }
 }
 
 /* Icon bounce on hover */
@@ -681,7 +709,62 @@ section {
   transform: scale(1.1);
 }
 
-/* Focus ring animation */
+/* Brand icon wiggle on hover */
+.navbar-brand:hover .brand-icon,
+.footer-logo:hover .brand-icon,
+.auth-brand:hover .brand-icon {
+  animation: brandWiggle 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes brandWiggle {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-8deg) scale(1.08); }
+  50% { transform: rotate(5deg) scale(1.05); }
+  75% { transform: rotate(-3deg) scale(1.02); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+/* Card image shimmer on load */
+.animal-card-img img,
+.featured-card-img img {
+  animation: imageReveal 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+@keyframes imageReveal {
+  0% { opacity: 0; transform: scale(1.03); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Stagger children animation for lists */
+.stagger-item {
+  animation: staggerFadeUp 0.5s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+.stagger-item:nth-child(1) { animation-delay: 0ms; }
+.stagger-item:nth-child(2) { animation-delay: 60ms; }
+.stagger-item:nth-child(3) { animation-delay: 120ms; }
+.stagger-item:nth-child(4) { animation-delay: 180ms; }
+.stagger-item:nth-child(5) { animation-delay: 240ms; }
+.stagger-item:nth-child(6) { animation-delay: 300ms; }
+.stagger-item:nth-child(7) { animation-delay: 360ms; }
+
+@keyframes staggerFadeUp {
+  0% { opacity: 0; transform: translateY(16px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Newsletter success pulse */
+.newsletter-success {
+  animation: successPop 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes successPop {
+  0% { transform: scale(0.9); opacity: 0; }
+  60% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Smooth page transitions */
 :focus-visible {
   outline: 2px solid var(--color-gold);
   outline-offset: 2px;
@@ -829,4 +912,109 @@ section {
 [data-theme="dark"] ::selection {
   background-color: rgba(74, 158, 115, 0.25);
   color: var(--color-charcoal);
+}
+
+/* --- Dark Mode: Footer & Welcome Banner --- */
+/* These use --color-forest-dark as background which inverts to light in dark mode.
+   Override to keep them dark. */
+[data-theme="dark"] .site-footer {
+  background: #0a1e14;
+}
+
+[data-theme="dark"] .site-footer .footer-logo .brand-text,
+[data-theme="dark"] .site-footer .footer-links h4 {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+[data-theme="dark"] .site-footer .footer-desc,
+[data-theme="dark"] .site-footer .footer-links li,
+[data-theme="dark"] .site-footer .footer-links a,
+[data-theme="dark"] .site-footer .footer-contact li {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+[data-theme="dark"] .site-footer .social-links a {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="dark"] .welcome-banner {
+  background: linear-gradient(135deg, #1a3a2a 0%, #0f2b1f 100%);
+}
+
+/* --- Dark Mode: Mobile Nav Drawer --- */
+[data-theme="dark"] .navbar-collapse {
+  background: rgba(22, 32, 24, 0.96);
+}
+
+[data-theme="dark"] .navbar-collapse .nav-link {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+[data-theme="dark"] .navbar-collapse .nav-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+[data-theme="dark"] .navbar-collapse .theme-toggle {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+[data-theme="dark"] .navbar-collapse .theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .navbar-collapse .nav-cta .nav-link {
+  color: rgba(255, 255, 255, 0.7) !important;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* --- Dark Mode: Navbar Scrolled --- */
+[data-theme="dark"] .navbar.scrolled {
+  background: rgba(15, 26, 20, 0.92);
+  border-bottom-color: rgba(42, 58, 46, 0.35);
+}
+
+[data-theme="dark"] .navbar.scrolled .nav-link {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+[data-theme="dark"] .navbar.scrolled .nav-link:hover,
+[data-theme="dark"] .navbar.scrolled .nav-link.active {
+  color: var(--color-forest);
+}
+
+[data-theme="dark"] .navbar.scrolled .theme-toggle {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+[data-theme="dark"] .navbar.scrolled .theme-toggle:hover {
+  background: var(--color-forest);
+  color: white;
+}
+
+[data-theme="dark"] .toggler-bar,
+[data-theme="dark"] .toggler-bar::before,
+[data-theme="dark"] .toggler-bar::after {
+  background: white;
+}
+
+/* --- Dark Mode: Auth Cards --- */
+[data-theme="dark"] .auth-card {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme="dark"] .auth-header h1 {
+  color: var(--color-charcoal);
+}
+
+[data-theme="dark"] .auth-footer {
+  color: var(--color-warm-gray);
+}
+
+[data-theme="dark"] .auth-footer a {
+  color: var(--color-forest);
 }

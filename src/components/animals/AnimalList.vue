@@ -52,7 +52,7 @@
           class="animal-card stagger-item"
         >
           <div class="animal-card-img">
-            <img :src="animal.imageUrl" :alt="animal.name" loading="lazy" />
+            <img :src="animal.imageUrl" :alt="animal.name" loading="lazy" width="400" height="300" />
             <span class="conservation-badge" :class="getStatusClass(animal.status)" :aria-label="`Conservation status: ${animal.status}`" :title="getConservationInfo(animal.status)">
               {{ animal.status }}
             </span>
@@ -237,9 +237,14 @@ export default {
 .search-clear {
   color: var(--color-warm-gray);
   cursor: pointer;
-  padding: 0.25rem;
+  padding: 0.5rem;
   margin-left: 0.5rem;
   transition: color var(--transition-fast);
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .search-clear:hover {
@@ -269,8 +274,9 @@ export default {
 
 .animal-card-img {
   position: relative;
-  height: 240px;
   overflow: hidden;
+  background: var(--color-sand);
+  aspect-ratio: 4 / 3;
 }
 
 .conservation-badge {
@@ -279,7 +285,7 @@ export default {
   left: 0.75rem;
   padding: 0.25rem 0.625rem;
   border-radius: var(--radius-full);
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -397,7 +403,7 @@ export default {
 }
 
 .skeleton-img {
-  height: 240px;
+  aspect-ratio: 4 / 3;
   border-radius: 0;
 }
 
@@ -462,10 +468,6 @@ export default {
   .animal-grid {
     grid-template-columns: 1fr;
     gap: 1.25rem;
-  }
-
-  .animal-card-img {
-    height: 200px;
   }
 }
 </style>

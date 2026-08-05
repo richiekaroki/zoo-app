@@ -256,4 +256,15 @@ export default {
     gap: 1.5rem;
   }
 }
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .stat-number {
+    font-size: var(--text-2xl);
+  }
+}
 </style>
