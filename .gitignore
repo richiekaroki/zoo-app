@@ -83,3 +83,5 @@ opencode.json
 
 .vercel
 .env*
+
+bash.exe.stackdump
