@@ -127,6 +127,7 @@
 
 <script>
 import { Carousel } from "bootstrap";
+import { carouselAnimals, placeholderImages } from "@/data/animals";
 
 export default {
   name: "AnimalCarousel",
@@ -138,12 +139,7 @@ export default {
       activeIndex: 0,
       carousel: null,
       imageLoaded: false,
-      placeholderImages: {
-        lion: "https://images.unsplash.com/photo-1552410260-0fd9b577afa6?w=800&h=400&fit=crop",
-        tiger: "https://images.unsplash.com/photo-1559253664-ca249d4608c6?w=800&h=400&fit=crop",
-        elephant: "https://images.unsplash.com/photo-1505148230895-d9a785a555fa?w=800&h=400&fit=crop",
-        giraffe: "https://images.unsplash.com/photo-1533415648777-407b626eb0fa?w=800&h=400&fit=crop",
-      },
+      placeholderImages,
     };
   },
   async created() {
@@ -162,29 +158,7 @@ export default {
       try {
         this.loading = true;
         this.error = false;
-
-        this.animals = [
-          {
-            id: 1, name: "African Lion", slug: "lion",
-            description: "The majestic king of the jungle that lives in prides. Lions are the only cats that live in groups called prides.",
-            imageUrl: this.placeholderImages.lion, conservationStatus: "Vulnerable",
-          },
-          {
-            id: 2, name: "Bengal Tiger", slug: "tiger",
-            description: "The largest cat species with distinctive stripes. Each tiger's stripe pattern is unique, like human fingerprints.",
-            imageUrl: this.placeholderImages.tiger, conservationStatus: "Endangered",
-          },
-          {
-            id: 3, name: "African Elephant", slug: "elephant",
-            description: "Gentle giants with incredible intelligence and memory. They can remember watering holes from decades past.",
-            imageUrl: this.placeholderImages.elephant, conservationStatus: "Endangered",
-          },
-          {
-            id: 4, name: "Masai Giraffe", slug: "giraffe",
-            description: "The tallest living terrestrial animal with long necks. Their necks contain the same number of vertebrae as humans (7).",
-            imageUrl: this.placeholderImages.giraffe, conservationStatus: "Vulnerable",
-          },
-        ];
+        this.animals = carouselAnimals;
       } catch (error) {
         this.error = true;
       } finally {

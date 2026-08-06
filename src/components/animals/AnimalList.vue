@@ -106,6 +106,7 @@
 import { useHead } from "@vueuse/head";
 import { fetchAnimalHabitat, fetchAnimalImage } from "@/services/animalApi";
 import { getRandomFact, getRandomLoadingMessage } from "@/services/animalFacts";
+import { animalNames, conservationStatus, placeholderImages } from "@/data/animals";
 
 export default {
   setup() {
@@ -127,16 +128,9 @@ export default {
       loading: true,
       error: null,
       searchQuery: "",
-      animalNames: ["Lion", "Tiger", "Elephant", "Giraffe", "Warthog", "Zebra", "Monkey"],
-      conservationStatus: {
-        Lion: "Vulnerable",
-        Tiger: "Endangered",
-        Elephant: "Endangered",
-        Giraffe: "Vulnerable",
-        Warthog: "Least Concern",
-        Zebra: "Near Threatened",
-        Monkey: "Least Concern",
-      },
+      animalNames,
+      conservationStatus,
+      placeholderImages,
       loadingMessage: getRandomLoadingMessage(),
       animalFact: getRandomFact(),
       factInterval: null,
