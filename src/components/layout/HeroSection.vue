@@ -22,17 +22,17 @@
     <div class="hero-bottom-fade"></div>
 
     <div class="container hero-content">
-      <p class="hero-eyebrow" data-aos="fade-up" data-aos-delay="50">Wildlife Conservation</p>
-      <h1 class="hero-title" data-aos="fade-up" data-aos-delay="150">
+      <p class="hero-eyebrow">Wildlife Conservation</p>
+      <h1 class="hero-title">
         Where Every<br />
         <span class="title-accent">Creature</span><br />
         Has a Story
       </h1>
-      <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="400">
+      <p class="hero-subtitle">
         Explore the diversity of wildlife, learn about habitats on the brink,
         and discover what we can do to protect them.
       </p>
-      <div class="hero-actions" data-aos="fade-up" data-aos-delay="550">
+      <div class="hero-actions">
         <router-link to="/animals" class="btn btn-gold btn-lg">
           <i class="fas fa-paw me-2"></i>Explore Animals
         </router-link>

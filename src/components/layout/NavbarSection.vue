@@ -639,9 +639,6 @@ export default {
     background: var(--color-sand);
   }
 
-  .btn-gold-nav {
-  }
-
   .dropdown-menu {
     position: static;
     box-shadow: none;

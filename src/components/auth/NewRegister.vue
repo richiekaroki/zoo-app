@@ -1,6 +1,6 @@
 <template>
   <div class="auth-page">
-    <div class="auth-card" data-aos="fade-up">
+    <div class="auth-card">
       <div class="auth-header">
         <router-link to="/" class="auth-brand" aria-label="Back to home">
           <span class="brand-icon"><i class="fas fa-paw"></i></span>

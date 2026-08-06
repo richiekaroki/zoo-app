@@ -2,17 +2,21 @@
   <div class="contact-page">
     <div class="page-header">
       <div class="container">
-        <h1 class="page-title" data-aos="fade-up" data-aos-delay="100">Contact Us</h1>
+        <h1 class="page-title">Contact Us</h1>
       </div>
     </div>
 
     <div class="container py-5">
       <div class="contact-layout">
         <!-- Form -->
-        <div class="contact-form-col" data-aos="fade-right">
+        <div class="contact-form-col">
           <div class="contact-form-card">
             <div v-if="submitSuccess" class="alert alert-success" role="status" aria-live="polite">
               <i class="fas fa-check-circle me-2"></i>Message sent successfully!
+              <p class="mt-2 mb-2">We'll respond within 48 hours.</p>
+              <button type="button" class="btn btn-outline-primary btn-sm" @click="submitSuccess = false">
+                <i class="fas fa-paper-plane me-1"></i>Send Another
+              </button>
             </div>
             <div v-if="submitError" class="alert alert-danger" role="alert" aria-live="assertive">
               <i class="fas fa-exclamation-circle me-2"></i>{{ submitError }}
@@ -30,7 +34,7 @@
                   placeholder="e.g. Jane Doe"
                   required
                 />
-                <small v-if="errors.name" class="form-error">{{ errors.name }}</small>
+                <small v-if="errors.name" class="form-error" role="alert">{{ errors.name }}</small>
               </div>
 
               <div class="form-group">
@@ -44,7 +48,7 @@
                   placeholder="e.g. jane@example.com"
                   required
                 />
-                <small v-if="errors.email" class="form-error">{{ errors.email }}</small>
+                <small v-if="errors.email" class="form-error" role="alert">{{ errors.email }}</small>
               </div>
 
               <div class="form-group">
@@ -60,7 +64,7 @@
                   required
                 ></textarea>
                 <div class="d-flex justify-content-between">
-                  <small v-if="errors.message" class="form-error">{{ errors.message }}</small>
+                  <small v-if="errors.message" class="form-error" role="alert">{{ errors.message }}</small>
                   <small class="char-count">{{ formData.message.length }}/500</small>
                 </div>
               </div>
@@ -81,7 +85,7 @@
         </div>
 
         <!-- Info -->
-        <div class="contact-info-col" data-aos="fade-left">
+        <div class="contact-info-col">
           <div class="contact-info-card">
             <h3>Get in Touch</h3>
             <p class="contact-info-desc">
@@ -194,7 +198,6 @@ export default {
         });
         this.submitSuccess = true;
         this.resetForm();
-        setTimeout(() => { this.submitSuccess = false; }, 5000);
       } catch {
         this.submitError = "Something went wrong. Please try again.";
       } finally {

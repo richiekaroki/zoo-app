@@ -30,7 +30,7 @@
     <WelcomeBanner />
     <section class="featured-section">
       <div class="container">
-        <div class="section-header" data-aos="fade-up">
+        <div class="section-header">
           <h2 class="section-title">Meet Our Wildlife</h2>
           <p class="section-subtitle">
             Each species plays a vital role in maintaining the balance of our ecosystems.
@@ -78,7 +78,7 @@
           </div>
         </div>
 
-        <div class="text-center mt-5" data-aos="fade-up">
+        <div class="text-center mt-5">
           <router-link to="/animals" class="btn btn-primary btn-lg">
             View All Animals<i class="fas fa-arrow-right ms-2"></i>
           </router-link>

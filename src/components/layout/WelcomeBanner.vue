@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showWelcome" class="welcome-banner" data-aos="fade-up">
+  <div v-if="showWelcome" class="welcome-banner">
     <div class="container">
       <div class="welcome-content">
         <div class="welcome-icon">

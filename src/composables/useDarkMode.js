@@ -3,6 +3,7 @@ import { ref, watch, onMounted } from "vue";
 const theme = ref("light");
 const isSystemDark = ref(false);
 let mediaQuery = null;
+let listenerAttached = false;
 
 function applyTheme(t) {
   document.documentElement.setAttribute("data-theme", t);
@@ -14,24 +15,27 @@ function getSystemPreference() {
 
 export function useDarkMode() {
   onMounted(() => {
-    mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    isSystemDark.value = mediaQuery.matches;
+    if (!listenerAttached) {
+      mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+      isSystemDark.value = mediaQuery.matches;
 
-    const saved = localStorage.getItem("wamzoo-theme");
-    if (saved) {
-      theme.value = saved;
-    } else {
-      theme.value = getSystemPreference();
-    }
-    applyTheme(theme.value);
-
-    mediaQuery.addEventListener("change", (e) => {
-      isSystemDark.value = e.matches;
-      if (!localStorage.getItem("wamzoo-theme")) {
-        theme.value = e.matches ? "dark" : "light";
-        applyTheme(theme.value);
+      const saved = localStorage.getItem("wamzoo-theme");
+      if (saved) {
+        theme.value = saved;
+      } else {
+        theme.value = getSystemPreference();
       }
-    });
+      applyTheme(theme.value);
+
+      mediaQuery.addEventListener("change", (e) => {
+        isSystemDark.value = e.matches;
+        if (!localStorage.getItem("wamzoo-theme")) {
+          theme.value = e.matches ? "dark" : "light";
+          applyTheme(theme.value);
+        }
+      });
+      listenerAttached = true;
+    }
   });
 
   watch(theme, (val) => {

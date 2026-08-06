@@ -1,5 +1,17 @@
 <template>
   <div class="animal-detail-page">
+    <script type="application/ld+json" v-if="animal.name">
+    {{
+      JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Animal",
+        "name": animal.name,
+        "description": animal.description,
+        "image": animal.imageUrl,
+        "url": `https://zoo-app-nu.vercel.app/animals/${name}`
+      })
+    }}
+    </script>
     <div v-if="loading" class="loading-state">
       <div class="loading-spinner">
         <div class="spinner-border" role="status">

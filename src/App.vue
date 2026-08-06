@@ -5,7 +5,9 @@
     <main id="main-content" class="main-content">
       <router-view v-slot="{ Component, route }">
         <transition :name="route.meta.transition || 'fade'">
-          <component :is="Component" />
+          <ErrorBoundary>
+            <component :is="Component" />
+          </ErrorBoundary>
         </transition>
       </router-view>
     </main>
@@ -19,6 +21,7 @@
 import FooterSection from "@/components/layout/FooterSection.vue";
 import NavbarSection from "@/components/layout/NavbarSection.vue";
 import ToastContainer from "@/components/layout/ToastContainer.vue";
+import ErrorBoundary from "@/components/ErrorBoundary.vue";
 import { Analytics } from "@vercel/analytics/vue";
 import { useDarkMode } from "@/composables/useDarkMode";
 
@@ -27,6 +30,7 @@ export default {
     NavbarSection,
     FooterSection,
     ToastContainer,
+    ErrorBoundary,
     Analytics,
   },
   setup() {
