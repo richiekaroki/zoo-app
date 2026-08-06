@@ -63,22 +63,10 @@
         <div class="footer-links">
           <h4>Stay Connected</h4>
           <p class="footer-newsletter-desc">Get the latest wildlife conservation updates.</p>
-          <form class="footer-newsletter" @submit.prevent="handleSubscribe" v-if="!subscribed">
-            <input
-              type="email"
-              v-model="email"
-              placeholder="Your email"
-              class="newsletter-input"
-              required
-              aria-label="Email for newsletter"
-            />
-            <button type="submit" class="newsletter-btn" :disabled="subscribing" aria-label="Subscribe">
-              <i class="fas fa-arrow-right"></i>
-            </button>
-          </form>
-          <p v-else class="newsletter-success">
-            <i class="fas fa-check-circle me-1"></i>Thanks for subscribing!
-          </p>
+          <div class="newsletter-coming-soon">
+            <i class="fas fa-envelope"></i>
+            <span>Newsletter coming soon</span>
+          </div>
         </div>
       </div>
 
@@ -97,22 +85,6 @@ export default {
   setup() {
     const toast = useToast();
     return { toast };
-  },
-  data() {
-    return {
-      email: "",
-      subscribed: false,
-      subscribing: false,
-    };
-  },
-  methods: {
-    async handleSubscribe() {
-      this.subscribing = true;
-      await new Promise((r) => setTimeout(r, 800));
-      this.subscribed = true;
-      this.subscribing = false;
-      this.toast.success("You've been subscribed to our newsletter!");
-    },
   },
 };
 </script>
@@ -297,10 +269,17 @@ export default {
   cursor: not-allowed;
 }
 
-.newsletter-success {
-  color: var(--color-gold-light);
+.newsletter-coming-soon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.5);
   font-size: var(--text-sm);
-  margin: 0;
+  padding: 0.5rem 0;
+}
+
+.newsletter-coming-soon i {
+  color: var(--color-gold-light);
 }
 
 .footer-bottom {

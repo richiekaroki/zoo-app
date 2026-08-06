@@ -162,7 +162,6 @@ export default {
       try {
         this.loading = true;
         this.error = false;
-        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         this.animals = [
           {
