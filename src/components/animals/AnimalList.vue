@@ -10,8 +10,8 @@
     </div>
 
     <div class="container py-5">
-      <!-- Search -->
-      <div class="search-wrapper" v-scroll-reveal>
+      <!-- Search + Filter Row -->
+      <div class="controls-row" v-scroll-reveal>
         <div class="search-bar">
           <i class="fas fa-search search-icon"></i>
           <input
@@ -24,6 +24,21 @@
           <button v-if="searchQuery" class="search-clear" @click="searchQuery = ''" type="button" aria-label="Clear search">
             <i class="fas fa-times"></i>
           </button>
+        </div>
+
+        <div class="filter-group">
+          <select v-model="filterStatus" class="filter-select" aria-label="Filter by conservation status">
+            <option value="all">All Status</option>
+            <option value="Endangered">Endangered</option>
+            <option value="Vulnerable">Vulnerable</option>
+            <option value="Near Threatened">Near Threatened</option>
+            <option value="Least Concern">Least Concern</option>
+          </select>
+
+          <select v-model="sortBy" class="filter-select" aria-label="Sort animals">
+            <option value="name">Sort by Name</option>
+            <option value="status">Sort by Status</option>
+          </select>
         </div>
       </div>
 
@@ -128,6 +143,8 @@ export default {
       loading: true,
       error: null,
       searchQuery: "",
+      filterStatus: "all",
+      sortBy: "name",
       animalNames,
       conservationStatus,
       placeholderImages,
@@ -138,12 +155,33 @@ export default {
   },
   computed: {
     filteredAnimals() {
+      let results = this.animals;
+
+      // Filter by status
+      if (this.filterStatus !== "all") {
+        results = results.filter((a) => a.status === this.filterStatus);
+      }
+
+      // Filter by search
       const query = this.searchQuery.toLowerCase();
-      return this.animals.filter(
-        (a) =>
-          a.name.toLowerCase().includes(query) ||
-          a.habitat.toLowerCase().includes(query)
-      );
+      if (query) {
+        results = results.filter(
+          (a) =>
+            a.name.toLowerCase().includes(query) ||
+            a.habitat.toLowerCase().includes(query)
+        );
+      }
+
+      // Sort
+      const statusOrder = { "Critically Endangered": 0, "Endangered": 1, "Vulnerable": 2, "Near Threatened": 3, "Least Concern": 4 };
+      results = [...results].sort((a, b) => {
+        if (this.sortBy === "status") {
+          return (statusOrder[a.status] ?? 5) - (statusOrder[b.status] ?? 5);
+        }
+        return a.name.localeCompare(b.name);
+      });
+
+      return results;
     },
   },
   async mounted() {
@@ -206,7 +244,38 @@ export default {
   margin: 0 auto 3rem;
 }
 
+.controls-row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+}
+
+.filter-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filter-select {
+  padding: 0.6rem 1rem;
+  border: 1.5px solid var(--color-light-border);
+  border-radius: var(--radius-full);
+  background: white;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+
+.filter-select:focus {
+  border-color: var(--color-forest-light);
+  outline: none;
+}
+
 .search-bar {
+  flex: 1;
   display: flex;
   align-items: center;
   background: white;
