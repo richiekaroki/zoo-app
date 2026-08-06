@@ -132,11 +132,25 @@
 </template>
 
 <script>
+import { useHead } from "@vueuse/head";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 
 export default {
   name: "ContactPage",
+  setup() {
+    useHead({
+      title: "Contact Us — Wam Zoo",
+      meta: [
+        { name: "description", content: "Get in touch with Wam Zoo for inquiries, partnerships, or to learn more about our conservation efforts." },
+        { property: "og:title", content: "Contact Us — Wam Zoo" },
+        { property: "og:description", content: "Get in touch with Wam Zoo for inquiries, partnerships, or to learn more about our conservation efforts." },
+        { property: "og:url", content: "https://zoo-app-nu.vercel.app/contact" },
+        { name: "twitter:title", content: "Contact Us — Wam Zoo" },
+        { name: "twitter:description", content: "Get in touch with Wam Zoo for inquiries, partnerships, or to learn more about our conservation efforts." },
+      ],
+    });
+  },
   data() {
     return {
       formData: { name: "", email: "", message: "" },

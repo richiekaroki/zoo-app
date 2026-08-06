@@ -80,6 +80,8 @@
 </template>
 
 <script>
+import { useHead } from "@vueuse/head";
+import { computed, getCurrentInstance } from "vue";
 import {
   fetchAnimalHabitat,
   fetchAnimalImage,
@@ -92,6 +94,28 @@ const DEFAULT_IMAGE = null;
 export default {
   name: "AnimalDetail",
   components: { BreadcrumbNav },
+  setup(props) {
+    const vm = getCurrentInstance();
+
+    const title = computed(() => `${vm?.proxy?.animal?.name || props.name || "Animal"} — Wam Zoo`);
+    const description = computed(() =>
+      vm?.proxy?.animal?.name
+        ? `Learn about the ${vm.proxy.animal.name} — habitat, conservation status, and fascinating facts.`
+        : `Learn about the ${props.name || "this animal"} — habitat, conservation status, and fascinating facts.`
+    );
+
+    useHead({
+      title,
+      meta: [
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url", content: `https://zoo-app-nu.vercel.app/animals/${props.name}` },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+      ],
+    });
+  },
   props: {
     name: {
       type: String,

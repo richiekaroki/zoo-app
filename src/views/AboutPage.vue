@@ -66,10 +66,24 @@
 </template>
 
 <script>
+import { useHead } from "@vueuse/head";
 import AnimalCarousel from "@/components/animals/AnimalCarousel.vue";
 
 export default {
   name: "AboutPage",
+  setup() {
+    useHead({
+      title: "About Us — Wam Zoo",
+      meta: [
+        { name: "description", content: "Learn about Wam Zoo's mission to protect wildlife and bring the wonder of nature to everyone through education and conservation." },
+        { property: "og:title", content: "About Us — Wam Zoo" },
+        { property: "og:description", content: "Learn about Wam Zoo's mission to protect wildlife and bring the wonder of nature to everyone through education and conservation." },
+        { property: "og:url", content: "https://zoo-app-nu.vercel.app/about" },
+        { name: "twitter:title", content: "About Us — Wam Zoo" },
+        { name: "twitter:description", content: "Learn about Wam Zoo's mission to protect wildlife and bring the wonder of nature to everyone through education and conservation." },
+      ],
+    });
+  },
   components: { AnimalCarousel },
   data() {
     return {

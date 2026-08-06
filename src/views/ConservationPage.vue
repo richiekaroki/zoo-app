@@ -145,8 +145,23 @@
 </template>
 
 <script>
+import { useHead } from "@vueuse/head";
+
 export default {
   name: "ConservationPage",
+  setup() {
+    useHead({
+      title: "Conservation Programs — Wam Zoo",
+      meta: [
+        { name: "description", content: "Explore our conservation programs protecting endangered species across 12 reserves. Join the movement to reverse wildlife decline." },
+        { property: "og:title", content: "Conservation Programs — Wam Zoo" },
+        { property: "og:description", content: "Explore our conservation programs protecting endangered species across 12 reserves. Join the movement to reverse wildlife decline." },
+        { property: "og:url", content: "https://zoo-app-nu.vercel.app/conservation" },
+        { name: "twitter:title", content: "Conservation Programs — Wam Zoo" },
+        { name: "twitter:description", content: "Explore our conservation programs protecting endangered species across 12 reserves. Join the movement to reverse wildlife decline." },
+      ],
+    });
+  },
   data() {
     return {
       threatenedSpecies: [

@@ -1,6 +1,32 @@
 <template>
   <div>
     <HeroSection />
+
+    <!-- Trust Signals -->
+    <section class="trust-section">
+      <div class="container">
+        <p class="trust-label">Trusted by leading conservation organizations</p>
+        <div class="trust-logos">
+          <div class="trust-logo">
+            <i class="fas fa-globe-americas"></i>
+            <span>WWF Partner</span>
+          </div>
+          <div class="trust-logo">
+            <i class="fas fa-leaf"></i>
+            <span>IUCN Member</span>
+          </div>
+          <div class="trust-logo">
+            <i class="fas fa-seedling"></i>
+            <span>CITES Certified</span>
+          </div>
+          <div class="trust-logo">
+            <i class="fas fa-heart"></i>
+            <span>10K+ Donors</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <WelcomeBanner />
     <section class="featured-section">
       <div class="container">
@@ -63,11 +89,25 @@
 </template>
 
 <script>
+import { useHead } from "@vueuse/head";
 import HeroSection from "@/components/layout/HeroSection.vue";
 import WelcomeBanner from "@/components/layout/WelcomeBanner.vue";
 
 export default {
   name: "HomePage",
+  setup() {
+    useHead({
+      title: "Wam Zoo — Wildlife Conservation & Animal Education",
+      meta: [
+        { name: "description", content: "Discover wildlife, learn about animal habitats, and support conservation efforts. Explore 50+ species with real data and facts." },
+        { property: "og:title", content: "Wam Zoo — Wildlife Conservation & Animal Education" },
+        { property: "og:description", content: "Discover wildlife, learn about animal habitats, and support conservation efforts. Explore 50+ species with real data and facts." },
+        { property: "og:url", content: "https://zoo-app-nu.vercel.app/" },
+        { name: "twitter:title", content: "Wam Zoo — Wildlife Conservation & Animal Education" },
+        { name: "twitter:description", content: "Discover wildlife, learn about animal habitats, and support conservation efforts. Explore 50+ species with real data and facts." },
+      ],
+    });
+  },
   components: {
     HeroSection,
     WelcomeBanner,
@@ -100,6 +140,52 @@ export default {
 </script>
 
 <style scoped>
+/* Trust Signals */
+.trust-section {
+  padding: 2rem 0;
+  background: white;
+  border-bottom: 1px solid var(--color-light-border);
+}
+
+.trust-label {
+  text-align: center;
+  font-size: var(--text-xs);
+  color: var(--color-warm-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  margin: 0 0 1.25rem;
+}
+
+.trust-logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.trust-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-warm-gray);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.trust-logo:hover {
+  opacity: 1;
+}
+
+.trust-logo i {
+  font-size: 1.1rem;
+  color: var(--color-forest);
+}
+
+/* Featured Section */
 .featured-section {
   padding: 7rem 0 8rem;
   background: var(--color-sand);

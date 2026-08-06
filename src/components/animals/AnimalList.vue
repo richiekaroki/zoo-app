@@ -103,10 +103,24 @@
 </template>
 
 <script>
+import { useHead } from "@vueuse/head";
 import { fetchAnimalHabitat, fetchAnimalImage } from "@/services/animalApi";
 import { getRandomFact, getRandomLoadingMessage } from "@/services/animalFacts";
 
 export default {
+  setup() {
+    useHead({
+      title: "Animals — Wam Zoo",
+      meta: [
+        { name: "description", content: "Browse our collection of wildlife species. Learn about their habitats, conservation status, and unique facts." },
+        { property: "og:title", content: "Animals — Wam Zoo" },
+        { property: "og:description", content: "Browse our collection of wildlife species. Learn about their habitats, conservation status, and unique facts." },
+        { property: "og:url", content: "https://zoo-app-nu.vercel.app/animals" },
+        { name: "twitter:title", content: "Animals — Wam Zoo" },
+        { name: "twitter:description", content: "Browse our collection of wildlife species. Learn about their habitats, conservation status, and unique facts." },
+      ],
+    });
+  },
   data() {
     return {
       animals: [],

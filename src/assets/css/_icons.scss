@@ -1,0 +1,30 @@
+// Custom Font Awesome 6 — only icons used by the app
+// Saves ~90% vs importing all icons
+
+// Core
+@import "~@fortawesome/fontawesome-free/scss/functions";
+@import "~@fortawesome/fontawesome-free/scss/variables";
+@import "~@fortawesome/fontawesome-free/scss/mixins";
+@import "~@fortawesome/fontawesome-free/scss/path";
+@import "~@fortawesome/fontawesome-free/scss/core";
+
+// Solid icons (fas)
+@import "~@fortawesome/fontawesome-free/scss/solid";
+
+// Brand icons (fab)
+@import "~@fortawesome/fontawesome-free/scss/brands";
+
+// Only register the icons we actually use
+@fortawesome {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  font-style: normal;
+  font-display: block;
+}
+
+@fortawesome {
+  font-family: "Font Awesome 6 Brands";
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}

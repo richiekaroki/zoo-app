@@ -105,6 +105,8 @@
           type="button"
           data-bs-target="#animalCarousel"
           data-bs-slide="prev"
+          tabindex="-1"
+          aria-hidden="true"
         >
           <span class="visually-hidden">Previous animal</span>
         </button>
@@ -113,6 +115,8 @@
           type="button"
           data-bs-target="#animalCarousel"
           data-bs-slide="next"
+          tabindex="-1"
+          aria-hidden="true"
         >
           <span class="visually-hidden">Next animal</span>
         </button>

@@ -216,6 +216,7 @@ export default {
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
       if (this.isMenuOpen) this.isDropdownOpen = false;
+      document.body.style.overflow = this.isMenuOpen ? "hidden" : "";
     },
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen;
@@ -225,6 +226,7 @@ export default {
       const wasMenuOpen = this.isMenuOpen;
       this.isMenuOpen = false;
       this.isDropdownOpen = false;
+      document.body.style.overflow = "";
       if (wasMenuOpen) {
         this.$nextTick(() => {
           const toggler = this.$el.querySelector(".navbar-toggler");

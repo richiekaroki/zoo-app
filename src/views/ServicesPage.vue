@@ -47,8 +47,23 @@
 </template>
 
 <script>
+import { useHead } from "@vueuse/head";
+
 export default {
   name: "ServicesPage",
+  setup() {
+    useHead({
+      title: "Services — Wam Zoo",
+      meta: [
+        { name: "description", content: "Discover Wam Zoo services including wildlife education programs, conservation tours, and research partnerships." },
+        { property: "og:title", content: "Services — Wam Zoo" },
+        { property: "og:description", content: "Discover Wam Zoo services including wildlife education programs, conservation tours, and research partnerships." },
+        { property: "og:url", content: "https://zoo-app-nu.vercel.app/services" },
+        { name: "twitter:title", content: "Services — Wam Zoo" },
+        { name: "twitter:description", content: "Discover Wam Zoo services including wildlife education programs, conservation tours, and research partnerships." },
+      ],
+    });
+  },
   data() {
     return {
       services: [
