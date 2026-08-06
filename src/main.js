@@ -4,7 +4,7 @@ import router from "./router";
 import { scrollReveal } from "./directives/scrollReveal";
 
 // CSS
-import "bootstrap/dist/css/bootstrap.css";
+import "@/assets/css/_bootstrap.scss";
 import "@/assets/css/design-system.css";
 import "@/assets/css/transitions.css";
 import "@/assets/css/scroll-reveal.css";

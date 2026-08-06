@@ -1,0 +1,35 @@
+// Selective Bootstrap 5 SCSS imports
+// Only the modules actually used by the app
+
+// 1. Functions & Variables (required by everything)
+@import "functions";
+@import "variables";
+@import "variables-dark";
+@import "maps";
+@import "mixins";
+@import "utilities";
+
+// 2. Reboot (base reset — needed for consistent typography)
+@import "reboot";
+
+// 3. Layout — only container
+@import "containers";
+
+// 4. Content — buttons, forms, alerts, spinners, tables, pagination
+@import "buttons";
+@import "forms";
+@import "alert";
+@import "spinners";
+@import "tables";
+@import "pagination";
+
+// 5. Components — modal, carousel, close
+@import "modal";
+@import "carousel";
+@import "close";
+
+// 6. Helpers — visually-hidden
+@import "helpers";
+
+// 7. Utilities — extended (d-flex, mt-3, w-100, etc.)
+@import "utilities/api";

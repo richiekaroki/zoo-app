@@ -2,9 +2,8 @@
    ZOO APP DESIGN SYSTEM
    Nature Distilled — Living Archive
    DM Serif Display + Outfit
+   Fonts loaded via <link> in public/index.html
    ============================================ */
-
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 /* --- Design Tokens --- */
 :root {
