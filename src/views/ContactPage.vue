@@ -137,8 +137,6 @@
 
 <script>
 import { useHead } from "@vueuse/head";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { db } from "@/firebase/firebaseConfig";
 
 export default {
   name: "ContactPage",
@@ -192,14 +190,19 @@ export default {
       this.submitSuccess = false;
       this.submitError = null;
       try {
-        await addDoc(collection(db, "contacts"), {
-          ...this.formData,
-          submittedAt: serverTimestamp(),
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(this.formData),
         });
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || "Submission failed");
+        }
         this.submitSuccess = true;
         this.resetForm();
-      } catch {
-        this.submitError = "Something went wrong. Please try again.";
+      } catch (err) {
+        this.submitError = err.message || "Something went wrong. Please try again.";
       } finally {
         this.loading = false;
       }
