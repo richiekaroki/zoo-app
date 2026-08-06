@@ -133,7 +133,7 @@ export default {
 }
 
 .about-carousel-wrapper {
-  padding: 1rem;
+  padding: 0;
 }
 
 /* Values */

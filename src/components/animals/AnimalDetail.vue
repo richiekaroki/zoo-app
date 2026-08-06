@@ -146,8 +146,8 @@ export default {
 }
 
 .detail-header {
-  background: var(--color-forest);
-  padding: 1.5rem 0 3rem;
+  background: linear-gradient(180deg, #0D2A1C 0%, var(--color-forest) 40%);
+  padding: 2rem 0 3.5rem;
   position: relative;
   overflow: hidden;
 }
@@ -156,13 +156,43 @@ export default {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 20% 30%, rgba(198, 123, 92, 0.1) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 20% 30%, rgba(198, 123, 92, 0.08) 0%, transparent 60%);
   pointer-events: none;
+}
+
+.detail-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
 }
 
 .detail-header .container {
   position: relative;
   z-index: 1;
+}
+
+.detail-header :deep(.breadcrumb-nav) {
+  padding: 0 0 1rem;
+}
+
+.detail-header :deep(.breadcrumb-link) {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.detail-header :deep(.breadcrumb-link:hover) {
+  color: var(--color-gold-light);
+}
+
+.detail-header :deep(.breadcrumb-current) {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.detail-header :deep(.breadcrumb-sep) {
+  color: rgba(255, 255, 255, 0.25);
 }
 
 .detail-title {
@@ -172,6 +202,7 @@ export default {
   color: white;
   margin: 0;
   letter-spacing: -0.02em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .detail-layout {

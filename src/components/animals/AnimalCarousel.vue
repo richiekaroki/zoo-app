@@ -41,14 +41,7 @@
             :class="{ active: index === activeIndex }"
             :aria-label="`View ${animal.name} (${animal.conservationStatus})`"
             @click="setActiveIndex(index)"
-          >
-            <span
-              class="conservation-badge"
-              :class="getConservationClass(animal)"
-            >
-              <i :class="getStatusIcon(animal)"></i>
-            </span>
-          </button>
+          ></button>
         </div>
 
         <!-- Slides -->
@@ -106,25 +99,21 @@
           </div>
         </div>
 
-        <!-- Controls -->
+        <!-- Controls - hidden, using indicators only -->
         <button
-          class="carousel-control-prev"
+          class="carousel-control-prev d-none"
           type="button"
           data-bs-target="#animalCarousel"
           data-bs-slide="prev"
-          @click="decrementIndex"
         >
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous animal</span>
         </button>
         <button
-          class="carousel-control-next"
+          class="carousel-control-next d-none"
           type="button"
           data-bs-target="#animalCarousel"
           data-bs-slide="next"
-          @click="incrementIndex"
         >
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next animal</span>
         </button>
       </div>
@@ -145,7 +134,6 @@ export default {
       activeIndex: 0,
       carousel: null,
       imageLoaded: false,
-      defaultImage: null,
       placeholderImages: {
         lion: "https://images.unsplash.com/photo-1552410260-0fd9b577afa6?w=800&h=400&fit=crop",
         tiger: "https://images.unsplash.com/photo-1559253664-ca249d4608c6?w=800&h=400&fit=crop",
@@ -206,11 +194,10 @@ export default {
       if (carouselElement && this.animals.length > 0) {
         const interval = window.innerWidth >= 992 ? 8000 : 6000;
         this.carousel = new Carousel(carouselElement, {
-          interval, wrap: true, touch: true, pause: "hover",
+          interval, wrap: true, touch: true, pause: "hover", ride: false,
         });
         carouselElement.addEventListener("slid.bs.carousel", (event) => {
           this.activeIndex = event.to;
-          this.imageLoaded = false;
         });
       }
     },
@@ -231,9 +218,6 @@ export default {
         if (this.carousel) this.carousel.to(index);
       }
     },
-
-    incrementIndex() { this.setActiveIndex((this.activeIndex + 1) % this.animals.length); },
-    decrementIndex() { this.setActiveIndex((this.activeIndex - 1 + this.animals.length) % this.animals.length); },
 
     getConservationClass(animal) {
       const status = (animal.conservationStatus || "").toLowerCase();
@@ -261,7 +245,7 @@ export default {
       return "fa-paw";
     },
 
-    handleImageError(animal) { animal.imageUrl = this.defaultImage; },
+    handleImageError(animal) { animal.imageUrl = this.placeholderImages[animal.slug]; },
     handleImageLoad() { this.imageLoaded = true; },
 
     truncateDescription(desc, maxLength = 150) {
@@ -279,8 +263,8 @@ export default {
 
 <style scoped>
 .animal-carousel {
-  margin: 1rem auto;
-  max-width: 1200px;
+  margin: 0 auto;
+  max-width: 600px;
   position: relative;
 }
 
@@ -331,7 +315,7 @@ export default {
   height: 100%;
   width: 100%;
   object-fit: cover;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.6s ease-in-out;
 }
 
 .image-placeholder {
@@ -342,6 +326,11 @@ export default {
   justify-content: center;
   color: var(--color-warm-gray);
   background-color: var(--color-sand);
+}
+
+/* Fade transition for carousel items */
+.carousel-item {
+  transition: opacity 0.6s ease-in-out;
 }
 
 .carousel-caption {
@@ -389,21 +378,11 @@ export default {
   background: var(--color-gold);
   color: white;
   border: none;
+  padding: 0.4rem 1rem;
 }
 
 .btn-gold:hover {
   background: var(--color-gold-dark);
-  color: white;
-}
-
-.btn-ghost-light {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: white;
-}
-
-.btn-ghost-light:hover {
-  background: rgba(255, 255, 255, 0.1);
   color: white;
 }
 
@@ -418,55 +397,42 @@ export default {
   align-items: center;
 }
 
+/* Clean minimal indicators */
 .carousel-indicators {
   display: flex;
-  gap: 0;
+  justify-content: center;
+  gap: 0.5rem;
   margin-bottom: 1rem;
+  position: relative;
 }
 
 .carousel-indicators button {
-  width: auto;
-  height: auto;
-  padding: 16px;
-  border-radius: 0;
-  margin: 0;
-  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
   border: none;
-  background: transparent;
+  padding: 0;
+  margin: 0;
+  background-color: rgba(0, 0, 0, 0.15);
+  opacity: 0.5;
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
-/* Visual dot via pseudo-element, 44px+ touch target via padding */
-.carousel-indicators button::before {
-  content: '';
-  display: block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.35);
-  transition: all 0.3s ease;
+.carousel-indicators button:hover {
+  opacity: 0.75;
 }
 
-.carousel-indicators button.active::before {
-  background-color: white;
-  transform: scale(1.3);
+.carousel-indicators button.active {
+  opacity: 1;
+  background-color: var(--color-forest);
+  transform: scale(1.2);
 }
 
-.conservation-badge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.6rem;
-  font-weight: bold;
-  color: white;
-  border: 2px solid white;
+/* Hide Bootstrap default carousel controls */
+.carousel-control-prev,
+.carousel-control-next {
+  display: none !important;
 }
 
 .status-endangered { background-color: var(--color-error); color: white; }
@@ -476,7 +442,7 @@ export default {
 .status-unknown { background-color: var(--color-warm-gray); color: white; }
 
 button:focus {
-  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline: 2px solid var(--color-forest);
   outline-offset: 2px;
 }
 
