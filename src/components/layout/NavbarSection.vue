@@ -255,16 +255,19 @@ export default {
   right: 0;
   z-index: var(--z-sticky);
   padding: 1rem 0;
-  background: transparent;
+  background: rgba(13, 42, 28, 0.85);
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
   transition: all var(--transition-base);
 }
 
 .navbar.scrolled {
-  background: rgba(245, 240, 225, 0.82);
+  background: rgba(245, 240, 225, 0.98);
   backdrop-filter: blur(16px) saturate(1.4);
   -webkit-backdrop-filter: blur(16px) saturate(1.4);
-  border-bottom: 1px solid rgba(226, 221, 208, 0.35);
+  border-bottom: 1px solid rgba(226, 221, 208, 0.5);
   padding: 0.5rem 0;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
 .navbar-inner {
