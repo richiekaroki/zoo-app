@@ -423,7 +423,7 @@ export default {
 .empty-state,
 .error-state {
   text-align: center;
-  padding: 4rem 0;
+  padding: var(--space-16) 0;
 }
 
 .empty-icon,

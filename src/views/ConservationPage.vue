@@ -295,7 +295,7 @@ export default {
 /* Species Section */
 .species-section {
   background: var(--color-sand);
-  padding: 5rem 0;
+  padding: var(--space-20) 0;
 }
 
 .section-title {
@@ -389,7 +389,7 @@ export default {
 
 /* Programs */
 .programs-section {
-  padding: 5rem 0;
+  padding: var(--space-20) 0;
 }
 
 .programs-grid {
@@ -463,7 +463,7 @@ export default {
 /* Impact */
 .impact-section {
   background: var(--color-forest);
-  padding: 4rem 0;
+  padding: var(--space-16) 0;
   position: relative;
   overflow: hidden;
 }

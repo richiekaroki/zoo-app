@@ -153,7 +153,7 @@ export default {
 /* Values */
 .values-section {
   background: var(--color-sand);
-  padding: 5rem 0;
+  padding: var(--space-20) 0;
 }
 
 .values-grid {
@@ -213,7 +213,7 @@ export default {
 /* Stats Section */
 .stats-section {
   background: var(--color-forest);
-  padding: 4rem 0;
+  padding: var(--space-16) 0;
   position: relative;
   overflow: hidden;
 }

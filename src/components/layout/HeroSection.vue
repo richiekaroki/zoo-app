@@ -318,7 +318,7 @@ export default {
 
 @media (max-width: 480px) {
   .hero-content {
-    padding: 6rem 0 4rem;
+    padding: var(--space-24) 0 var(--space-16);
   }
 
   .hero-title {

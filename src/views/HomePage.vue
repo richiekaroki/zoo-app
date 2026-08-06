@@ -365,7 +365,7 @@ export default {
   }
 
   .featured-section {
-    padding: 4rem 0 5rem;
+    padding: var(--space-16) 0 var(--space-20);
   }
 }
 

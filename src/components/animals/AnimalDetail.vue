@@ -183,7 +183,7 @@ export default {
 
 .detail-header {
   background: linear-gradient(180deg, #0D2A1C 0%, var(--color-forest) 40%);
-  padding: 5rem 0 3.5rem;
+  padding: var(--space-20) 0 var(--space-16);
   position: relative;
   overflow: hidden;
 }
@@ -321,7 +321,7 @@ export default {
 
 .error-content {
   text-align: center;
-  padding: 4rem 0;
+  padding: var(--space-16) 0;
 }
 
 .error-icon {
