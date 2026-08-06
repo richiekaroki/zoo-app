@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Page Not Found — Wam Zoo</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/svg+xml" href="<%= BASE_URL %>favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: 'Outfit', system-ui, sans-serif;
+        background: #f5f0e1;
+        color: #2d3436;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
+      }
+      .container { max-width: 480px; }
+      .icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        display: block;
+      }
+      h1 {
+        font-family: 'DM Serif Display', serif;
+        font-size: 3rem;
+        font-weight: 400;
+        color: #0D2A1C;
+        margin-bottom: 0.5rem;
+      }
+      .subtitle {
+        font-size: 1.25rem;
+        color: #6b6b5c;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+      }
+      .home-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.875rem 2rem;
+        background: #0D2A1C;
+        color: white;
+        text-decoration: none;
+        border-radius: 9999px;
+        font-weight: 500;
+        font-size: 1rem;
+        transition: all 0.2s;
+      }
+      .home-btn:hover {
+        background: #1B4332;
+        transform: translateY(-1px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <span class="icon" aria-hidden="true">🦁</span>
+      <h1>404</h1>
+      <p class="subtitle">
+        This page seems to have wandered off into the wild. Let's get you back to safety.
+      </p>
+      <a href="/" class="home-btn">
+        <i class="fas fa-home"></i> Back to Home
+      </a>
+    </div>
+  </body>
+</html>

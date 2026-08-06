@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zoo-app-nu.vercel.app/sitemap.xml
