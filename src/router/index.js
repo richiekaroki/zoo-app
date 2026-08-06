@@ -4,6 +4,7 @@ import { onAuthStateChanged } from "firebase/auth";
 
 const HomePage = () => import("@/views/HomePage.vue");
 const AboutPage = () => import("@/views/AboutPage.vue");
+const ConservationPage = () => import("@/views/ConservationPage.vue");
 const ServicesPage = () => import("@/views/ServicesPage.vue");
 const ContactPage = () => import("@/views/ContactPage.vue");
 const UserLogin = () => import("@/components/auth/UserLogin.vue");
@@ -18,7 +19,7 @@ const routes = [
   { path: "/", name: "Home", component: HomePage },
   { path: "/about", name: "About", component: AboutPage },
   { path: "/services", name: "Services", component: ServicesPage },
-  { path: "/conservation", redirect: "/about" },
+  { path: "/conservation", name: "Conservation", component: ConservationPage },
   { path: "/contact", name: "Contact", component: ContactPage },
   { path: "/login", name: "Login", component: UserLogin },
   { path: "/register", name: "Register", component: NewRegister },

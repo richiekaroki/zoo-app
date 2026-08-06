@@ -53,15 +53,6 @@
           </li>
 
           <template v-if="!isLoggedIn">
-            <li class="nav-item nav-cta">
-              <router-link
-                to="/login"
-                class="nav-link"
-                @click="handleNavClick('/login', $event)"
-              >
-                Sign In
-              </router-link>
-            </li>
             <li class="nav-item">
               <router-link
                 to="/register"
@@ -425,15 +416,6 @@ export default {
   color: white;
 }
 
-/* CTA */
-.nav-cta .nav-link {
-  color: rgba(255, 255, 255, 0.7) !important;
-}
-
-.navbar.scrolled .nav-cta .nav-link {
-  color: var(--color-warm-gray) !important;
-}
-
 /* Gold Nav Button */
 .btn-gold-nav {
   background: var(--color-gold);
@@ -655,17 +637,7 @@ export default {
     background: var(--color-sand);
   }
 
-  .nav-cta {
-    margin-top: 0.5rem;
-  }
-
-  .nav-cta .nav-link {
-    width: 100%;
-    text-align: center;
-    border: 1.5px solid var(--color-forest);
-    border-radius: var(--radius-md);
-    color: var(--color-forest);
-    font-weight: 600;
+  .btn-gold-nav {
   }
 
   .dropdown-menu {

@@ -147,7 +147,7 @@ export default {
 
 .detail-header {
   background: linear-gradient(180deg, #0D2A1C 0%, var(--color-forest) 40%);
-  padding: 2rem 0 3.5rem;
+  padding: 5rem 0 3.5rem;
   position: relative;
   overflow: hidden;
 }
