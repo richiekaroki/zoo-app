@@ -1,56 +1,129 @@
-ZOO APP
+# Wam Zoo
 
-Zoo-App is a Single-Page Application (SPA) built using HTML, Vue.js, Vue Router, and Bootstrap CSS. It showcases various animals with descriptions and images, dynamically fetched from API Ninjas(for descriptions) and UnsplashAPI(for images).Addition it stores login/Registration information and information recorded in the forms in Firebase
+Wildlife conservation web app — real animals, real data, real conservation impact.
 
-## Installation and Setup
+**Live:** [zoo-app-nu.vercel.app](https://zoo-app-nu.vercel.app)
 
-## Project setup
+## Tech Stack
 
-````bash
-npm install -g @vue/cli
+- **Frontend:** Vue 3 + Vue Router
+- **Styling:** Bootstrap 5.3.3 (tree-shaked) + custom design system
+- **Backend:** Firebase (Firestore, Auth)
+- **Deployment:** Vercel (with serverless API)
+- **Fonts:** DM Serif Display + Outfit
+- **Icons:** Font Awesome 6.7.2
 
-To run this project locally, follow these steps:
-
-1. Clone the repository:
+## Quick Start
 
 ```bash
-git clone https://github.com/your-username/zoo-app.git
+git clone https://github.com/richiekaroki/zoo-app.git
+cd zoo-app
+npm install
+npm run serve
+```
 
-````
+Open `http://localhost:8080`.
 
-2. Navigate into the project directory:
+## Project Structure
 
-   ```bash
-   cd zoo-app
-   ```
+```
+zoo-app/
+├── api/
+│   └── contact.js            # Serverless contact form (rate-limited)
+├── public/
+│   ├── 404.html              # Custom 404 page
+│   ├── robots.txt            # Search engine directives
+│   ├── sitemap.xml           # XML sitemap
+│   └── site.webmanifest      # PWA manifest
+├── src/
+│   ├── assets/css/
+│   │   ├── design-system.css # Tokens, dark mode, transitions
+│   │   └── _bootstrap.scss   # Selective Bootstrap imports
+│   ├── components/
+│   │   ├── layout/           # Navbar, Footer, Hero, Welcome, Breadcrumb
+│   │   ├── animals/          # AnimalList, AnimalDetail, AnimalCarousel
+│   │   ├── auth/             # UserLogin, NewRegister
+│   │   └── admin/            # AdminDashboard
+│   ├── composables/          # useDarkMode
+│   ├── data/
+│   │   └── animals.js        # Centralized animal data
+│   ├── firebase/             # Firebase config
+│   ├── router/               # Vue Router
+│   ├── services/             # API services (API Ninjas, Unsplash)
+│   └── views/                # Pages (Home, About, Animals, Conservation, Contact, Services)
+└── vue.config.js
+```
 
-3. Install the dependencies:
+## Features
 
-   ```bash
-   npm install bootstrap
-   npm install @popperjs/core
-   npm install firebase
-   ```
+### Pages
+| Page | Route | Description |
+|------|-------|-------------|
+| Home | `/` | Hero, stats, featured animals, trust signals |
+| Animals | `/animals` | Browse all species with search, filter, sort |
+| Animal Detail | `/animals/:name` | Habitat, facts, conservation status |
+| Conservation | `/conservation` | Threatened species, programs, impact stats |
+| About | `/about` | Mission, team, carousel |
+| Contact | `/contact` | Form with rate-limiting |
+| Services | `/services` | Zoo services and programs |
 
-4. Start the development server:
+### UX
+- **Dark mode** — full support across all components
+- **Mobile nav** — slide-in drawer with focus trap, scroll lock
+- **Back-to-top** — floating button after 400px scroll
+- **Welcome banner** — dismissible, localStorage remembers
+- **Filter/sort** — by conservation status and name severity
 
-   ```bash
-   npm run build
-   npm run serve
-   ```
+### SEO
+- Per-page meta tags via `@vueuse/head`
+- JSON-LD structured data (Organization, Animal)
+- Open Graph + Twitter Card meta
+- Canonical URLs, sitemap.xml, robots.txt
 
-5. Open your browser and go to `your-local-host` to view the app.
+### Accessibility
+- Skip-to-content link
+- `aria-current="page"` on active nav
+- `role="alert"` on form errors
+- Focus trap in mobile nav drawer
+- `prefers-reduced-motion` support
 
-## API Integration
+### Security
+- Rate-limited contact form (3/hour via Vercel serverless)
+- Server-side validation
+- Firebase Admin SDK for Firestore writes
 
-API Ninjas
-Description API:
-This app fetches animal descriptions from [API Ninjas](https://api-ninjas.com/api/animals).
+### Performance
+- Bootstrap tree-shaked (74% CSS reduction: 300KB → 78KB)
+- Selective SCSS imports (14 modules)
+- `<picture>` with responsive srcsets
+- Lazy-loaded images
+- Singleton dark mode listener
 
-- To use this API, get an API key from API Ninjas and replace `'YOUR_API_NINJAS_KEY'` in the `AnimalList.vue` and `AnimalDetail.vue` files.
+## API Keys
 
-Unsplash API
-Image API
-Animal images are fetched from [Unsplash](https://unsplash.com/developers).
+Get your keys and add them to `.env`:
 
-- To use this API, get an API key from Unsplash and replace `'YOUR_UNSPLASH_ACCESS_KEY'` in the `AnimalList.vue` and `AnimalDetail.vue` files.
+```
+VUE_APP_API_NINJAS_KEY=your_key_here
+VUE_APP_UNSPLASH_KEY=your_key_here
+```
+
+### Serverless Environment Variables (Vercel)
+
+```
+FIREBASE_PROJECT_ID=your-project-id
+FIREBASE_CLIENT_EMAIL=your-client-email
+FIREBASE_PRIVATE_KEY=your-private-key
+```
+
+## Development
+
+```bash
+npm run serve        # Dev server
+npm run build        # Production build
+npm run lint         # Lint
+```
+
+## License
+
+MIT
